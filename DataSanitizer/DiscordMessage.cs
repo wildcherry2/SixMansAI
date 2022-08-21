@@ -18,6 +18,55 @@ public class DiscordMessage {
             return (author.is_bot == "true");
         }
 
+        public bool IsLobbyMessage() {
+            if (embeds.Count > 0 && embeds[0].description == "You may now join the team channels") return true;
+
+            return false;
+        }
+
+        public bool IsQMessage() {
+            if (content == @"!q") return true;
+            return false;
+        }
+
+        public bool IsLeaveMessage() {
+            if (content == @"!leave") return true;
+
+            return false;
+        }
+
+        public bool IsVotingCompleteMessage() {
+            if (embeds.Count > 0 && embeds[0].description ==
+                "All players must join within 7 minutes and then teams will be chosen.\n**Vote result:**")
+                return true;
+
+            return false;
+        }
+
+        public int GetLobbyId() {
+            if (IsVotingCompleteMessage()) {
+                // parse and return id
+            }
+
+            return -1;
+        }
+
+        public bool IsBotMessage() {
+            return author.name == "6MansBot";
+        }
+
+        public bool IsBotResponsePlayerJoinedMessage() {
+            if (embeds.Count > 0 && embeds[0].description.Contains(") has joined.")) return true;
+
+            return false;
+        }
+
+        public bool IsBotResponsePlayerLeftMessage() {
+            if (embeds.Count > 0 && embeds[0].description.Contains(") has left (using command).")) return true;
+
+            return false;
+        }
+
         public class Author {
             [JsonProperty("id")]       public string id       { get; set; } = "";
             [JsonProperty("name")]     public string name     { get; set; } = "";

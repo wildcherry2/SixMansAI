@@ -8,31 +8,39 @@ namespace DataSanitizer;
 public class Database {
     private readonly List<ScoreReportMessage> sr_messages;
     private          StreamReader             in_reader = null!;
-    private          List<QueueReadyMessage>  lb_messages;
+    private          List<QueueReadyMessage>  qr_messages;
     private          List<QueueBlock>         queue_blocks;
 
-    //need to re-mine with !q messages in chat to gather as many names as possible for each player
-    //to relate a player's link name to the other names, backtrack !q messages after lobby is setup
-    private List<Player> players;
+    public List<Player> players { get; set; }
+
+    public string sr_path_s   { get; set; } = "";
+    public string chat_path_s { get; set; } = "";
 
     public Database() {
         queue_blocks = new List<QueueBlock>();
         sr_messages = new List<ScoreReportMessage>();
-        lb_messages = new List<QueueReadyMessage>();
+        qr_messages = new List<QueueReadyMessage>();
         players = new List<Player>();
     }
 
     public Database(string sr_path_s, string chat_path_s) {
         queue_blocks = new List<QueueBlock>();
         sr_messages = new List<ScoreReportMessage>();
-        lb_messages = new List<QueueReadyMessage>();
+        qr_messages = new List<QueueReadyMessage>();
         players = new List<Player>();
         this.sr_path_s = sr_path_s;
         this.chat_path_s = chat_path_s;
     }
 
-    public string sr_path_s   { get; set; } = "";
-    public string chat_path_s { get; set; } = "";
+    public static int GetIndexOfPlayer(ref List<Player> players, ulong discord_id) {
+        for (int i = 0; i < players.Count; i++) {
+            if (players[i].discord_id == discord_id) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
 
     private void FormatScoreReportList(ref List<Message> list) {
         foreach (var message in list) {
@@ -215,6 +223,7 @@ public class Database {
             if (QueueReadyMessage.IsVotingCompleteMessage(ref message)) {
                 // If this message comes after a full queue block, add it to the output list
                 if (bFoundStart) {
+                    current_queue_block.messages.Add(message);
                     blocks.Add(current_queue_block);
                     current_queue_block = new QueueBlock();
                 }
@@ -227,7 +236,7 @@ public class Database {
 
             // If the message isn't part of a partial queue block and it isn't a voting complete message, add it to the current QueueBlock
             else if (bFoundStart) {
-                // QueueBlock.counter represents the amount of !q commands in relation to other messages; increment on !q, decrement on everything else
+                // QueueBlock.counter represents the amount of !q commands in relation to other messages; increment on !q, decrement on !leave
                 // The result is that queue blocks with more/less than 6 responses to !q commands can be checked and invalidated, since the bot didn't get the data correctly
                 if (QueueReadyMessage.IsQMessage(ref message)) {
                     current_queue_block.counter++;
@@ -238,7 +247,7 @@ public class Database {
                     current_queue_block.messages.Add(message);
                 }
                 else if (QueueReadyMessage.IsBotResponsePlayerJoinedMessage(ref message) ||
-                         QueueReadyMessage.IsBotResponsePlayerLeftMessage(ref message)) {
+                         QueueReadyMessage.IsBotResponsePlayerLeftMessage(ref message)) { // OR with isLobbyMessage as well??
                     current_queue_block.messages.Add(message);
                 }
             }
