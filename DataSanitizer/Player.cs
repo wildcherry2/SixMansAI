@@ -48,11 +48,14 @@ public class Player {
         return JsonSerializer.Deserialize<Player>(json_s);
     }
 
-    public static bool operator ==(Player left, Player right) {
+    public static bool operator ==(Player? left, Player? right) {
+        if (ReferenceEquals(left, null) && ReferenceEquals(right, null)) return true;
+        else if ((ReferenceEquals(left, null) && !ReferenceEquals(right, null)) || (!ReferenceEquals(left, null) && ReferenceEquals(right, null))) return false;
         return left.discord_id == right.discord_id;
     }
 
     public static bool operator ==(string name, Player? player) {
+        if (player == null) return false;
         return player.recorded_names.Any(recorded_name => name == recorded_name);
     }
 
