@@ -23,7 +23,7 @@ public class Queue {
 
     public static bool operator ==(Queue queue, int match_id) {
         return queue.match_id == match_id;
-    }
+}
 
     public static bool operator !=(Queue queue, int match_id) {
         return !(queue == match_id);
@@ -32,9 +32,9 @@ public class Queue {
 
 public class QueueBuilder {
     public static int errcount = 0;
-    public static Queue BuildQueue(ref Database.QueueBlock block, ref List<Player> players) {
+    public static Queue BuildQueue(ref Database.QueueBlock block, List<Player> players) {
         var ret_queue = new Queue();
-        
+
         // Vote complete message contains the lobby id
         ret_queue.match_id = block.voting_complete_message.GetLobbyId();
 
@@ -45,7 +45,7 @@ public class QueueBuilder {
             errcount++;
             return ret_queue;
         }
-
+        
         var i2 = 1;
         for (var i = 0; i < block.messages.Count - 1; i++) {
             var current_msg = block.messages[i];
@@ -61,7 +61,7 @@ public class QueueBuilder {
                                       current_msg.content, i, next_msg.content, i2, ret_queue.match_id);
                     ret_queue.error = true;
                     break;
-                }
+                }                
             }
             else if (current_msg.IsLeaveMessage()) {
                 if (next_msg.IsBotResponsePlayerLeftMessage())

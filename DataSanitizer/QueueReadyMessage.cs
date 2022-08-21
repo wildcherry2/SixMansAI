@@ -45,7 +45,7 @@ class QueueReadyMessage {
 
     public static bool IsVotingCompleteMessage(ref DiscordMessage.Message message) {
         if (message.embeds.Count > 0 && message.embeds[0].description ==
-            "All players must join within 7 minutes and then teams will be chosen.\n**Vote result:** Captains")
+            "All players must join within 7 minutes and then teams will be chosen.\n**Vote result:**")
             return true;
 
         return false;

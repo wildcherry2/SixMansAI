@@ -11,9 +11,10 @@ public class Database {
     private          List<Queue>              queues;
     private          List<QueueBlock>         queue_blocks;
 
-    //need to re-mine with !q messages in chat to gather as many names as possible for each player
-    //to relate a player's link name to the other names, backtrack !q messages after lobby is setup
-    private List<Player> players;
+    public List<Player> players { get; set; }
+
+    public string sr_path_s   { get; set; } = "";
+    public string chat_path_s { get; set; } = "";
 
     public Database() {
         queue_blocks = new List<QueueBlock>();
@@ -30,9 +31,6 @@ public class Database {
         this.sr_path_s = sr_path_s;
         this.chat_path_s = chat_path_s;
     }
-
-    public string sr_path_s   { get; set; } = "";
-    public string chat_path_s { get; set; } = "";
 
     public static int GetIndexOfPlayer(ref List<Player> players, ulong current_id) {
         for (int i = 0; i < players.Count; i++) {
@@ -241,7 +239,7 @@ public class Database {
 
             // If the message isn't part of a partial queue block and it isn't a voting complete message, add it to the current QueueBlock
             else if (bFoundStart) {
-                // QueueBlock.counter represents the amount of !q commands in relation to other messages; increment on !q, decrement on everything else
+                // QueueBlock.counter represents the amount of !q commands in relation to other messages; increment on !q, decrement on !leave
                 // The result is that queue blocks with more/less than 6 responses to !q commands can be checked and invalidated, since the bot didn't get the data correctly
                 if (message.IsQMessage()) {
                     current_queue_block.counter++;
@@ -495,7 +493,7 @@ public class Database {
     private void ParseQueueBlocks() {
         for (int i = 0; i < queue_blocks.Count; i++) {
             var current_block = queue_blocks[i];
-            var current_queue = QueueBuilder.BuildQueue(ref current_block, ref players);
+            var current_queue = QueueBuilder.BuildQueue(ref current_block, players);
 
             if (current_queue) {
                 Console.WriteLine("Queue constructed with match id = {6} and players \n{0},\n{1},\n{2},\n{3},\n{4},\n{5}",
