@@ -58,6 +58,13 @@ public class DiscordMessage {
         return false;
     }
     public bool IsBotResponseMessage() { return IsBotResponsePlayerJoinedMessage() || IsBotResponsePlayerLeftMessage(); }
-    public List<DiscordMessage> raw_messages { get; set; }
-    public static DiscordMessage RawDataToDiscordMessage(ref StreamReader sr) { return JsonConvert.DeserializeObject<DiscordMessage>(sr.ReadToEnd()); }
+    //public List<DiscordMessage> raw_messages { get; set; }
+    public static DiscordMessageList? RawDataToDiscordMessage(ref StreamReader sr) {
+        return JsonConvert.DeserializeObject<DiscordMessageList>(sr.ReadToEnd());
+    }
+}
+
+public class DiscordMessageList {
+    [JsonProperty("messages")]
+    public List<DiscordMessage>? raw_messages { get; set; }
 }

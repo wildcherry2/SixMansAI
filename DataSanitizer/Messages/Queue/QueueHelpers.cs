@@ -88,7 +88,7 @@ public partial class Database {
         Console.ForegroundColor = ConsoleColor.Green;
     }
 
-    private List<QueueBlock> GetQueueBlocks(ref List<DiscordMessage> list) {
+    private List<QueueBlock> GetQueueBlocks(ref DiscordMessageList list) {
         var blocks = new List<QueueBlock>();
         var current_queue_block = new QueueBlock();
 
@@ -97,7 +97,7 @@ public partial class Database {
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("\t[GetQueueBlocks] Getting queue blocks for current file...");
 
-        foreach (var message in list) {
+        foreach (var message in list.raw_messages) {
             // After a voting complete message, players are free to start a new queue, so the current QueueBlock should be added to the list and a new QueueBlock should be instantiated
             if (message.IsVotingCompleteMessage()) {
                 // If this message comes after a full queue block, add it to the output list
@@ -125,13 +125,14 @@ public partial class Database {
                     current_queue_block.counter--;
                     current_queue_block.messages.Add(message);
                 }
-                else if (message.IsJoinGameMessage()) {
-                    current_queue_block.teams_decided_messages.Add(message);
-                }
                 else if (message.IsBotResponsePlayerJoinedMessage() ||
                          message.IsBotResponsePlayerLeftMessage()) {
                     current_queue_block.messages.Add(message);
                 }
+                else if (message.IsJoinGameMessage()) {
+                    current_queue_block.teams_decided_messages.Add(message);
+                }
+                
             }
         }
 
@@ -170,13 +171,14 @@ public partial class Database {
             in_reader = File.OpenText(chat_path_s);
 
             Console.WriteLine("[CleanupChat] Reading \"" + chat_path_s + "\" into JSON object...");
-            var chat = DiscordMessage.RawDataToDiscordMessage(ref in_reader);
-            var chat_messages = chat.raw_messages;
+            var chat_message = DiscordMessage.RawDataToDiscordMessage(ref in_reader);
+            //var chat_messages = chat.raw_messages;
             Console.WriteLine("[CleanupChat] Done reading \"" + chat_path_s + "\" into JSON object...");
             queue_blocks = new List<QueueBlock>();
-            if (chat != null)
-                queue_blocks = GetQueueBlocks(ref chat_messages);
+            if (chat_message != null)
+                queue_blocks = GetQueueBlocks(ref chat_message);
 
+            //RegisterPlayerNames();
             Console.WriteLine("[CleanupChat] Valid queues in file: " + queue_blocks.Count);
             Console.WriteLine("[CleanupChat] Closing file \"" + chat_path_s + "\"...");
             in_reader.Close();

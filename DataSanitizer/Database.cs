@@ -1,4 +1,5 @@
-﻿using Database.Messages.ScoreReportMessage;
+﻿using System.Text.Json;
+using Database.Messages.ScoreReportMessage;
 
 namespace Database;
 
@@ -28,16 +29,20 @@ public partial class Database {
     public string              sr_path_s   { get; set; } = "";
     public string              chat_path_s { get; set; } = "";
 
-
+    /*  TODO: A better algorithm for score gathering: get all names from all raw data files, then independently get all join vc messages and lookup by name. Or do this only for error queues to sew what's salvageable  */
     public void BuildDatabase() {
-        CleanupScoreReportFile();
+        //CleanupScoreReportFile();
         CleanupChatFile();
-        RegisterPlayerNames();
+        
         RemoveUnusableBlocks();
-        ParseQueueBlocks();
-        SetMatchResults();
+        RegisterPlayerNames();
+
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        Console.WriteLine(JsonSerializer.Serialize(players[0], options));
+        //ParseQueueBlocks();
+        //SetMatchResults();
         // validate queues have 6 players before scanning
-        SetPlayerRecords();
+        //SetPlayerRecords();
 
         //validate final objects are valid
     }

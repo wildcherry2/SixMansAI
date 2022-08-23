@@ -9,10 +9,11 @@ public class Player {
         game_history = new List<GameHistoryRecord>();
     }
 
-    public Player(string name, ulong discord_id, string nickname = "") {
+    public Player(string name, ulong discord_id, string nickname = "", string linkname = "") {
         recorded_names = new List<string>();
         if (name.Length > 0) recorded_names.Add(name);
         if (nickname.Length > 0 && nickname != name) recorded_names.Add(nickname);
+        if (linkname.Length > 0 && linkname != nickname && linkname != name) recorded_names.Add(linkname);
         game_history = new List<GameHistoryRecord>();
         this.discord_id = discord_id;
     }

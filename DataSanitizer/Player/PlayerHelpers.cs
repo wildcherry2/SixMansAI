@@ -5,40 +5,79 @@ namespace Database;
 
 public partial class Database {
     /*  TODO: FIX THIS  */
-    private void RegisterPlayerNames() {
+    private void RegisterPlayerNames()
+    {
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("[RegisterPlayerNames] Registering player names...");
-        foreach (var block in queue_blocks) {
-            for (int i = 0; i < block.messages.Count; i++) {
+        foreach (var block in queue_blocks)
+        {
+            for (int i = 0; i + 1 < block.messages.Count; i++)
+            {
                 var message = block.messages[i];
-                if (message.IsQMessage() || message.IsLeaveMessage()) {
-                    LookupAndTryInsertPlayer(ref message);
-                }
-                else if(/*message.author.IsHumanMessage() && */message.IsBotResponseMessage()){
-                    //string linkname = message.embeds[0].description.Substring(1, (message.embeds[0].description.IndexOf(']')) - 1);
-                    string linkname = GetPlayerNameFromEmbeddedLink(message.GetEmbeddedDescription());
-                    bool found = false;
+                var next_message = block.messages[i + 1];
+                if (message.IsQMessage() && next_message.IsBotResponsePlayerJoinedMessage()) {
+                    var found_player = false;
+                    var discord_id = message.author.GetDiscordId();
+                    var player_name = message.author.name;
+                    var player_nick = message.author.nickname;
+                    var linkname = GetPlayerNameFromEmbeddedLink(next_message.GetEmbeddedDescription());
                     foreach (var player in players) {
-                        if (block.messages[i-1].author.GetDiscordId() == player.discord_id) {
-                            Console.WriteLine("\t[RegisterPlayerNames] Registered linkname " + linkname + " for " +
-                                              player.discord_id);
-                            player.recorded_names.Add(linkname);
-                            found = true;
+                        if (player.discord_id == discord_id) {
+                            string log = "\t[RegisterPlayerNames] Registered new names for {0}:";
+                            bool has_name = false;
+                            //Console.WriteLine("\t[RegisterPlayerNames] Registered new names for {0}: ", player.recorded_names[0]);
+                            if (linkname != null && !player.HasName(ref linkname)) {
+                                //Console.Write("\t\t{0} (linkname)\t", linkname);
+                                player.recorded_names.Add(linkname);
+                                has_name = true;
+                                log += "\n\t\t{1} (linkname)\t";
+                            }
+                            if (!player.HasName(ref player_name)) {
+                                //Console.WriteLine("\t\t{0} (player_name)\t", player_name);
+                                player.recorded_names.Add(player_name);
+                                has_name = true;
+                                log += "\n\t\t{2} (player_name)\t";
+                            }
+
+                            if (!player.HasName(ref player_nick)) {
+                                //Console.WriteLine("\t\t{0} (player_nickname)\t", player_nick);
+                                player.recorded_names.Add(player_nick);
+                                has_name = true;
+                                log += "\n\t\t{3} (player_nickname)\t";
+                            }
+
+                            if (has_name) {
+                                Console.WriteLine(log, player.recorded_names[0], linkname, player_name, player_nick);
+                            }
+                            found_player = true;
                             break;
                         }
                     }
 
-                    if (!found) {
-                        Console.WriteLine("\t[RegisterPlayerNames] Could not find player for link name {0}", linkname);
+                    if (!found_player) {
+                        var new_player = new Player.Player(player_name, discord_id, player_nick, linkname != null ? linkname : "");
+                        players.Add(new_player);
+
+                        Console.WriteLine("\t[RegisterPlayerNames] Registered new player:\n\t\tplayer_name = {0}\n\t\tplayer_nick = {1}\n\t\tlinkname = {2}\n\t\tdiscord_id = {3}", 
+                                          player_name, player_nick, linkname != null ? linkname : "Null", discord_id);
                     }
                 }
             }
         }
+        Console.WriteLine("\t[RegisterPlayerNames] Registered {0} players!", players.Count);
         Console.ForegroundColor = ConsoleColor.White;
     }
-    public static string GetPlayerNameFromEmbeddedLink(string link) {
-        return new Regex(@"(?:(?!^\[|\]\().)+", RegexOptions.Compiled)
-               .Match(link.Trim()).Value;
+
+    private static Regex name_from_embedded_link_regex = new Regex(@"(?:(?!^\[|\]\().)+", RegexOptions.Compiled);
+    private static Regex is_link_regex                 = new Regex(@"^\[.+\]\(https://www\.rl6mans\.com/profile/.+\) has joined.$", RegexOptions.Compiled);
+    public static string? GetPlayerNameFromEmbeddedLink(string link) {
+        if(IsLinkMessage(link))
+            return name_from_embedded_link_regex.Match(link.Trim()).Value;
+        return null;
+    }
+
+    public static bool IsLinkMessage(string test) {
+        return is_link_regex.Match(test).Success;
     }
     public static int GetIndexOfPlayer(ref List<Player.Player> players, ulong current_id) {
         for (int i = 0; i < players.Count; i++) {
