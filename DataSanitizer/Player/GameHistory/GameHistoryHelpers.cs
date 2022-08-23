@@ -159,59 +159,8 @@ public partial class Database {
 
     private void SetMatchResults() {
         Console.ForegroundColor = ConsoleColor.Cyan;
-        int results_set = 0;
-        foreach (var queue in queues) {
-            foreach (var sr_msg in sr_messages) {
-                if (sr_msg.match_id == queue.match_id) {
-                    bool found_q = false;
-                    foreach (var player in queue.team_one) {
-                        if (sr_msg.reporter == player.discord_id) {
-                            if (sr_msg.reported_win) {
-                                queue.team_one_won = true;
-                                queue.result = sr_msg;
-                                found_q = true;
-                                results_set++;
-                                Console.WriteLine("[SetMatchResults] Set team one as winner for queue {0}!", queue.match_id);
-                            }
-                            else {
-                                queue.result = sr_msg;
-                                found_q = true;
-                                results_set++;
-                                Console.WriteLine("[SetMatchResults] Set team two as winner for queue {0}!", queue.match_id);
-                            }
-
-                            break;
-                        }
-                    }
-
-                    if (!found_q) {
-                        foreach (var player in queue.team_two) {
-                            if (sr_msg.reporter == player.discord_id){ 
-                                if(!sr_msg.reported_win) {
-                                    queue.team_one_won = true;
-                                    queue.result = sr_msg;
-                                    found_q = true;
-                                    results_set++;
-                                    Console.WriteLine("[SetMatchResults] Set team one as winner for queue {0}!", queue.match_id);
-                                }
-                                else {
-                                    queue.result = sr_msg;
-                                    found_q = true;
-                                    results_set++;
-                                    Console.WriteLine("[SetMatchResults] Set team two as winner for queue {0}!", queue.match_id);
-                                }
-                            }
-                        }
-                    }
-
-                    if(!found_q) 
-                        Console.WriteLine("[SetMatchResults] Could not set a valid win for queue {0}, likely due to discord id mismatch!", queue.match_id);
-
-                    break;
-                }
-            }
-        }
-        Console.WriteLine("[SetMatchResults] Set match results for {0} queues, {1} queues unaccounted for!", results_set, queues.Count - results_set);
+        
+        //Console.WriteLine("[SetMatchResults] Set match results for {0} queues, {1} queues unaccounted for!", results_set, queues.Count - results_set);
         Console.ForegroundColor = ConsoleColor.White;
     }
     private void SetPlayerRecords() {

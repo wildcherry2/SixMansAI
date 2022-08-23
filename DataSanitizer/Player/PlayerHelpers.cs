@@ -17,37 +17,34 @@ public partial class Database {
                 var next_message = block.messages[i + 1];
                 if (message.IsQMessage() && next_message.IsBotResponsePlayerJoinedMessage()) {
                     var found_player = false;
+                    var date = message.datetime;
                     var discord_id = message.author.GetDiscordId();
                     var player_name = message.author.name;
                     var player_nick = message.author.nickname;
                     var linkname = GetPlayerNameFromEmbeddedLink(next_message.GetEmbeddedDescription());
                     foreach (var player in players) {
                         if (player.discord_id == discord_id) {
-                            string log = "\t[RegisterPlayerNames] Registered new names for {0}:";
+                            string log = "\t[RegisterPlayerNames] Registered new names for {0} ({4}):";
                             bool has_name = false;
-                            //Console.WriteLine("\t[RegisterPlayerNames] Registered new names for {0}: ", player.recorded_names[0]);
                             if (linkname != null && !player.HasName(ref linkname)) {
-                                //Console.Write("\t\t{0} (linkname)\t", linkname);
                                 player.recorded_names.Add(linkname);
                                 has_name = true;
                                 log += "\n\t\t{1} (linkname)\t";
                             }
                             if (!player.HasName(ref player_name)) {
-                                //Console.WriteLine("\t\t{0} (player_name)\t", player_name);
                                 player.recorded_names.Add(player_name);
                                 has_name = true;
                                 log += "\n\t\t{2} (player_name)\t";
                             }
 
                             if (!player.HasName(ref player_nick)) {
-                                //Console.WriteLine("\t\t{0} (player_nickname)\t", player_nick);
                                 player.recorded_names.Add(player_nick);
                                 has_name = true;
                                 log += "\n\t\t{3} (player_nickname)\t";
                             }
 
                             if (has_name) {
-                                Console.WriteLine(log, player.recorded_names[0], linkname, player_name, player_nick);
+                                Console.WriteLine(log, player.recorded_names[0], linkname, player_name, player_nick, date.ToString());
                             }
                             found_player = true;
                             break;
@@ -75,7 +72,6 @@ public partial class Database {
             return name_from_embedded_link_regex.Match(link.Trim()).Value;
         return null;
     }
-
     public static bool IsLinkMessage(string test) {
         return is_link_regex.Match(test).Success;
     }

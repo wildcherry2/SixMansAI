@@ -5,6 +5,7 @@ namespace Database.Messages.DiscordMessage;
 
 public class DiscordMessage {
     [JsonProperty("content")]   public  string         content   { get; set; } = "";
+    [JsonProperty("timestamp")] public  DateTime       datetime { get; set; }
     [JsonProperty("author")]    public  Author         author    { get; set; }
     [JsonProperty("reactions")] public  List<Reaction> reactions { get; set; }
     [JsonProperty("mentions")]  public  List<Author>   mentions  { get; set; }
@@ -58,7 +59,19 @@ public class DiscordMessage {
         return false;
     }
     public bool IsBotResponseMessage() { return IsBotResponsePlayerJoinedMessage() || IsBotResponsePlayerLeftMessage(); }
-    //public List<DiscordMessage> raw_messages { get; set; }
+    public List<string>? GetTeamOneNames(){
+        if (IsJoinGameMessage()){
+            return new List<string>(GetEmbeddedField(0).value.Split(','));
+        }
+        return null;
+    }
+
+    public List<string>? GetTeamTwoNames(){
+        if (IsJoinGameMessage()){
+            return new List<string>(GetEmbeddedField(1).value.Split(','));
+        }
+        return null;
+    }
     public static DiscordMessageList? RawDataToDiscordMessage(ref StreamReader sr) {
         return JsonConvert.DeserializeObject<DiscordMessageList>(sr.ReadToEnd());
     }

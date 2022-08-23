@@ -1,5 +1,6 @@
 ﻿using Database.Messages.ScoreReportMessage;
 using Database.Player;
+using Database.Messages.DiscordMessage;
 
 public class Queue {
     public Queue() {
@@ -51,6 +52,10 @@ public class Queue {
 
             i2++;
         }
+    }
+
+    public Queue(ref DiscordMessage join_msg, List<Player> players){
+
     }
 
     public List<Player> players_in_queue { get; set; }

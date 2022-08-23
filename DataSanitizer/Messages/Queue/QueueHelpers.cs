@@ -141,27 +141,29 @@ public partial class Database {
     }
 
     // Transforms QueueBlocks (which are essentially collections of relevant chat messages) into Queue structs that organize the queue data
-    private void ParseQueueBlocks() {
-        Console.ForegroundColor = ConsoleColor.Red;
-        int qcount = 0;
-        for (int i = 0; i < queue_blocks.Count; i++) {
-            var current_block = queue_blocks[i];
-            var current_queue = new global::Queue(ref current_block, players);
+    //private void ParseQueueBlocks() {
+    //    Console.ForegroundColor = ConsoleColor.Red;
+    //    int qcount = 0;
+    //    for (int i = 0; i < queue_blocks.Count; i++) {
+    //        var current_block = queue_blocks[i];
+    //        var current_queue = new global::Queue(ref current_block, players);
 
-            if (current_queue) {
-                Console.WriteLine("[ParseQueueBlocks] Queue constructed with match id = {6} and players \n{0},\n{1},\n{2},\n{3},\n{4},\n{5}",
-                                  current_queue.players_in_queue[0].recorded_names[0], current_queue.players_in_queue[1].recorded_names[0], current_queue.players_in_queue[2].recorded_names[0],
-                                  current_queue.players_in_queue[3].recorded_names[0] ,current_queue.players_in_queue[4].recorded_names[0], current_queue.players_in_queue[5].recorded_names[0], 
-                                  current_queue.match_id);
-                queues.Add(current_queue);
-                qcount++;
-            }
-            //UpdateTeamDecisions(ref current_block);
-        }
-        UpdateTeamDecisions();
-        Console.WriteLine("[ParseQueueBlocks] Assigned {0} teams to queues, {1} queues are unassigned!", qcount, queue_blocks.Count - qcount);
-        Console.ForegroundColor = ConsoleColor.White;
-    }
+    //        if (current_queue) {
+    //            Console.WriteLine("[ParseQueueBlocks] Queue constructed with match id = {6} and players \n{0},\n{1},\n{2},\n{3},\n{4},\n{5}",
+    //                              current_queue.players_in_queue[0].recorded_names[0], current_queue.players_in_queue[1].recorded_names[0], current_queue.players_in_queue[2].recorded_names[0],
+    //                              current_queue.players_in_queue[3].recorded_names[0] ,current_queue.players_in_queue[4].recorded_names[0], current_queue.players_in_queue[5].recorded_names[0], 
+    //                              current_queue.match_id);
+    //            queues.Add(current_queue);
+    //            qcount++;
+    //        }
+    //        //UpdateTeamDecisions(ref current_block);
+    //    }
+    //    UpdateTeamDecisions();
+    //    Console.WriteLine("[ParseQueueBlocks] Assigned {0} teams to queues, {1} queues are unassigned!", qcount, queue_blocks.Count - qcount);
+    //    Console.ForegroundColor = ConsoleColor.White;
+    //}
+
+    public DiscordMessageList? raw_chat_data { get; set; }
 
     /*  TODO: THIS WILL NOT WORK YET DUE TO REFACTORS  */
     private void CleanupChatFile() {
@@ -171,12 +173,12 @@ public partial class Database {
             in_reader = File.OpenText(chat_path_s);
 
             Console.WriteLine("[CleanupChat] Reading \"" + chat_path_s + "\" into JSON object...");
-            var chat_message = DiscordMessage.RawDataToDiscordMessage(ref in_reader);
-            //var chat_messages = chat.raw_messages;
+            raw_chat_data = DiscordMessage.RawDataToDiscordMessage(ref in_reader);
+            var chat_messages = raw_chat_data;
             Console.WriteLine("[CleanupChat] Done reading \"" + chat_path_s + "\" into JSON object...");
             queue_blocks = new List<QueueBlock>();
-            if (chat_message != null)
-                queue_blocks = GetQueueBlocks(ref chat_message);
+            if (chat_messages != null)
+                queue_blocks = GetQueueBlocks(ref chat_messages);
 
             //RegisterPlayerNames();
             Console.WriteLine("[CleanupChat] Valid queues in file: " + queue_blocks.Count);
@@ -188,6 +190,17 @@ public partial class Database {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(ex.Message);
             Console.ForegroundColor = ConsoleColor.White;
+        }
+    }
+
+    private void SetQueues(){
+        if(raw_chat_data != null && raw_chat_data.raw_messages != null){
+            //List<DiscordMessage> popped = new List<DiscordMessage>();
+            foreach(var msg in raw_chat_data.raw_messages){
+                if (msg.IsJoinGameMessage()){
+
+                }
+            }
         }
     }
 }

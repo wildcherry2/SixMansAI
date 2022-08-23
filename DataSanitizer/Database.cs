@@ -37,10 +37,12 @@ public partial class Database {
         RemoveUnusableBlocks();
         RegisterPlayerNames();
 
+        SetQueues();
+        
         var options = new JsonSerializerOptions { WriteIndented = true };
         Console.WriteLine(JsonSerializer.Serialize(players[0], options));
         //ParseQueueBlocks();
-        //SetMatchResults();
+        SetMatchResults();
         // validate queues have 6 players before scanning
         //SetPlayerRecords();
 
