@@ -1,4 +1,5 @@
-﻿namespace Database;
+﻿using Database.Messages.ScoreReportMessage;
+namespace Database;
 
 public partial class Database {
     // TODO: validate team decision messages from queueblock are being actually team decision messages
@@ -202,7 +203,5 @@ public partial class Database {
         }
         
         Console.ForegroundColor = ConsoleColor.White;
-    }
-    private void SetPlayerRecords() {
     }
 }

@@ -146,7 +146,8 @@ public class Queue {
 
     public ScoreReportMessage result { get; set; }
 
-    public bool team_one_won { get; set; } = false; // NOTE: team label not zero-indexed, team one is the first team and team two is the second
+    //public Database.Database.Team team { get; set; } = Database.Database.Team.NOT_SET;
+
     public bool error        { get; set; }
     public static int  error_count  { get; set; } = 0;
 
@@ -202,7 +203,21 @@ public class Queue {
         }
 
         foreach (var player in team_one) { 
-            
+            if(result.winning_team == Database.Database.Team.TEAM_ONE) {
+                player.AddGameHistoryRecord(new Database.Player.GameHistory.GameRecord(player, result, result.datetime, true));
+            }
+            else {
+                player.AddGameHistoryRecord(new Database.Player.GameHistory.GameRecord(player, result, result.datetime, false));
+            }
+        }
+
+        foreach (var player in team_two) {
+            if (result.winning_team == Database.Database.Team.TEAM_TWO) {
+                player.AddGameHistoryRecord(new Database.Player.GameHistory.GameRecord(player, result, result.datetime, true));
+            }
+            else {
+                player.AddGameHistoryRecord(new Database.Player.GameHistory.GameRecord(player, result, result.datetime, false));
+            }
         }
     }
 }

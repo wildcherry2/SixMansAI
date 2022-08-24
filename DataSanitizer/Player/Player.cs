@@ -6,7 +6,7 @@ namespace Database.Player;
 public class Player {
     public Player() {
         recorded_names = new List<string>();
-        game_history = new List<GameHistoryRecord>();
+        game_history = new List<GameRecord>();
     }
 
     public Player(string name, ulong discord_id, string nickname = "", string linkname = "") {
@@ -14,17 +14,17 @@ public class Player {
         if (name.Length > 0) recorded_names.Add(name);
         if (nickname.Length > 0 && nickname != name) recorded_names.Add(nickname);
         if (linkname.Length > 0 && linkname != nickname && linkname != name) recorded_names.Add(linkname);
-        game_history = new List<GameHistoryRecord>();
+        game_history = new List<GameRecord>();
         this.discord_id = discord_id;
     }
 
     public Player(List<string> recorded_names, ulong discord_id) {
-        game_history = new List<GameHistoryRecord>();
+        game_history = new List<GameRecord>();
         this.recorded_names = recorded_names;
         this.discord_id = discord_id;
     }
 
-    public List<GameHistoryRecord> game_history   { get; }
+    public List<GameRecord> game_history   { get; }
     public List<string>            recorded_names { get; set; }
     public ulong                   discord_id     { get; }
     public int                     total_wins     { get; set; }
@@ -32,7 +32,7 @@ public class Player {
 
     public void AddName(string name) { recorded_names.Add(name); }
 
-    public void AddGameHistoryRecord(GameHistoryRecord record) { game_history.Add(record); }
+    public void AddGameHistoryRecord(GameRecord record) { game_history.Add(record); }
 
     public double GetTotalWinRateRatio() { return (double)total_wins / (total_wins + total_losses); }
 

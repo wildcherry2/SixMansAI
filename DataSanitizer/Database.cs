@@ -25,6 +25,8 @@ public partial class Database {
         this.chat_path_s = chat_path_s;
     }
 
+    public enum Team { TEAM_ONE, TEAM_TWO, NOT_SET }
+
     public List<Player.Player> players     { get; set; }
     public string              sr_path_s   { get; set; } = "";
     public string              chat_path_s { get; set; } = "";
