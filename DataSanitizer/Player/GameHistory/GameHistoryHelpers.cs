@@ -159,7 +159,7 @@ public partial class Database {
 
     private void SetMatchResults() {
         Console.ForegroundColor = ConsoleColor.Cyan;
-        
+
         /*
          *  int errors = 0
          *  for each queue in queues
@@ -176,6 +176,30 @@ public partial class Database {
          *          Log error message and increment errors
          *  Log set results complete message and show error count
          */
+
+        int errors = 0;
+        foreach(var queue in queues){
+            if (queue) {
+                bool found_queue = false;
+                foreach (var report in sr_messages) {
+                    if (report && report.match_id == queue.match_id) {
+                        if (report.SetWinner(queue)) {
+                            //log error
+                            //subs?
+                        }
+                        queue.result = report;
+                        found_queue = true;
+                        break;
+                    }
+                }
+                if (!found_queue) { 
+                    //log error
+                }
+            }
+            else {
+                //log error
+            }
+        }
         
         Console.ForegroundColor = ConsoleColor.White;
     }

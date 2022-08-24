@@ -155,4 +155,54 @@ public class Queue {
     public static bool operator ==(Queue queue, int match_id) { return queue.match_id == match_id; }
 
     public static bool operator !=(Queue queue, int match_id) { return !(queue == match_id); }
+    public bool TeamOneHasPlayer(ulong discord_id) {
+        foreach (var player in team_one) {
+            if (player.discord_id == discord_id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool TeamOneHasPlayer(string name) {
+        foreach (var player in team_one) {
+            if (player.HasName(ref name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool TeamTwoHasPlayer(ulong discord_id) {
+        foreach (var player in team_two) {
+            if (player.discord_id == discord_id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool TeamTwoHasPlayer(string name) {
+        foreach (var player in team_two) {
+            if (player.HasName(ref name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void UpdatePlayerRecords() {
+        if (team_one == null || team_two == null || team_one.Count < 3 || team_two.Count < 3 || !result.winner_set) {
+            //log error
+            return;
+        }
+
+        foreach (var player in team_one) { 
+            
+        }
+    }
 }
