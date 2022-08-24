@@ -61,14 +61,26 @@ public class DiscordMessage {
     public bool IsBotResponseMessage() { return IsBotResponsePlayerJoinedMessage() || IsBotResponsePlayerLeftMessage(); }
     public List<string>? GetTeamOneNames(){
         if (IsJoinGameMessage()){
-            return new List<string>(GetEmbeddedField(0).value.Split(','));
+            var names = new List<string>(GetEmbeddedField(0).value.Split(','));
+            for (int i = 0; i < names.Count; i++) {
+                var name = Database.GetPlayerNameFromEmbeddedLink(names[i].Trim());
+                names[i] = name != null ? name : names[i];
+            }
+
+            return names;
         }
         return null;
     }
 
     public List<string>? GetTeamTwoNames(){
         if (IsJoinGameMessage()){
-            return new List<string>(GetEmbeddedField(1).value.Split(','));
+            var names = new List<string>(GetEmbeddedField(1).value.Split(','));
+            for (int i = 0; i < names.Count; i++) {
+                var name = Database.GetPlayerNameFromEmbeddedLink(names[i].Trim());
+                names[i] = name != null ? name : names[i];
+            }
+
+            return names;
         }
         return null;
     }

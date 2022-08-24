@@ -197,10 +197,21 @@ public partial class Database {
         if(raw_chat_data != null && raw_chat_data.raw_messages != null){
             //List<DiscordMessage> popped = new List<DiscordMessage>();
             foreach(var msg in raw_chat_data.raw_messages){
-                if (msg.IsJoinGameMessage()){
-
+                if (msg.IsJoinGameMessage()) {
+                    var q = new Queue(msg, players);
+                    if (q) {
+                        queues.Add(q);
+                        Console.WriteLine("[SetQueues] Created and set team names for Match Id: {0} with Player count: {1}\n\tTeam 1: {2}\n\tTeam 2: {3}",
+                                          msg.GetLobbyId(), q.players_in_queue.Count, q.team_one[0].recorded_names[0] + ", " + q.team_one[1].recorded_names[0] + ", " + q.team_one[2].recorded_names[0],
+                                          q.team_two[0].recorded_names[0] + ", " + q.team_two[1].recorded_names[0] + ", " + q.team_two[2].recorded_names[0]);
+                    }
+                    else {
+                        Console.WriteLine("[SetQueues] Error creating queue!\n\tMatch Id = {0}\n\tPlayer count = {1}", q.match_id, q.players_in_queue.Count);
+                    }
                 }
             }
+
+            Console.WriteLine("[SetQueues] Finished setting player queues, error count = {0}", Queue.error_count);
         }
     }
 }

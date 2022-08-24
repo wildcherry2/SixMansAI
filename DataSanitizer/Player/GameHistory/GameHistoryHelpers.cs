@@ -160,7 +160,23 @@ public partial class Database {
     private void SetMatchResults() {
         Console.ForegroundColor = ConsoleColor.Cyan;
         
-        //Console.WriteLine("[SetMatchResults] Set match results for {0} queues, {1} queues unaccounted for!", results_set, queues.Count - results_set);
+        /*
+         *  int errors = 0
+         *  for each queue in queues
+         *      if queue
+         *          bool found_queue = false
+         *          for each report in sr_messages
+         *              if lobby ids match
+         *                  set queue.team_one_won
+         *                  found_queue = true
+         *                  break
+         *          if !found_queue
+         *              Log error message and increment errors
+         *      else
+         *          Log error message and increment errors
+         *  Log set results complete message and show error count
+         */
+        
         Console.ForegroundColor = ConsoleColor.White;
     }
     private void SetPlayerRecords() {

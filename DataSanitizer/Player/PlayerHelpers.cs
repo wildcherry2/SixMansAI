@@ -68,8 +68,8 @@ public partial class Database {
     private static Regex name_from_embedded_link_regex = new Regex(@"(?:(?!^\[|\]\().)+", RegexOptions.Compiled);
     private static Regex is_link_regex                 = new Regex(@"^\[.+\]\(https://www\.rl6mans\.com/profile/.+\) has joined.$", RegexOptions.Compiled);
     public static string? GetPlayerNameFromEmbeddedLink(string link) {
-        if(IsLinkMessage(link))
-            return name_from_embedded_link_regex.Match(link.Trim()).Value;
+        if(name_from_embedded_link_regex.Match(link).Success)
+            return name_from_embedded_link_regex.Match(link).Value;
         return null;
     }
     public static bool IsLinkMessage(string test) {

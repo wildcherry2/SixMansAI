@@ -31,7 +31,7 @@ public partial class Database {
 
     /*  TODO: A better algorithm for score gathering: get all names from all raw data files, then independently get all join vc messages and lookup by name. Or do this only for error queues to sew what's salvageable  */
     public void BuildDatabase() {
-        //CleanupScoreReportFile();
+        CleanupScoreReportFile();
         CleanupChatFile();
         
         RemoveUnusableBlocks();
