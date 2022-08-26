@@ -8,6 +8,11 @@
     <StartupObject>MainClass</StartupObject>
   </PropertyGroup>
 
+	<PropertyGroup>
+		<EnablePreviewFeatures>True</EnablePreviewFeatures>
+	</PropertyGroup>
+
+
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
