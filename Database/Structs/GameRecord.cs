@@ -1,6 +1,6 @@
 ﻿namespace Database.Structs;
 
 public struct FGameRecord {
-    public Database.DatabaseCore.Season.Queue queue;
-    public bool                               bPlayerWon;
+    public Database.DatabaseCore.Season.DBQueue queue;
+    public bool                                 bPlayerWon;
 }
