@@ -10,7 +10,7 @@ public class DBQueue : IDatabaseComponent {
     public FScoreReport score_report { get; set; }
 
     //public List<DiscordMessage> raw_messages_in_queue
-    public ETeamLabel winner;
+    public ETeamLabel winner { get; set; } = ETeamLabel.NOT_SET;
 
     public DBQueue(int match_id /* List<DiscordMessages> maybe?? */) : base(ConsoleColor.Cyan, 2, "DBQueue"){
         this.match_id = match_id;
