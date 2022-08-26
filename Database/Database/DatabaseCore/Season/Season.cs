@@ -5,7 +5,7 @@ namespace Database.Database.DatabaseCore.Season;
 
 public class DBSeason : IDatabaseComponent {
     private DBSeason(string chat_data, string score_report_data) : base(ConsoleColor.Yellow, 1, "DBSeason") {
-
+        queues = new List<DBQueue>();
     }
     public         FSeasonLabel         season_label { get; set; }
     public         List<DBQueue>        queues       { get; set; }
