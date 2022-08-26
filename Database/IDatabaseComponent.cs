@@ -1,5 +1,5 @@
 ﻿namespace Database;
-
+//change abstract members to virtual where applicable? wouldnt have to reimplement everywhere
 public abstract class IDatabaseComponent {
     protected      bool                bError = false;
     protected      ConsoleColor        current_color { get; set; }
@@ -52,14 +52,12 @@ public abstract class IDatabaseComponent {
 
     protected void Log(string message, params string[] subs_strings) {
         Console.ForegroundColor = current_color;
-        if (subs_strings.Length > 0) {
-            string msg = "";
-            for (int i = 0; i < iTabs; i++) msg += "\t";
-            msg += "[" + class_name + "] " + message;
+        string msg = "";
+        for (int i = 0; i < iTabs; i++) msg += "\t";
+        msg += "[" + class_name + "] " + message;
 
-            Console.WriteLine(msg, subs_strings);
-        }
-        else Console.WriteLine(message);
+        if (subs_strings.Length > 0) Console.WriteLine(msg, subs_strings);
+        else Console.WriteLine(msg);
     }
 
     protected IDatabaseComponent(ConsoleColor color = ConsoleColor.White, int tabs = 0, string class_name = "IDatabaseComponent") {

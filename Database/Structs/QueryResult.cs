@@ -4,6 +4,7 @@ using Database.Enums;
 
 namespace Database.Structs;
 
+//make common base class for structs so T can be a struct as well?
 public struct FQueryResult<T> where T : IDatabaseComponent {
     //private EQueryResultType type;
     private T?               result;
