@@ -50,6 +50,7 @@ public abstract class IDatabaseComponent {
     protected abstract bool IsEqual(IDatabaseComponent?    rhs);
     protected abstract bool IsLessThan(IDatabaseComponent? rhs);
 
+    // add in System.Reflection.MethodBase.GetCurrentMethod().Name to print with function name?
     protected void Log(string message, params string[] subs_strings) {
         Console.ForegroundColor = current_color;
         string msg = "";
