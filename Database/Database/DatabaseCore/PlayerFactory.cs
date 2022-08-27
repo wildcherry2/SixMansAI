@@ -21,12 +21,13 @@ public class PlayerFactory {
     // Precondition: expects chat_messages to have already run through ChatCleaner.ProcessChat
     public List<DPlayer> ProcessChat(FMessageList chat_messages) {
         var players = DDatabaseCore.GetSingleton().all_players;
-        for (var i = 1; i < chat_messages.messages.Count - 1; i++) {
-            
+        for (var i = 2; i < chat_messages.messages.Count - 2; i++) {
+            var previous_previous = chat_messages.messages[i - 2];
             var previous = chat_messages.messages[i - 1];
             var current = chat_messages.messages[i];
             var next = chat_messages.messages[i + 1];
-            if (FollowsValidPattern(ref previous, ref current, ref next)) {
+            var next_next = chat_messages.messages[i + 2];
+            if (FollowsValidPattern(ref previous_previous, ref previous, ref current, ref next, ref next_next)) {
                 var search = DDatabaseCore.GetSingleton().GetPlayerIfExists(ulong.Parse(current.author.id));
                 var link = next.GetPlayerNameFromEmbeddedLink(next.GetEmbeddedDescription());
                 if (ReferenceEquals(search, null)) {
@@ -34,9 +35,12 @@ public class PlayerFactory {
                     players.Add(player);
                 }
                 else {
-                    if(!search.HasName(current.author.name)) search.recorded_names.Add(current.author.name);
-                    if(!search.HasName(current.author.nickname)) search.recorded_names.Add(current.author.nickname);
-                    if (link != null && !search.HasName(link)) search.recorded_names.Add(link);
+                    if(!search.HasName(current.author.name)) 
+                        search.TryAddName(current.author.name);
+                    if(!search.HasName(current.author.nickname)) 
+                        search.TryAddName(current.author.nickname);
+                    if (link != null && !search.HasName(link)) 
+                        search.TryAddName(link);
                 }
             }
         }
@@ -44,8 +48,9 @@ public class PlayerFactory {
         return players;
     }
 
-    private bool FollowsValidPattern(ref DDiscordMessage previous, ref DDiscordMessage current, ref DDiscordMessage next) {
-        if (current.type == EMessageType.PLAYER_Q && (previous.IsBotNotification() || previous.IsBotResponse()) && (next.IsBotNotification() || next.IsBotResponse()))
+    private bool FollowsValidPattern(ref DDiscordMessage previous_previous, ref DDiscordMessage previous, ref DDiscordMessage current, ref DDiscordMessage next, ref DDiscordMessage next_next) {
+        if (current.type == EMessageType.PLAYER_Q && (previous.IsBotNotification() || previous.IsBotResponse()) && next.IsBotResponse()
+            && (!previous_previous.IsBotNotification() && !previous_previous.IsBotResponse()) && !next_next.IsBotResponse())
             return true;
 
 

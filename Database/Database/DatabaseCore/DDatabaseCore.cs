@@ -12,7 +12,7 @@ public class DDatabaseCore : IDatabaseComponent {
     private static DDatabaseCore?         singleton;
 
     // Will move to CLoader
-    public static string chat_path = @"";
+    public static string chat_path = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\rank-b\July2022.json";
 
     private DDatabaseCore() : base(ConsoleColor.Green, 0, "DDatabaseCore") {
         all_players = new List<DPlayer>();
@@ -20,8 +20,7 @@ public class DDatabaseCore : IDatabaseComponent {
     }
 
     public static DDatabaseCore GetSingleton() {
-        if(!singleton)
-            singleton = new DDatabaseCore();
+        if(ReferenceEquals(singleton, null)) singleton = new DDatabaseCore();
 
         return singleton;
     }
@@ -29,9 +28,8 @@ public class DDatabaseCore : IDatabaseComponent {
     // Will later use CLoader
     public FMessageList? LoadAndGetAllDiscordChatMessages(string path) {
         FMessageList? list = null;
-
         try {
-            list = JsonSerializer.Deserialize<FMessageList>(path);
+            list = JsonSerializer.Deserialize<FMessageList>(new StreamReader(path).ReadToEnd());
             if (list == null || list.messages == null) return null;
         }
         catch (Exception e) {

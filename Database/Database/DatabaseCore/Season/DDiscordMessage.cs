@@ -51,6 +51,8 @@ public class DDiscordMessage : IDatabaseComponent {
                     return GetMatchIdFromTeamsPickedMessage();
                 case EMessageType.SCORE_REPORT:
                     return GetMatchIdFromScoreReportMessage();
+                case EMessageType.BOT_LOBBY_CANCELLED:
+                    return GetMatchIdFromBotLobbyCancelledNoPickMessage();
                 default:
                     return -1;
             }
@@ -94,6 +96,17 @@ public class DDiscordMessage : IDatabaseComponent {
         }
     }
 
+    private int GetMatchIdFromBotLobbyCancelledNoPickMessage() {
+        try {
+            if (!IsLobbyCancelledNoPickMessage()) return -1;
+            return int.Parse(RegularExpressions.lobby_id_lobby_cancelled_regex.Match(content).Value);
+        }
+        catch (Exception ex) {
+            Log("Could not parse match ID from teams picked message! Content = {0}, Exception = {1}", content, ex.Message);
+            return -1;
+        }
+    }
+
     public string? GetEmbeddedTitle() {
         return (embeds != null && embeds.Count > 0 && embeds[0].title != null) ? embeds[0].title : null;
     }
@@ -107,9 +120,11 @@ public class DDiscordMessage : IDatabaseComponent {
     }
 
     public string? GetPlayerNameFromEmbeddedLink(string? embedded_link) {
-        if (embedded_link != null && RegularExpressions.name_from_embedded_link_regex.Match(embedded_link).Success) {
-            var match = RegularExpressions.name_from_embedded_link_regex.Match(embedded_link);
-            if (match.Success) { return match.Value; }
+        if (embedded_link != null ) {
+            var pre_match = RegularExpressions.name_from_embedded_link_regex.Match(embedded_link);
+            if(pre_match != null && pre_match.Success) {
+                return pre_match.Value;
+            }
         }
         Log("Get player name from embedded link failed! Link = {0} IsMatch = {1}", embedded_link ?? "null", RegularExpressions.name_from_embedded_link_regex.Match(embedded_link).Success ? "true" : "false");
         return null;

@@ -19,7 +19,8 @@ public class ChatCleaner {
     }
 
     public FMessageList ProcessChat(string override_path = "") {
-        var all_messages = DDatabaseCore.GetSingleton().LoadAndGetAllDiscordChatMessages(override_path == "" ? DDatabaseCore.chat_path : override_path);
+        var core = DDatabaseCore.GetSingleton();
+        var all_messages = core.LoadAndGetAllDiscordChatMessages(override_path == "" ? DDatabaseCore.chat_path : override_path);
         var filtered_messages = new FMessageList();
         if (all_messages != null) {
             foreach (var message in all_messages.messages) {

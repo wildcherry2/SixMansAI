@@ -14,8 +14,8 @@ public class DPlayer : IDatabaseComponent {
         game_history = new List<FGameRecord>();
         recorded_names = new List<string>();
         recorded_names.Add(discord_name);
-        if(nickname.Length > 0) recorded_names.Add(nickname);
-        if(link_name.Length > 0) recorded_names.Add(link_name);
+        if(nickname.Length > 0 && nickname != discord_name) recorded_names.Add(nickname);
+        if(link_name.Length > 0 && link_name != discord_name && link_name != nickname) recorded_names.Add(link_name);
     }
 
     public bool HasName(string name) {

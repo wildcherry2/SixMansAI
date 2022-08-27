@@ -282,27 +282,24 @@ public class DDiscordMessageTests {
         Assert.IsTrue(sample.reactions == null || sample.reactions.Count == 0);
     }
 
+    // Invariant: There will always be a name between the first pair of [ and ]
     [TestMethod]
     public void TestGetPlayerNameFromEmbeddedLink() {
-        string sample0 = "[SirFinkle](https://www.rl6mans.com/profile/SirFinkle) has joined.";
-        string sample1 = "[[wildcherry]](https://www.rl6mans.com/profile/[[wildcherry]]) has joined.";
-        string sample2 = "[wildcherry]";
-        string sample3 = "";
-        string sample4 = "[SirFinkle(https://www.rl6mans.com/profile/SirFinkle) has joined.";
-        string sample5 = "SirFinkle(https://www.rl6mans.com/profile/SirFinkle) has joined.";
-        string sample6 = "SirFinkle](https://www.rl6mans.com/profile/SirFinkle) has joined.";
+        string sample0 = @"[SirFinkle](https://www.rl6mans.com/profile/SirFinkle) has joined.";
+        string sample1 = @"[[wildcherry]](https://www.rl6mans.com/profile/[[wildcherry]]) has joined.";
+        string sample2 = @"[wildcherry]](https://www.rl6mans.com/profile/wildcherry]) has joined.";
+        string sample3 = @"[wildcherry+/?\\]](https://www.rl6mans.com/profile/wildcherry]) has joined.";
 
         var dummy = messages.messages[0];
         Assert.IsNotNull(dummy.GetPlayerNameFromEmbeddedLink(sample0));
         Assert.IsNotNull(dummy.GetPlayerNameFromEmbeddedLink(sample1));
-        Assert.IsNull(dummy.GetPlayerNameFromEmbeddedLink(sample2));
-        Assert.IsNull(dummy.GetPlayerNameFromEmbeddedLink(sample3));
-        Assert.IsNull(dummy.GetPlayerNameFromEmbeddedLink(sample4));
-        Assert.IsNull(dummy.GetPlayerNameFromEmbeddedLink(sample5));
-        Assert.IsNull(dummy.GetPlayerNameFromEmbeddedLink(sample6));
+        Assert.IsNotNull(dummy.GetPlayerNameFromEmbeddedLink(sample2));
+        Assert.IsNotNull(dummy.GetPlayerNameFromEmbeddedLink(sample3));
 
         Assert.AreEqual("SirFinkle", dummy.GetPlayerNameFromEmbeddedLink(sample0));
         Assert.AreEqual("[wildcherry]", dummy.GetPlayerNameFromEmbeddedLink(sample1));
+        Assert.AreEqual("wildcherry]", dummy.GetPlayerNameFromEmbeddedLink(sample2));
+        Assert.AreEqual(@"wildcherry+/?\\]", dummy.GetPlayerNameFromEmbeddedLink(sample3));
     }
 
     [TestMethod]
