@@ -42,8 +42,20 @@ public class DDatabaseCore : IDatabaseComponent {
     }
 
     public DPlayer? GetPlayerIfExists(ulong discord_id) {
+        if (discord_id == 0) return null;
         foreach (var player in all_players) {
             if (player.discord_id == discord_id) return player;
+        }
+
+        return null;
+    }
+
+    public DPlayer? GetPlayerIfExists(string name) {
+        if (name.Length == 0) return null;
+        foreach (var player in all_players) {
+            foreach (var this_name in player.recorded_names) {
+                if(this_name == name) return player;
+            }
         }
 
         return null;
