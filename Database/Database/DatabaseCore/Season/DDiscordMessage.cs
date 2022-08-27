@@ -106,10 +106,42 @@ public class DDiscordMessage : IDatabaseComponent {
         return embeds != null && embeds.Count > 0 && embeds[0].fields.Count >= index + 1 ? embeds[0].fields[index] : null;
     }
 
+    // TODO: Unit test GetPlayerNameFromEmbeddedLink
+    public string? GetPlayerNameFromEmbeddedLink(string embedded_link) {
+        var match = RegularExpressions.name_from_embedded_link_regex.Match(embedded_link);
+        if (match.Success) {
+            return match.Value;
+        }
+
+        return null;
+    }
+
     public bool HasSubstitutes() {
         return IsScoreReportMessage() && mentions.Count > 0;
     }
 
+    // TODO: Unit test GetPlayerNamesFromTeamPickedMessage
+    public string[]? GetPlayerNamesFromTeamPickedMessage() {
+        if (!IsTeamsPickedMessage()) return null;
+        var ret = new string[6];
+        var link_strings = GetEmbeddedField(0).value.Split(", ");
+        if (link_strings.Length != 3) return null;
+
+        ret[0] = GetPlayerNameFromEmbeddedLink(link_strings[0]);
+        ret[1] = GetPlayerNameFromEmbeddedLink(link_strings[1]);
+        ret[2] = GetPlayerNameFromEmbeddedLink(link_strings[2]);
+
+        link_strings = GetEmbeddedField(1).value.Split(", ");
+        if (link_strings.Length != 3) return null;
+
+        ret[3] = GetPlayerNameFromEmbeddedLink(link_strings[0]);
+        ret[4] = GetPlayerNameFromEmbeddedLink(link_strings[1]);
+        ret[5] = GetPlayerNameFromEmbeddedLink(link_strings[2]);
+
+        return ret;
+    }
+
+    // TODO: Use GetPlayerNamesFromTeamPickedMessage to get names instead, then do a lookup for either team in one function with an ETeamLabel to indicate the team in the parameters
     public List<DPlayer>? GetTeamOne() {
         if (!IsTeamsPickedMessage()) return null;
 
@@ -214,10 +246,12 @@ public class DDiscordMessage : IDatabaseComponent {
         return !IsAuthorBot();
     }
 
+    // Returns true if this message is a bot response to a player !q or !leave command
     public bool IsBotResponse() {
         return IsBotResponseToPlayerQ() || IsBotResponseToPlayerLeave();
     }
 
+    // Returns true if this message is a voting complete or teams picked message
     public bool IsBotNotification() {
         return IsVotingCompleteMessage() || IsTeamsPickedMessage();
     }

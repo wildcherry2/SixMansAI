@@ -1,6 +1,6 @@
 ﻿namespace Database.Structs;
 
-public struct FSeasonLabel {
-    public string month;
-    public string year;
+public class FSeasonLabel {
+    public string month = "-1";
+    public string year = "-1";
 }

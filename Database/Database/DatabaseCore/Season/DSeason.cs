@@ -1,4 +1,5 @@
-﻿using Database.Database.DatabaseCore.Season.RawMessageDeserializer;
+﻿using Database.Database.DatabaseCore.Season.Queue;
+using Database.Database.DatabaseCore.Season.RawMessageDeserializer;
 using Database.Structs;
 
 namespace Database.Database.DatabaseCore.Season;
@@ -6,11 +7,14 @@ namespace Database.Database.DatabaseCore.Season;
 public class DSeason : IDatabaseComponent {
     private DSeason(string chat_data, string score_report_data) : base(ConsoleColor.Yellow, 1, "DSeason") {
         queues = new List<DQueue>();
+        //queue_factory = new QueueFactory();
+        deserializer = new RawChatDeserializer();
+        season_label = new FSeasonLabel();
     }
     public         FSeasonLabel         season_label { get; set; }
     public         List<DQueue>        queues       { get; set; }
     private static DSeason?            singleton;
-    private static QueueScanner?        queue_scanner;
+    private static QueueFactory?        queue_factory;
     private static RawChatDeserializer? deserializer;
 
     public static DSeason GetSingleton(string chat_data = "", string score_report_data = "") {

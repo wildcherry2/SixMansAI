@@ -1,5 +1,5 @@
 ﻿//change abstract members to virtual where applicable? wouldnt have to reimplement everywhere
-namespace Database; 
+namespace Database;
 
 public abstract class IDatabaseComponent {
     protected      bool                bError = false;

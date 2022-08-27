@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
 namespace Database.Structs;
-public struct FReaction {
+public class FReaction {
     [JsonPropertyName("emoji")]
     public FEmoji emoji;
 }
