@@ -212,6 +212,7 @@ public class DDiscordMessage : IDatabaseComponent {
         else if (IsScoreReportMessage()) type = EMessageType.SCORE_REPORT;
         else if (IsTeamsPickedMessage()) type = EMessageType.TEAMS_PICKED;
         else if (IsVotingCompleteMessage()) type = EMessageType.VOTING_COMPLETE;
+        else if (IsLobbyCancelledNoPickMessage()) type = EMessageType.BOT_LOBBY_CANCELLED;
         else {
             type = EMessageType.UNKNOWN;
             bError = true;
@@ -236,6 +237,12 @@ public class DDiscordMessage : IDatabaseComponent {
 
     private bool IsTeamsPickedMessage() {
         return IsAuthorBot() && GetEmbeddedDescription() == "You may now join the team channels";
+    }
+
+    // TODO: Unit test lobby IsLobbyCancelledNoPickMessage
+    // With NameFactory, if this is true then reset the counter, since captains not picking resets the queue
+    private bool IsLobbyCancelledNoPickMessage() {
+        return IsAuthorBot() && GetEmbeddedTitle().Contains("Captain failed to pick players for **Match ID");
     }
 
     private bool IsAuthorBot() {

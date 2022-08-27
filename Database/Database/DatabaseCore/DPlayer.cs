@@ -18,6 +18,46 @@ public class DPlayer : IDatabaseComponent {
         if(link_name.Length > 0) recorded_names.Add(link_name);
     }
 
+    public bool HasName(string name) {
+        foreach (var player_name in recorded_names) {
+            if (name == player_name) return true;
+        }
+
+        return false;
+    }
+
+    public FGameRecord GetPlayerGameRecord(FSeasonLabel season, int match_id) {
+        /*
+         * Get season object here
+         */
+
+        return new FGameRecord();
+    }
+
+    public void TryAddName(string name) {
+        bool found = false;
+        foreach (var player_name in recorded_names) {
+            if (name == player_name) {
+                found = true;
+                break;
+            }
+        }
+
+        if(!found) recorded_names.Add(name);
+    }
+
+    public void TryAddGameRecord(FGameRecord record) {
+        bool found = false;
+        foreach (var rec in game_history) {
+            if (rec.queue == record.queue) {
+                found = true;
+                break;
+            }
+        }
+
+        if(!found) game_history.Add(record);
+    }
+
     public static bool operator ==(DPlayer? lhs, string rhs) {
         if (!lhs) return false;
         foreach (var name in lhs.recorded_names) {

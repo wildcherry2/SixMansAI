@@ -6,12 +6,16 @@ namespace Database.Database.DatabaseCore.Season.Queue;
 public class QueueFactory {
     private static QueueFactory? singleton    { get; set; }
     private        FMessageList? _messageList { get; set; }
-    private QueueFactory() {
-        _messageList = DDatabaseCore.GetSingleton().LoadAndGetAllDiscordChatMessages(DDatabaseCore.chat_path);
+    private QueueFactory(FMessageList? season_message_list = null) {
+        if (season_message_list == null)
+            _messageList = DDatabaseCore.GetSingleton().LoadAndGetAllDiscordChatMessages(DDatabaseCore.chat_path);
+        else
+            _messageList = season_message_list;
     }
 
-    public QueueFactory GetSingleton() {
-        if (singleton == null) singleton = new QueueFactory();
+    public static QueueFactory GetSingleton(FMessageList? season_message_list = null) {
+        if (singleton == null) singleton = new QueueFactory(season_message_list);
+        else if(season_message_list != null) singleton._messageList = season_message_list;
         return singleton;
     }
 

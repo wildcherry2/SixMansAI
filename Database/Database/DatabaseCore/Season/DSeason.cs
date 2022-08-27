@@ -9,18 +9,22 @@ public class DSeason : IDatabaseComponent {
         queues = new List<DQueue>();
         //queue_factory = new QueueFactory();
         deserializer = new RawChatDeserializer();
-        season_label = new FSeasonLabel();
+    }
+
+    public DSeason(FSeasonLabel season_label, List<DQueue> queues) {
+        this.season_label = season_label;
+        this.queues = queues;
     }
     public         FSeasonLabel         season_label { get; set; }
     public         List<DQueue>        queues       { get; set; }
-    private static DSeason?            singleton;
+    //private static DSeason?            singleton;
     private static QueueFactory?        queue_factory;
     private static RawChatDeserializer? deserializer;
 
-    public static DSeason GetSingleton(string chat_data = "", string score_report_data = "") {
-        if (!singleton) singleton = new DSeason(chat_data, score_report_data);
-        return singleton;
-    }
+    //public static DSeason GetSingleton(FSeasonLabel label) {
+    //    if (!singleton) singleton = new DSeason(label);
+    //    return singleton;
+    //}
 
     public void SetQueues() {
 
