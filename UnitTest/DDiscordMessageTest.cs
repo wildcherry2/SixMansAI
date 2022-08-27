@@ -281,4 +281,41 @@ public class DDiscordMessageTests {
         Assert.IsTrue(sample.mentions != null && sample.mentions.Count == 6);
         Assert.IsTrue(sample.reactions == null || sample.reactions.Count == 0);
     }
+
+    [TestMethod]
+    public void TestGetPlayerNameFromEmbeddedLink() {
+        string sample0 = "[SirFinkle](https://www.rl6mans.com/profile/SirFinkle) has joined.";
+        string sample1 = "[[wildcherry]](https://www.rl6mans.com/profile/[[wildcherry]]) has joined.";
+        string sample2 = "[wildcherry]";
+        string sample3 = "";
+        string sample4 = "[SirFinkle(https://www.rl6mans.com/profile/SirFinkle) has joined.";
+        string sample5 = "SirFinkle(https://www.rl6mans.com/profile/SirFinkle) has joined.";
+        string sample6 = "SirFinkle](https://www.rl6mans.com/profile/SirFinkle) has joined.";
+
+        var dummy = messages.messages[0];
+        Assert.IsNotNull(dummy.GetPlayerNameFromEmbeddedLink(sample0));
+        Assert.IsNotNull(dummy.GetPlayerNameFromEmbeddedLink(sample1));
+        Assert.IsNull(dummy.GetPlayerNameFromEmbeddedLink(sample2));
+        Assert.IsNull(dummy.GetPlayerNameFromEmbeddedLink(sample3));
+        Assert.IsNull(dummy.GetPlayerNameFromEmbeddedLink(sample4));
+        Assert.IsNull(dummy.GetPlayerNameFromEmbeddedLink(sample5));
+        Assert.IsNull(dummy.GetPlayerNameFromEmbeddedLink(sample6));
+
+        Assert.AreEqual("SirFinkle", dummy.GetPlayerNameFromEmbeddedLink(sample0));
+        Assert.AreEqual("[wildcherry]", dummy.GetPlayerNameFromEmbeddedLink(sample1));
+    }
+
+    [TestMethod]
+    public void TestGetPlayerNamesFromTeamPickedMessage() {
+        var msg = GetTeamsPickedMessage();
+        Assert.IsNotNull(msg);
+
+        var sample0 = msg.GetPlayerNamesFromTeamPickedMessage();
+        Assert.IsNotNull(sample0);
+        Assert.IsTrue(sample0.Length == 6);
+        Console.WriteLine(sample0);
+        Assert.AreEqual("Whale-", sample0[0]);
+        Assert.AreEqual("ohtits", sample0[1]);
+        Assert.AreEqual("kimo", sample0[2]);
+    }
 }

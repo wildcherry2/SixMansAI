@@ -95,7 +95,7 @@ public class DDiscordMessage : IDatabaseComponent {
     }
 
     public string? GetEmbeddedTitle() {
-        return embeds != null && embeds.Count > 0? embeds[0].title : null;
+        return (embeds != null && embeds.Count > 0 && embeds[0].title != null) ? embeds[0].title : null;
     }
 
     public string? GetEmbeddedDescription() {
@@ -106,13 +106,12 @@ public class DDiscordMessage : IDatabaseComponent {
         return embeds != null && embeds.Count > 0 && embeds[0].fields.Count >= index + 1 ? embeds[0].fields[index] : null;
     }
 
-    // TODO: Unit test GetPlayerNameFromEmbeddedLink
     public string? GetPlayerNameFromEmbeddedLink(string? embedded_link) {
-        if (embedded_link != null) {
+        if (embedded_link != null && RegularExpressions.name_from_embedded_link_regex.Match(embedded_link).Success) {
             var match = RegularExpressions.name_from_embedded_link_regex.Match(embedded_link);
             if (match.Success) { return match.Value; }
         }
-
+        Log("Get player name from embedded link failed! Link = {0} IsMatch = {1}", embedded_link ?? "null", RegularExpressions.name_from_embedded_link_regex.Match(embedded_link).Success ? "true" : "false");
         return null;
     }
 
@@ -120,23 +119,71 @@ public class DDiscordMessage : IDatabaseComponent {
         return IsScoreReportMessage() && mentions.Count > 0;
     }
 
-    // TODO: Unit test GetPlayerNamesFromTeamPickedMessage
     public string[]? GetPlayerNamesFromTeamPickedMessage() {
-        if (!IsTeamsPickedMessage()) return null;
+        if (!IsTeamsPickedMessage()) {
+            Log("Tried to get embedded player names from a message that isn't a team picked message! Content = {0}", content ?? "null");
+            return null;
+        }
         var ret = new string[6];
-        var link_strings = GetEmbeddedField(0).value.Split(", ");
-        if (link_strings.Length != 3) return null;
+        var link_fields = GetEmbeddedField(0);
+        if (link_fields == null) {
+            Log("Tried to get embedded player names from a message without field 0! Content = {0}", content ?? "null");
+            return null;
+        }
+        var link_strings = link_fields.value.Split(",");
+        if (link_strings.Length != 3) {
+            Log("Could not gather 3 players with links! Content = {0}", content ?? "null");
+            return null;
+        }
 
-        ret[0] = GetPlayerNameFromEmbeddedLink(link_strings[0]);
-        ret[1] = GetPlayerNameFromEmbeddedLink(link_strings[1]);
-        ret[2] = GetPlayerNameFromEmbeddedLink(link_strings[2]);
+        string? str_name = GetPlayerNameFromEmbeddedLink(link_strings[0].Trim());
+        if (str_name != null)
+            ret[0] = str_name;
+        else {
+            Log("Could not get player name from link string 0! String = {0}", link_strings[0]);
+            return null;
+        }
 
-        link_strings = GetEmbeddedField(1).value.Split(", ");
-        if (link_strings.Length != 3) return null;
+        str_name = GetPlayerNameFromEmbeddedLink(link_strings[1].Trim());
+        if (str_name != null)
+            ret[1] = str_name;
+        else
+            return null;
 
-        ret[3] = GetPlayerNameFromEmbeddedLink(link_strings[0]);
-        ret[4] = GetPlayerNameFromEmbeddedLink(link_strings[1]);
-        ret[5] = GetPlayerNameFromEmbeddedLink(link_strings[2]);
+        str_name = GetPlayerNameFromEmbeddedLink(link_strings[2].Trim());
+        if (str_name != null)
+            ret[2] = str_name;
+        else
+            return null;
+
+        link_fields = GetEmbeddedField(1);
+        if (link_fields == null) {
+            Log("Tried to get embedded player names from a message without field 1! Content = {0}", content ?? "null");
+            return null;
+        }
+        link_strings = link_fields.value.Split(", ");
+        if (link_strings.Length != 3) {
+            Log("Could not gather 3 players with links! Content = {0}", content ?? "null");
+            return null;
+        }
+
+        str_name = GetPlayerNameFromEmbeddedLink(link_strings[0].Trim());
+        if (str_name != null)
+            ret[3] = str_name;
+        else
+            return null;
+
+        str_name = GetPlayerNameFromEmbeddedLink(link_strings[1].Trim());
+        if (str_name != null)
+            ret[4] = str_name;
+        else
+            return null;
+
+        str_name = GetPlayerNameFromEmbeddedLink(link_strings[2].Trim());
+        if (str_name != null)
+            ret[5] = str_name;
+        else
+            return null;
 
         return ret;
     }
@@ -220,33 +267,32 @@ public class DDiscordMessage : IDatabaseComponent {
     }
 
     private bool IsQMessage() {
-        return content == @"!q";
+        return content != null && content == @"!q";
     }
 
     private bool IsLeaveMessage() {
-        return content == @"!leave";
+        return content != null && content == @"!leave";
     }
 
     private bool IsVotingCompleteMessage() {
-        return IsAuthorBot() && embeds.Count > 0 && embeds[0].description.Contains("All players must join within 7 minutes and then teams will be chosen.\n**Vote result:**");
+        return IsAuthorBot() && embeds != null && embeds.Count > 0 && embeds[0].description.Contains("All players must join within 7 minutes and then teams will be chosen.\n**Vote result:**");
     }
 
     private bool IsScoreReportMessage() {
-        return IsAuthorHuman() && RegularExpressions.score_report_regex.IsMatch(content);
+        return IsAuthorHuman() && content != null && RegularExpressions.score_report_regex.IsMatch(content);
     }
 
     private bool IsTeamsPickedMessage() {
         return IsAuthorBot() && GetEmbeddedDescription() == "You may now join the team channels";
     }
 
-    // TODO: Unit test lobby IsLobbyCancelledNoPickMessage
     // With PlayerFactory, if this is true then reset the counter, since captains not picking resets the queue
     private bool IsLobbyCancelledNoPickMessage() {
-        return IsAuthorBot() && GetEmbeddedTitle().Contains("Captain failed to pick players for **Match ID");
+        return IsAuthorBot() && content != null && content.Contains("Captain failed to pick players for **Match ID");
     }
 
     private bool IsAuthorBot() {
-        return author != null && (author.isBot ? true : false);
+        return author != null && author.isBot != null && author.isBot.Value;
     }
 
     private bool IsAuthorHuman() {
@@ -264,11 +310,11 @@ public class DDiscordMessage : IDatabaseComponent {
     }
 
     private bool IsBotResponseToPlayerQ() {
-        return IsAuthorBot() && embeds.Count > 0 && embeds[0].description.Contains(") has joined.");
+        return IsAuthorBot() && embeds != null && embeds.Count > 0 && embeds[0].description.Contains(") has joined.");
     }
 
     private bool IsBotResponseToPlayerLeave() {
-        return IsAuthorBot() && embeds.Count > 0 && embeds[0].description.Contains(") has left (using command).");
+        return IsAuthorBot() && embeds != null && embeds.Count > 0 && embeds[0].description.Contains(") has left (using command).");
     }
 
     #region Inherited Overrides

@@ -18,6 +18,7 @@ public class PlayerFactory {
         return singleton;
     }
 
+    // Precondition: expects chat_messages to have already run through ChatCleaner.ProcessChat
     public List<DPlayer> ProcessChat(FMessageList chat_messages) {
         var players = DDatabaseCore.GetSingleton().all_players;
         for (var i = 1; i < chat_messages.messages.Count - 1; i++) {
