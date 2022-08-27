@@ -26,7 +26,7 @@ public class SeasonFactory {
     public List<DSeason> ProcessChat() {
         var ret = new List<DSeason>();
 
-        if (chat_messages != null && chat_messages.messages != null) {
+        if (chat_messages != null) {
             var previous_id = 0;
             var previous_id_index = -1;
             var season_begin_index = 0;

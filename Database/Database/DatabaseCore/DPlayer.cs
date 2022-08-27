@@ -75,7 +75,7 @@ public class DPlayer : IDatabaseComponent {
     protected override bool IsEqual(IDatabaseComponent? rhs) {
     
         var rhs_casted = rhs != null ? (rhs as DPlayer) : null;
-        if(rhs_casted) 
+        if(!ReferenceEquals(rhs_casted, null)) 
             return discord_id == rhs_casted.discord_id;
         return false;
     }

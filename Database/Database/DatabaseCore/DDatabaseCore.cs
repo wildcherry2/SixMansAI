@@ -43,6 +43,14 @@ public class DDatabaseCore : IDatabaseComponent {
         return list;
     }
 
+    public DPlayer? GetPlayerIfExists(ulong discord_id) {
+        foreach (var player in all_players) {
+            if (player.discord_id == discord_id) return player;
+        }
+
+        return null;
+    }
+
     #region Inherited Overrides
 
     /*  Equality operators worthless since this is strictly a singleton  */

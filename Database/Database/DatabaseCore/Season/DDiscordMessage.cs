@@ -107,10 +107,10 @@ public class DDiscordMessage : IDatabaseComponent {
     }
 
     // TODO: Unit test GetPlayerNameFromEmbeddedLink
-    public string? GetPlayerNameFromEmbeddedLink(string embedded_link) {
-        var match = RegularExpressions.name_from_embedded_link_regex.Match(embedded_link);
-        if (match.Success) {
-            return match.Value;
+    public string? GetPlayerNameFromEmbeddedLink(string? embedded_link) {
+        if (embedded_link != null) {
+            var match = RegularExpressions.name_from_embedded_link_regex.Match(embedded_link);
+            if (match.Success) { return match.Value; }
         }
 
         return null;
@@ -240,7 +240,7 @@ public class DDiscordMessage : IDatabaseComponent {
     }
 
     // TODO: Unit test lobby IsLobbyCancelledNoPickMessage
-    // With NameFactory, if this is true then reset the counter, since captains not picking resets the queue
+    // With PlayerFactory, if this is true then reset the counter, since captains not picking resets the queue
     private bool IsLobbyCancelledNoPickMessage() {
         return IsAuthorBot() && GetEmbeddedTitle().Contains("Captain failed to pick players for **Match ID");
     }
@@ -260,7 +260,7 @@ public class DDiscordMessage : IDatabaseComponent {
 
     // Returns true if this message is a voting complete or teams picked message
     public bool IsBotNotification() {
-        return IsVotingCompleteMessage() || IsTeamsPickedMessage();
+        return IsVotingCompleteMessage() || IsTeamsPickedMessage() || IsLobbyCancelledNoPickMessage();
     }
 
     private bool IsBotResponseToPlayerQ() {
