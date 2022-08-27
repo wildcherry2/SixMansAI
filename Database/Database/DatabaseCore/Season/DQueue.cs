@@ -3,7 +3,7 @@ using Database.Structs;
 
 namespace Database.Database.DatabaseCore.Season;
 
-public class DBQueue : IDatabaseComponent {
+public class DQueue : IDatabaseComponent {
     public int          match_id     { get; set; } = -1;
     public FTeam        team_one     { get; set; }
     public FTeam        team_two     { get; set; }
@@ -12,7 +12,7 @@ public class DBQueue : IDatabaseComponent {
     //public List<DiscordMessage> raw_messages_in_queue
     public ETeamLabel winner { get; set; } = ETeamLabel.NOT_SET;
 
-    public DBQueue(int match_id /* List<DiscordMessages> maybe?? */) : base(ConsoleColor.Cyan, 2, "DBQueue"){
+    public DQueue(int match_id /* List<DiscordMessages> maybe?? */) : base(ConsoleColor.Cyan, 2, "DQueue"){
         this.match_id = match_id;
         // raw_messages_in_queue = new
         // init structs?
@@ -22,13 +22,13 @@ public class DBQueue : IDatabaseComponent {
 
     #region Inherited Overrides
     protected override bool IsEqual(IDatabaseComponent? rhs) {
-        var rhs_casted = rhs != null ? (rhs as DBQueue) : null;
+        var rhs_casted = rhs != null ? (rhs as DQueue) : null;
         if(rhs_casted) 
             return match_id == rhs_casted.match_id;
         return false;
     }
     protected override bool IsLessThan(IDatabaseComponent? rhs) {
-        var rhs_casted = rhs != null ? (rhs as DBQueue) : null;
+        var rhs_casted = rhs != null ? (rhs as DQueue) : null;
         if (rhs_casted) {
             return match_id < rhs_casted.match_id;
         }

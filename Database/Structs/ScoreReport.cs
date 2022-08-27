@@ -3,7 +3,7 @@
 namespace Database.Structs;
 
 public struct FScoreReport {
-    public DBPlayer reporter;
+    public DPlayer reporter;
     public bool     bReportedWin;
     public int      iMatchId;
 }

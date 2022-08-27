@@ -1,5 +1,6 @@
-﻿namespace Database;
-//change abstract members to virtual where applicable? wouldnt have to reimplement everywhere
+﻿//change abstract members to virtual where applicable? wouldnt have to reimplement everywhere
+namespace Database; 
+
 public abstract class IDatabaseComponent {
     protected      bool                bError = false;
     protected      ConsoleColor        current_color { get; set; }
@@ -9,23 +10,17 @@ public abstract class IDatabaseComponent {
     private static IDatabaseComponent? singleton { get; }
     protected      int                 iErrorCount;
 
-    public static implicit operator bool(IDatabaseComponent? component) {
-        return (component != null && !component.bError);
-    }
+    public static implicit operator bool(IDatabaseComponent? component) { return (component != null && !component.bError); }
 
     public static bool operator ==(IDatabaseComponent? lhs, IDatabaseComponent? rhs) {
-        if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null))
-            return false;
+        if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null)) return false;
 
-        if(lhs.IsEqual(rhs))
-            return true;
+        if (lhs.IsEqual(rhs)) return true;
 
         return false;
     }
 
-    public static bool operator !=(IDatabaseComponent? lhs, IDatabaseComponent? rhs) {
-        return !(lhs == rhs);
-    }
+    public static bool operator !=(IDatabaseComponent? lhs, IDatabaseComponent? rhs) { return !(lhs == rhs); }
 
     public static bool operator <(IDatabaseComponent? lhs, IDatabaseComponent? rhs) {
         if (!lhs || !rhs) return false;
@@ -57,8 +52,10 @@ public abstract class IDatabaseComponent {
         for (int i = 0; i < iTabs; i++) msg += "\t";
         msg += "[" + class_name + "] " + message;
 
-        if (subs_strings.Length > 0) Console.WriteLine(msg, subs_strings);
-        else Console.WriteLine(msg);
+        if (subs_strings.Length > 0)
+            Console.WriteLine(msg, subs_strings);
+        else
+            Console.WriteLine(msg);
     }
 
     protected IDatabaseComponent(ConsoleColor color = ConsoleColor.White, int tabs = 0, string class_name = "IDatabaseComponent") {
@@ -71,7 +68,5 @@ public abstract class IDatabaseComponent {
     public abstract void   ToJson(string   save_path);
     public abstract void   FromJson(string save_path);
 
-    public static IDatabaseComponent? GetSingleton() {
-        return null;
-    }
+    public static IDatabaseComponent? GetSingleton() { return null; }
 }

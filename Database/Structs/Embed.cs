@@ -2,13 +2,13 @@
 
 namespace Database.Structs;
 
-public struct FEmbed {
+public class FEmbed {
     [JsonPropertyName("title")]
-    public string title;
+    public string title { get; set; }
 
     [JsonPropertyName("description")]
-    public string description;
+    public string description { get; set; }
 
     [JsonPropertyName("fields")]
-    public List<FField> fields;
+    public List<FField> fields { get; set; }
 }

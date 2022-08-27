@@ -3,7 +3,7 @@
 namespace Database.Structs;
 
 public struct FTeam {
-    public DBPlayer? player_one;
-    public DBPlayer? player_two;
-    public DBPlayer? player_three;
+    public DPlayer? player_one;
+    public DPlayer? player_two;
+    public DPlayer? player_three;
 }

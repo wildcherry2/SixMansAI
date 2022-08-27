@@ -2,10 +2,10 @@
 
 namespace Database.Structs;
 
-public struct FField {
+public class FField {
     [JsonPropertyName("name")]
-    public string name;
+    public string name { get; set; }
 
     [JsonPropertyName("value")]
-    public string value;
+    public string value { get; set; }
 }

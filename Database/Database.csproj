@@ -6,7 +6,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	  <EnablePreviewFeatures>True</EnablePreviewFeatures>
-	  <StartupObject>MainClass</StartupObject>
+	  <StartupObject>Database.MainClass</StartupObject>
 	  <AnalysisLevel>preview</AnalysisLevel>
   </PropertyGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\tyler\Documents\Programming\AI\SixMans\Database\Database\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\tyler\Documents\Programming\AI\SixMans\Database\Database\.editorconfig" />
+  </ItemGroup>
 </Project>

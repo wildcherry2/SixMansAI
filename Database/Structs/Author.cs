@@ -1,16 +1,16 @@
 ﻿using System.Text.Json.Serialization;
 
 namespace Database.Structs;
-public struct FAuthor {
+public class FAuthor {
     [JsonPropertyName("id")]
-    public string id;
+    public string id { get; set; } = "";
 
     [JsonPropertyName("name")]
-    public string name;
+    public string name { get; set; } = "";
 
     [JsonPropertyName("nickname")]
-    public string nickname;
+    public string nickname { get; set; } = "";
 
-    [JsonPropertyName("is_bot")]
-    public string is_bot;
+    [JsonPropertyName("isBot")]
+    public bool isBot { get; set; }
 }

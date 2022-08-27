@@ -1,7 +1,21 @@
 ﻿
-using Database;
+namespace Database.Database.DatabaseCore; 
 
-public class DatabaseCore : IDatabaseComponent {
+public class DDatabaseCore : IDatabaseComponent {
+    public         List<DPlayer> all_players { get; set; }
+    private static DDatabaseCore?  singleton;
+
+    private DDatabaseCore() {
+        all_players = new List<DPlayer>();
+    }
+
+    public static DDatabaseCore GetSingleton() {
+        if(!singleton)
+            singleton = new DDatabaseCore();
+
+        return singleton;
+    }
+
     #region Inherited Overrides
 
     /*  Equality operators worthless since this is strictly a singleton  */
@@ -13,10 +27,10 @@ public class DatabaseCore : IDatabaseComponent {
     }
     public override string ToJson() {
         /*
-         *
-         *  CONVERT TO JSON
-         *
-         */
+     *
+     *  CONVERT TO JSON
+     *
+     */
 
         return "";
     }

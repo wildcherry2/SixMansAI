@@ -2,14 +2,14 @@
 
 namespace Database.Database.DatabaseCore;
 
-public class DBPlayer : IDatabaseComponent {
+public class DPlayer : IDatabaseComponent {
     public ulong             discord_id     { get; set; } = 0;
     public List<string>      recorded_names { get; set; }
     public List<FGameRecord> game_history   { get; set; }
     public int               iTotalWins     { get; set; } = 0;
     public int               iTotalLosses   { get; set; } = 0;
 
-    public DBPlayer(ulong discord_id, string discord_name, string nickname = "", string link_name = "") : base(ConsoleColor.Yellow, 1, "DBPlayer"){
+    public DPlayer(ulong discord_id, string discord_name, string nickname = "", string link_name = "") : base(ConsoleColor.Yellow, 1, "DPlayer"){
         this.discord_id = discord_id;
         game_history = new List<FGameRecord>();
         recorded_names = new List<string>();
@@ -18,18 +18,29 @@ public class DBPlayer : IDatabaseComponent {
         if(link_name.Length > 0) recorded_names.Add(link_name);
     }
 
+    public static bool operator ==(DPlayer? lhs, string rhs) {
+        if (!lhs) return false;
+        foreach (var name in lhs.recorded_names) {
+            if(name == rhs) return true;
+        }
 
+        return false;
+    }
+
+    public static bool operator !=(DPlayer? lhs, string rhs) {
+        return !(lhs == rhs);
+    }
 
     #region Inherited Overrides
     protected override bool IsEqual(IDatabaseComponent? rhs) {
     
-        var rhs_casted = rhs != null ? (rhs as DBPlayer) : null;
+        var rhs_casted = rhs != null ? (rhs as DPlayer) : null;
         if(rhs_casted) 
             return discord_id == rhs_casted.discord_id;
         return false;
     }
     protected override bool IsLessThan(IDatabaseComponent? rhs) {
-        var rhs_casted = rhs != null ? (rhs as DBPlayer) : null;
+        var rhs_casted = rhs != null ? (rhs as DPlayer) : null;
         if (rhs_casted) {
             return discord_id < rhs_casted.discord_id;
         }
