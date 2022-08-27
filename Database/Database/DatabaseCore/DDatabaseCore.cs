@@ -40,7 +40,8 @@ public class DDatabaseCore : IDatabaseComponent {
         all_discord_chat_messages = list;
         return list;
     }
-
+    
+    // TODO: move to cquerier
     public DPlayer? GetPlayerIfExists(ulong discord_id) {
         if (discord_id == 0) return null;
         foreach (var player in all_players) {
@@ -50,6 +51,7 @@ public class DDatabaseCore : IDatabaseComponent {
         return null;
     }
 
+        // TODO: move to cquerier
     public DPlayer? GetPlayerIfExists(string name) {
         if (name.Length == 0) return null;
         foreach (var player in all_players) {

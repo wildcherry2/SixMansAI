@@ -50,5 +50,7 @@ public class DQueueTests {
         Assert.IsNotNull(test_queue.team_two.player_two, "Team two, player two was null!");
         Assert.IsNotNull(test_queue.team_two.player_three, "Team two, player three was null!");
         Assert.IsTrue(test_queue.match_id != -1, "Match id not set!");
+
+        Console.WriteLine(test_queue.ToString());
     }
 }

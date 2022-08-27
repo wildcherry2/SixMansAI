@@ -2,7 +2,7 @@
 namespace Database;
 
 public abstract class IDatabaseComponent {
-    protected      bool                bError = false;
+    public         bool                bError        { get; set; } = false;
     protected      ConsoleColor        current_color { get; set; }
     protected      int                 iTabs         { get; set; }
     protected      string              class_name    { get; set; }

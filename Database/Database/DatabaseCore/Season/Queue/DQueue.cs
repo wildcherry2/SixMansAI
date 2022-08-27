@@ -4,15 +4,17 @@ using Database.Structs;
 namespace Database.Database.DatabaseCore.Season.Queue;
 
 public class DQueue : IDatabaseComponent {
-    public int             match_id             { get; set; } = -1;
-    public FTeam           team_one             { get; set; }
-    public FTeam           team_two             { get; set; }
-    public FScoreReport    score_report         { get; set; }
-    public ETeamLabel      winner               { get; set; } = ETeamLabel.NOT_SET;
-    public DDiscordMessage teams_picked_message { get; set; }
+    public        int             match_id             { get; set; } = -1;
+    public        FTeam           team_one             { get; set; }
+    public        FTeam           team_two             { get; set; }
+    public        FScoreReport    score_report         { get; set; }
+    public        ETeamLabel      winner               { get; set; } = ETeamLabel.NOT_SET;
+    public        DDiscordMessage teams_picked_message { get; set; }
+    public List<string>   not_matched          { get; set; }
 
     // Precondition: Expects player names/objects to be deserialized 
     public DQueue(DDiscordMessage teams_picked_message) {
+        not_matched = new List<string>();
         if (teams_picked_message.type == EMessageType.TEAMS_PICKED) {
             match_id = teams_picked_message.GetMatchId();
 
@@ -42,30 +44,53 @@ public class DQueue : IDatabaseComponent {
         var p5_name = names[4];
         var p6_name = names[5];
         var core = DDatabaseCore.GetSingleton();
-
+        
         var current = core.GetPlayerIfExists(p1_name);
-        if (current != null) team_one.player_one = current;
-        else Log(""); // TODO: log and add to name not matched list for manual selection
+        if (!ReferenceEquals(current, null)) team_one.player_one = current;
+        else not_matched.Add(p1_name); // TODO: log and add to name not matched list for manual selection
 
         current = core.GetPlayerIfExists(p2_name);
-        if (current != null) team_one.player_two = current;
-        else Log(""); // TODO: log
+        if (!ReferenceEquals(current, null)) team_one.player_two = current;
+        else not_matched.Add(p2_name); // TODO: log
 
         current = core.GetPlayerIfExists(p3_name);
-        if (current != null) team_one.player_three = current;
-        else Log(""); // TODO: log
+        if (!ReferenceEquals(current, null)) team_one.player_three = current;
+        else not_matched.Add(p3_name); // TODO: log
 
         current = core.GetPlayerIfExists(p4_name);
-        if (current != null) team_two.player_one = current;
-        else Log(""); // TODO: log
+        if (!ReferenceEquals(current, null)) team_two.player_one = current;
+        else not_matched.Add(p4_name); // TODO: log
 
         current = core.GetPlayerIfExists(p5_name);
-        if (current != null) team_two.player_two = current;
-        else Log(""); // TODO: log
+        if (!ReferenceEquals(current, null)) team_two.player_two = current;
+        else not_matched.Add(p5_name); // TODO: log
 
         current = core.GetPlayerIfExists(p6_name);
-        if (current != null) team_two.player_three = current;
-        else Log(""); // TODO: log
+        if (!ReferenceEquals(current, null)) team_two.player_three = current;
+        else not_matched.Add(p6_name); // TODO: log
+
+        if (not_matched.Count > 0) bError = true;
+    }
+
+    public override string ToString() {
+        var ret = "";
+
+        ret += "Match ID = " + match_id + "\n";
+        ret += "Team One\n";
+        ret += team_one.player_one.recorded_names[0] + " (" + team_one.player_one.discord_id + "),\t";
+        ret += team_one.player_two.recorded_names[0] + " (" + team_one.player_two.discord_id + "),\t";
+        ret += team_one.player_three.recorded_names[0] + " (" + team_one.player_three.discord_id + ")\n\n";
+
+        ret += "Team Two\n";
+        ret += team_two.player_one.recorded_names[0] + " (" + team_two.player_one.discord_id + "),\t";
+        ret += team_two.player_two.recorded_names[0] + " (" + team_two.player_two.discord_id + "),\t";
+        ret += team_two.player_three.recorded_names[0] + " (" + team_two.player_three.discord_id + ")";
+
+        /*
+         * TODO: add mined score report stuff later
+         */
+
+        return ret;
     }
 
     #region Inherited Overrides
