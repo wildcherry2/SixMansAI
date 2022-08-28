@@ -26,16 +26,20 @@ public class ScoreReportFactoryTests {
         Assert.IsNotNull(qfactory);
         Assert.IsNotNull(pfactory);
 
-        var chat_clean_res = ccleaner.ProcessChat();
-        var all_players = pfactory.ProcessChat(chat_clean_res);
+        ccleaner.ProcessChat();
+        var chat_clean_res = DDatabaseCore.GetSingleton().all_discord_chat_messages;
+        pfactory.ProcessChat(chat_clean_res);
+        var all_players = DDatabaseCore.GetSingleton().all_players;
         //var qfact_res = qfactory.ProcessChat();
     }
 
     [TestMethod]
     public void TestProcessChat() {
-        var clean = sr_cleaner.ProcessChat();
+        sr_cleaner.ProcessChat();
+        var clean = DDatabaseCore.GetSingleton().all_score_report_messages;
         Assert.IsNotNull(clean);
-        var res = sr_factory.ProcessChat(clean);
+        sr_factory.ProcessChat(clean);
+        var res = DDatabaseCore.GetSingleton().all_score_reports;
         Assert.IsNotNull(res);
         Assert.IsTrue(res.Count > 0);
 

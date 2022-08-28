@@ -16,7 +16,8 @@ public class ScoreReportCleanerTests {
 
     [TestMethod]
     public void TestProcessChat() {
-        var ret = sr_cleaner.ProcessChat();
+        sr_cleaner.ProcessChat();
+        var ret = DDatabaseCore.GetSingleton().all_score_report_messages;
         Assert.IsNotNull(ret);
         Assert.IsFalse(ret.messages.Count == 0);
 

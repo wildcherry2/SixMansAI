@@ -4,8 +4,9 @@ using Database.Structs;
 namespace Database.Database.DatabaseCore.Season.Cleaners; 
 
 public class ScoreReportCleaner {
-    private static ScoreReportCleaner? singleton { get; set; }
-    private        FMessageList?       messages  { get; set; }
+    private static ScoreReportCleaner? singleton   { get; set; }
+    private        FMessageList?       messages    { get; set; }
+    public         bool                bIsComplete { get; set; } = false;
     private ScoreReportCleaner() {
         messages = DDatabaseCore.GetSingleton().LoadAndGetAllDiscordChatMessages(DDatabaseCore.sr_path);
     }
@@ -15,8 +16,8 @@ public class ScoreReportCleaner {
         return singleton;
     }
 
-    public FMessageList? ProcessChat() {
-        if(messages == null) return null;
+    public void ProcessChat() {
+        if(messages == null) return;
         FMessageList result = new FMessageList();
 
         int unverified = 0;
@@ -36,14 +37,12 @@ public class ScoreReportCleaner {
                 else {
                     notlong++;
                 }
-
-
             }
         }
 
         Console.WriteLine("Unverified score reports = {0}, score reports with invalid length = {1}", unverified, notlong);
-
-        return result;
+        if (result.messages.Count > 0) bIsComplete = true;
+        DDatabaseCore.GetSingleton().all_score_report_messages = result;
     }
 
     private bool IsValidLength(ref DDiscordMessage message) {

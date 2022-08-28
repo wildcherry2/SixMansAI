@@ -1,17 +1,15 @@
 ﻿
 using Database.Database.DatabaseCore.Season;
+using Database.Database.DatabaseCore.Season.Cleaners;
 using Database.Enums;
 using Database.Structs;
 
 namespace Database.Database.DatabaseCore; 
 
 public class PlayerFactory {
-    //public         List<DPlayer>  player_list { get; set; }
     private static PlayerFactory? singleton   { get; set; }
-
-    private PlayerFactory() {
-        //player_list = new List<DPlayer>();
-    }
+    public         bool           bIsComplete { get; set; } = false;
+    private PlayerFactory() {}
 
     public static PlayerFactory GetSingleton() {
         if (singleton == null) singleton = new PlayerFactory();
@@ -19,7 +17,10 @@ public class PlayerFactory {
     }
 
     // Precondition: expects chat_messages to have already run through ChatCleaner.ProcessChat
-    public List<DPlayer> ProcessChat(FMessageList chat_messages) {
+    // Postcondition: DDatabaseCore's singleton's all_players field is initialized with data
+    public void ProcessChat(FMessageList chat_messages) {
+        if (!ChatCleaner.GetSingleton().bIsComplete) return;
+
         var players = DDatabaseCore.GetSingleton().all_players;
         for (var i = 2; i < chat_messages.messages.Count - 2; i++) {
             var previous_previous = chat_messages.messages[i - 2];
@@ -45,8 +46,8 @@ public class PlayerFactory {
             }
         }
 
+        if (players.Count > 0) bIsComplete = true;
         DDatabaseCore.GetSingleton().all_players = players;
-        return players;
     }
 
     private bool FollowsValidPattern(ref DDiscordMessage previous_previous, ref DDiscordMessage previous, ref DDiscordMessage current, ref DDiscordMessage next, ref DDiscordMessage next_next) {

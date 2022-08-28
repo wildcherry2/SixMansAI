@@ -29,10 +29,12 @@ public class DQueueTests {
         ccleaner = ChatCleaner.GetSingleton();
         pfactory = PlayerFactory.GetSingleton();
 
-        filtered_messages = ccleaner.ProcessChat();
+        ccleaner.ProcessChat();
+        filtered_messages = DDatabaseCore.GetSingleton().all_discord_chat_messages;
         Assert.IsTrue(filtered_messages.messages.Count > 0);
 
-        all_players = pfactory.ProcessChat(filtered_messages);
+        pfactory.ProcessChat(filtered_messages);
+        all_players = DDatabaseCore.GetSingleton().all_players;
         Assert.IsTrue(all_players.Count > 0);
 
         teams_picked_message = GetTeamsPickedMessage();

@@ -1,12 +1,13 @@
 ﻿
 using Database.Database.DatabaseCore.Season;
+using Database.Database.DatabaseCore.Season.Cleaners;
 using Database.Structs;
 
 namespace Database.Database.DatabaseCore; 
 
 public class ScoreReportFactory {
-    private static ScoreReportFactory? singleton { get; set; }
-
+    private static ScoreReportFactory? singleton   { get; set; }
+    public         bool                bIsComplete { get; set; } = false;
     private ScoreReportFactory() {}
 
     public static ScoreReportFactory GetSingleton() {
@@ -15,7 +16,9 @@ public class ScoreReportFactory {
     }
 
     // Precondition: ScoreReportCleaner.ProcessChat has already been called with messages
-    public List<FScoreReport> ProcessChat(FMessageList messages) {
+    // Postcondition: DDatabaseCore's singleton's all_score_reports field is initialized with data
+    public void ProcessChat(FMessageList messages) {
+        if (!ScoreReportCleaner.GetSingleton().bIsComplete) return;
         List<FScoreReport> ret = new List<FScoreReport>();
 
         for(var i = 0; i < messages.messages.Count; i++) {
@@ -31,8 +34,8 @@ public class ScoreReportFactory {
             ret.Add(report);
         }
 
+        if (ret.Count > 0) bIsComplete = true;
         DDatabaseCore.GetSingleton().all_score_reports = ret;
-        return ret;
     }
 
     private bool GetReportedWin(ref DDiscordMessage message) {

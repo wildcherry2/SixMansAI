@@ -4,20 +4,17 @@ using Database.Structs;
 namespace Database.Database.DatabaseCore.Season.Cleaners; 
 
 public class ChatCleaner {
-    private static ChatCleaner?  singleton         { get; set; }
-    //private        FMessageList? all_messages      { get; set; }
-    //public         FMessageList  filtered_messages { get; set; }
-    private ChatCleaner() {
-        //all_messages = DDatabaseCore.GetSingleton().LoadAndGetAllDiscordChatMessages(DDatabaseCore.chat_path);
-        //filtered_messages = new FMessageList();
-    }
+    private static ChatCleaner? singleton   { get; set; }
+    public         bool         bIsComplete { get; set; } = false;
+
+    private ChatCleaner() {}
 
     public static ChatCleaner GetSingleton() {
         if(singleton == null) singleton = new ChatCleaner();
         return singleton;
     }
 
-    public FMessageList ProcessChat(string override_path = "") {
+    public void ProcessChat(string override_path = "") {
         var core = DDatabaseCore.GetSingleton();
         var all_messages = core.LoadAndGetAllDiscordChatMessages(override_path == "" ? DDatabaseCore.chat_path : override_path);
         var filtered_messages = new FMessageList();
@@ -28,7 +25,8 @@ public class ChatCleaner {
             }
         }
 
-        return filtered_messages;
+        if (filtered_messages.messages.Count > 0) bIsComplete = true;
+        core.all_discord_chat_messages = filtered_messages;
     }
 
     private bool IsRelevantMessage(DDiscordMessage message) {

@@ -16,7 +16,8 @@ public class ChatCleanerTests {
 
     [TestMethod]
     public void TestProcessChat() {
-        var result = cleaner.ProcessChat();
+        cleaner.ProcessChat();
+        var result = DDatabaseCore.GetSingleton().all_discord_chat_messages;
         Assert.IsNotNull(result);
 
         foreach (var chat in result.messages) {

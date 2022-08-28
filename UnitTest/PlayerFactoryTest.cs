@@ -15,7 +15,8 @@ public class PlayerFactoryTests {
 
     [TestMethod]
     public void TestProcessChat() {
-        var res = factory.ProcessChat(ChatCleaner.GetSingleton().ProcessChat());
+        factory.ProcessChat(DDatabaseCore.GetSingleton().all_discord_chat_messages);
+        var res = DDatabaseCore.GetSingleton().all_players;
         foreach (var player in res) {
             Assert.IsNotNull(player);
             Assert.IsTrue(player.recorded_names.Count > 0);
