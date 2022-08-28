@@ -13,6 +13,7 @@ public class DDatabaseCore : IDatabaseComponent {
 
     // Will move to CLoader
     public static string chat_path = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\rank-b\July2022.json";
+    public static string sr_path   = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\score-report\July2022.json";
 
     private DDatabaseCore() : base(ConsoleColor.Green, 0, "DDatabaseCore") {
         all_players = new List<DPlayer>();
@@ -40,7 +41,7 @@ public class DDatabaseCore : IDatabaseComponent {
         all_discord_chat_messages = list;
         return list;
     }
-    
+
     // TODO: move to cquerier
     public DPlayer? GetPlayerIfExists(ulong discord_id) {
         if (discord_id == 0) return null;

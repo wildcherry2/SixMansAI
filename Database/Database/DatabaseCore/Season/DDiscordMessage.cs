@@ -294,7 +294,7 @@ public class DDiscordMessage : IDatabaseComponent {
     }
 
     private bool IsScoreReportMessage() {
-        return IsAuthorHuman() && content != null && RegularExpressions.score_report_regex.IsMatch(content);
+        return IsAuthorHuman() && content != null && RegularExpressions.score_report_relaxed_regex.IsMatch(content);
     }
 
     private bool IsTeamsPickedMessage() {

@@ -8,7 +8,7 @@ public class DSeason : IDatabaseComponent {
     private DSeason(string chat_data, string score_report_data) : base(ConsoleColor.Yellow, 1, "DSeason") {
         queues = new List<DQueue>();
         //queue_factory = new QueueFactory();
-        deserializer = new RawChatDeserializer();
+        //deserializer = new RawChatDeserializer();
     }
 
     public DSeason(FSeasonLabel season_label, List<DQueue> queues) {
@@ -19,7 +19,7 @@ public class DSeason : IDatabaseComponent {
     public         List<DQueue>        queues       { get; set; }
     //private static DSeason?            singleton;
     private static QueueFactory?        queue_factory;
-    private static RawChatDeserializer? deserializer;
+    //private static RawChatDeserializer? deserializer;
 
     //public static DSeason GetSingleton(FSeasonLabel label) {
     //    if (!singleton) singleton = new DSeason(label);
