@@ -42,7 +42,7 @@ public class DDiscordMessage : IDatabaseComponent {
     }
 
     public int GetMatchId() {
-        if (IsAuthorHuman()) return -1;
+        if (IsAuthorHuman() && !IsScoreReportMessage()) return -1;
         try {
             switch (type) {
                 case EMessageType.VOTING_COMPLETE:
@@ -131,7 +131,7 @@ public class DDiscordMessage : IDatabaseComponent {
     }
 
     public bool HasSubstitutes() {
-        return IsScoreReportMessage() && mentions.Count > 0;
+        return IsScoreReportMessage() && mentions != null && mentions.Count == 2;
     }
 
     public string[]? GetPlayerNamesFromTeamPickedMessage() {

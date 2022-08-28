@@ -17,4 +17,8 @@
   <ItemGroup>
     <None Include="C:\Users\tyler\Documents\Programming\AI\SixMans\Database\Database\.editorconfig" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
 </Project>

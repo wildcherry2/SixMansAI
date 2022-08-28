@@ -45,6 +45,7 @@ public class PlayerFactory {
             }
         }
 
+        DDatabaseCore.GetSingleton().all_players = players;
         return players;
     }
 

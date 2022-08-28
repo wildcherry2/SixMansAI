@@ -1,8 +1,7 @@
-﻿
-using Database.Enums;
+﻿using Database.Enums;
 using Database.Structs;
 
-namespace Database.Database.DatabaseCore.Season.RawMessageDeserializer; 
+namespace Database.Database.DatabaseCore.Season.Cleaners; 
 
 public class ChatCleaner {
     private static ChatCleaner?  singleton         { get; set; }

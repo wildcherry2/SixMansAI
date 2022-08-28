@@ -1,6 +1,6 @@
 ﻿
 using Database.Database.DatabaseCore;
-using Database.Database.DatabaseCore.Season.RawMessageDeserializer;
+using Database.Database.DatabaseCore.Season.Cleaners;
 using Database.Enums;
 
 namespace UnitTest;
@@ -30,5 +30,7 @@ public class ChatCleanerTests {
                 Assert.IsTrue(chat.embeds != null && (chat.type != EMessageType.BOT_LOBBY_CANCELLED ? chat.embeds.Count > 0 : chat.embeds.Count == 0), chat.type.ToString() + ", " + chat.GetMatchId() + ", " + (chat.embeds != null).ToString() + ", " + chat.embeds.Count.ToString());
             }
         }
+
+        Console.WriteLine("Cleaned messages = {0}", result.messages.Count);
     }
 }

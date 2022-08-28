@@ -29,7 +29,7 @@ public class QueueFactory {
             }
         }
 
-
+        DDatabaseCore.GetSingleton().all_queues = ret;
         return ret;
     }
 }
