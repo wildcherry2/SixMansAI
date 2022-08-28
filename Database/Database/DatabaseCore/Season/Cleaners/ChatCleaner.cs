@@ -3,11 +3,11 @@ using Database.Structs;
 
 namespace Database.Database.DatabaseCore.Season.Cleaners; 
 
-public class ChatCleaner {
+public class ChatCleaner : ILogger {
     private static ChatCleaner? singleton   { get; set; }
     public         bool         bIsComplete { get; set; } = false;
 
-    private ChatCleaner() {}
+    private ChatCleaner() : base(ConsoleColor.Yellow, 1, "ChatCleaner") {}
 
     public static ChatCleaner GetSingleton() {
         if(singleton == null) singleton = new ChatCleaner();
@@ -24,8 +24,12 @@ public class ChatCleaner {
                     filtered_messages.messages.Add(message);
             }
         }
+        else {
+            Log("Preconditions not met! Score report chat data was not set!");
+        }
 
         if (filtered_messages.messages.Count > 0) bIsComplete = true;
+        else Log("Error cleaning chat data! No messages were filtered!");
         core.all_discord_chat_messages = filtered_messages;
     }
 

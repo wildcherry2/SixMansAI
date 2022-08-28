@@ -17,6 +17,22 @@ public class DDiscordMessageTests {
 
     public MsgList? messages { get; set; }
 
+    public DDiscordMessage? GetQResponseMessage() {
+        foreach (var msg in messages.messages) {
+            if (msg.id == "992151004608987217") return msg;
+        }
+
+        return null;
+    }
+
+    public DDiscordMessage? GetPlayerQMessage() {
+        foreach (var msg in messages.messages) {
+            if (msg.id == "992151003455565844") return msg;
+        }
+
+        return null;
+    }
+
     public DDiscordMessage? GetLeaveMessage() {
         foreach (var msg in messages.messages) {
             if (msg.content == "!leave") return msg;
@@ -45,6 +61,14 @@ public class DDiscordMessageTests {
         return null;
     }
 
+    public DDiscordMessage? GetVotingCompleteMessage() {
+        foreach (var msg in messages.messages) {
+            if (msg.id == "992151879733760170") return msg;
+        }
+
+        return null;
+    }
+
     [TestMethod]
     public void Construct() {
         var chat = "C:\\Users\\tyler\\Documents\\Programming\\AI\\SixMans\\RawData\\rank-b\\July2022.json";
@@ -55,7 +79,8 @@ public class DDiscordMessageTests {
 
     [TestMethod]
     public void TestPlayerQMessage() {
-        DDiscordMessage? sample = messages.messages[0];
+        DDiscordMessage? sample = GetPlayerQMessage();
+        Console.WriteLine(sample.id);
         Assert.IsNotNull(sample);
         Assert.IsTrue(sample.type == EMessageType.PLAYER_Q);
 
@@ -72,9 +97,9 @@ public class DDiscordMessageTests {
         Assert.IsNotNull(sample.id);
         Assert.AreEqual(sample.content, "!q");
         Assert.IsNotNull(sample.author);
-        Assert.AreEqual(sample.author.nickname, "TopHattMatt");
-        Assert.AreEqual(sample.author.name, "TopHattMatt");
-        Assert.AreEqual(sample.author.id, "343117878360539146");
+        Assert.AreEqual(sample.author.nickname, "vetta");
+        Assert.AreEqual(sample.author.name, "vetta");
+        Assert.AreEqual(sample.author.id, "779874051534618676");
         Assert.AreEqual(sample.author.isBot, false);
         Assert.IsNotNull(sample.timestamp);
         Assert.AreEqual(sample.mentions.Count, 0);
@@ -84,7 +109,7 @@ public class DDiscordMessageTests {
 
     [TestMethod]
     public void TestBotResponsePlayerQMessage() {
-        DDiscordMessage? sample = messages.messages[1];
+        DDiscordMessage? sample = GetQResponseMessage();
         Assert.IsNotNull(sample);
         Assert.IsTrue(sample.type == EMessageType.BOT_RESPONSE_TO_PLAYER_Q);
 
@@ -93,15 +118,15 @@ public class DDiscordMessageTests {
         Assert.IsFalse(sample.HasSubstitutes());
         Assert.AreEqual(sample.GetMatchId(), -1);
         Assert.IsNotNull(sample.GetEmbeddedTitle());
-        Assert.AreEqual(sample.GetEmbeddedTitle(), "5 players are in the queue");
+        Assert.AreEqual(sample.GetEmbeddedTitle(), "1 players are in the queue");
         Assert.IsNotNull(sample.GetEmbeddedDescription());
-        Assert.AreEqual(sample.GetEmbeddedDescription(), "[TopHattMatt](https://www.rl6mans.com/profile/TopHattMatt) has joined.");
-        Assert.IsNull(sample.GetEmbeddedField(0));
+        Assert.AreEqual(sample.GetEmbeddedDescription(), "[Vetta](https://www.rl6mans.com/profile/Vetta) has joined.");
+        Assert.IsNotNull(sample.GetEmbeddedField(0));
         Assert.IsNull(sample.GetTeamOne());
         Assert.IsNull(sample.GetTeamTwo());
 
         Assert.IsNotNull(sample.id);
-        Assert.AreEqual(sample.content, "");
+        Assert.IsTrue(sample.content == "" || sample.content == "@Rank B NA");
         Assert.IsNotNull(sample.author);
         Assert.AreEqual(sample.author.nickname, "Bot 6MansBot");
         Assert.AreEqual(sample.author.name, "6MansBot");
@@ -116,6 +141,7 @@ public class DDiscordMessageTests {
     [TestMethod]
     public void TestPlayerLeaveMessage() {
         DDiscordMessage? sample = GetLeaveMessage();
+        Console.WriteLine(sample.id);
         Assert.IsNotNull(sample);
         Assert.IsTrue(sample.type == EMessageType.PLAYER_LEAVE);
 
@@ -132,9 +158,9 @@ public class DDiscordMessageTests {
         Assert.IsNotNull(sample.id);
         Assert.AreEqual(sample.content, "!leave");
         Assert.IsNotNull(sample.author);
-        Assert.AreEqual(sample.author.nickname, "Fattyy-_-");
-        Assert.AreEqual(sample.author.name, "Fatty");
-        Assert.AreEqual(sample.author.id, "183751831405461504");
+        Assert.AreEqual(sample.author.nickname, "CraziiPanduh");
+        Assert.AreEqual(sample.author.name, "CraziiPanduh");
+        Assert.AreEqual(sample.author.id, "275382835043500032");
         Assert.AreEqual(sample.author.isBot, false);
         Assert.IsNotNull(sample.timestamp);
         Assert.IsTrue(sample.mentions == null || sample.mentions.Count == 0);
@@ -181,27 +207,28 @@ public class DDiscordMessageTests {
     [TestMethod]
     public void TestTeamsPickedMessage() {
         DDiscordMessage? sample = GetTeamsPickedMessage();
+        Console.WriteLine(sample.id);
         Assert.IsNotNull(sample);
         Assert.IsTrue(sample.type == EMessageType.TEAMS_PICKED);
 
         Assert.IsFalse(sample.IsBotResponse());
         Assert.IsTrue(sample.IsBotNotification());
         Assert.IsFalse(sample.HasSubstitutes());
-        Assert.AreEqual(sample.GetMatchId(), 886);
+        Assert.AreEqual(sample.GetMatchId(), 4);
 
         Assert.IsNotNull(sample.GetEmbeddedTitle());
-        Assert.AreEqual(sample.GetEmbeddedTitle(), "Lobby #886 is ready!");
+        Assert.AreEqual(sample.GetEmbeddedTitle(), "Lobby #4 is ready!");
         Assert.IsNotNull(sample.GetEmbeddedDescription());
         Assert.AreEqual(sample.GetEmbeddedDescription(), "You may now join the team channels");
         Assert.IsNotNull(sample.GetEmbeddedField(0));
         Assert.AreEqual(sample.GetEmbeddedField(0).name, "-Team 1-");
-        Assert.AreEqual(sample.GetEmbeddedField(0).value, "[Whale-](https://www.rl6mans.com/profile/Whale-), [ohtits](https://www.rl6mans.com/profile/ohtits), [kimo](https://www.rl6mans.com/profile/kimo)");
+        Assert.AreEqual(sample.GetEmbeddedField(0).value, "[taysech](https://www.rl6mans.com/profile/taysech), [Nava](https://www.rl6mans.com/profile/Nava), [Codyy](https://www.rl6mans.com/profile/Codyy)");
         Assert.IsNotNull(sample.GetEmbeddedField(1));
         Assert.AreEqual(sample.GetEmbeddedField(1).name, "-Team 2-");
-        Assert.AreEqual(sample.GetEmbeddedField(1).value, "[cg](https://www.rl6mans.com/profile/cg), [Bella](https://www.rl6mans.com/profile/Bella), [Evil](https://www.rl6mans.com/profile/Evil)");
+        Assert.AreEqual(sample.GetEmbeddedField(1).value, "[Dewy413](https://www.rl6mans.com/profile/Dewy413), [Vetta](https://www.rl6mans.com/profile/Vetta), [Confusion](https://www.rl6mans.com/profile/Confusion)");
         Assert.IsNotNull(sample.GetEmbeddedField(2));
         Assert.AreEqual(sample.GetEmbeddedField(2).name, "Creates the lobby:");
-        Assert.AreEqual(sample.GetEmbeddedField(2).value, "@Evil");
+        Assert.AreEqual(sample.GetEmbeddedField(2).value, "@taysech");
 
         // NOTE: Haven't parsed names at this point since it's out of the scope of this test method
         //Assert.IsNull(sample.GetTeamOne());
@@ -209,39 +236,39 @@ public class DDiscordMessageTests {
 
         Assert.IsTrue(sample.mentions != null && sample.mentions.Count == 6);
 
-        Assert.AreEqual(sample.mentions[0].nickname, "Bella the Elite");
-        Assert.AreEqual(sample.mentions[0].name, "Bella.");
-        Assert.AreEqual(sample.mentions[0].id, "213080978111987712");
+        Assert.AreEqual(sample.mentions[0].nickname, "taysech");
+        Assert.AreEqual(sample.mentions[0].name, "taysech");
+        Assert.AreEqual(sample.mentions[0].id, "139123904206602240");
         Assert.AreEqual(sample.mentions[0].isBot, false);
 
-        Assert.AreEqual(sample.mentions[1].nickname, "ControllerEvil");
-        Assert.AreEqual(sample.mentions[1].name, "Evil");
-        Assert.AreEqual(sample.mentions[1].id, "236485142728671232");
+        Assert.AreEqual(sample.mentions[1].nickname, "Confusion");
+        Assert.AreEqual(sample.mentions[1].name, "Mr Bitch");
+        Assert.AreEqual(sample.mentions[1].id, "420719137845673990");
         Assert.AreEqual(sample.mentions[1].isBot, false);
 
-        Assert.AreEqual(sample.mentions[2].nickname, "Whale-");
-        Assert.AreEqual(sample.mentions[2].name, "Whale");
-        Assert.AreEqual(sample.mentions[2].id, "430460963293233152");
+        Assert.AreEqual(sample.mentions[2].nickname, "Nava");
+        Assert.AreEqual(sample.mentions[2].name, "JNava8");
+        Assert.AreEqual(sample.mentions[2].id, "438868635390443526");
         Assert.AreEqual(sample.mentions[2].isBot, false);
 
         // Assertions don't like unicode emojis, but it's fine outside of testing
-        Assert.AreEqual(sample.mentions[3].nickname, "cg");
-        Assert.AreEqual(sample.mentions[3].name, ".cgXD\u2730");
-        Assert.AreEqual(sample.mentions[3].id, "290318442882400256");
+        Assert.AreEqual(sample.mentions[3].nickname, "Dewy413 the Adorable");
+        Assert.AreEqual(sample.mentions[3].name, "Dewy413");
+        Assert.AreEqual(sample.mentions[3].id, "302910158688747531");
         Assert.AreEqual(sample.mentions[3].isBot, false);
 
-        Assert.AreEqual(sample.mentions[4].nickname, "kimo");
-        Assert.AreEqual(sample.mentions[4].name, "kimo");
-        Assert.AreEqual(sample.mentions[4].id, "403256669792108545");
+        Assert.AreEqual(sample.mentions[4].nickname, "vetta");
+        Assert.AreEqual(sample.mentions[4].name, "vetta");
+        Assert.AreEqual(sample.mentions[4].id, "779874051534618676");
         Assert.AreEqual(sample.mentions[4].isBot, false);
 
-        Assert.AreEqual(sample.mentions[5].nickname, "otis");
-        Assert.AreEqual(sample.mentions[5].name, "otis");
-        Assert.AreEqual(sample.mentions[5].id, "582287073524842496");
+        Assert.AreEqual(sample.mentions[5].nickname, "Codyy");
+        Assert.AreEqual(sample.mentions[5].name, "Codyy");
+        Assert.AreEqual(sample.mentions[5].id, "915656408526127124");
         Assert.AreEqual(sample.mentions[5].isBot, false);
 
         Assert.IsNotNull(sample.id);
-        Assert.AreEqual(sample.content, "@otis, @.cgXD\u2730, @Bella., @Evil, @Whale, @kimo");
+        Assert.AreEqual(sample.content, "@vetta, @Mr Bitch, @Codyy, @taysech, @JNava8, @Dewy413");
         Assert.IsNotNull(sample.author);
         Assert.AreEqual(sample.author.nickname, "Bot 6MansBot");
         Assert.AreEqual(sample.author.name, "6MansBot");
@@ -253,16 +280,16 @@ public class DDiscordMessageTests {
 
     [TestMethod]
     public void TestVotingCompleteMessage() {
-        DDiscordMessage? sample = messages.messages[11];
+        DDiscordMessage? sample = GetVotingCompleteMessage();
         Assert.IsNotNull(sample);
         Assert.IsTrue(sample.type == EMessageType.VOTING_COMPLETE);
 
         Assert.IsFalse(sample.IsBotResponse());
         Assert.IsTrue(sample.IsBotNotification());
         Assert.IsFalse(sample.HasSubstitutes());
-        Assert.AreEqual(sample.GetMatchId(), 884);
+        Assert.AreEqual(sample.GetMatchId(), 4);
         Assert.IsNotNull(sample.GetEmbeddedTitle());
-        Assert.AreEqual(sample.GetEmbeddedTitle(), "Please join __**Lobby #884**__ in the __**Rank B category**__");
+        Assert.AreEqual(sample.GetEmbeddedTitle(), "Please join __**Lobby #4**__ in the __**Rank B category**__");
         Assert.IsNotNull(sample.GetEmbeddedDescription());
         Assert.AreEqual(sample.GetEmbeddedDescription(), "All players must join within 7 minutes and then teams will be chosen.\n**Vote result:** Captains");
         Assert.IsNull(sample.GetEmbeddedField(0));
@@ -270,7 +297,7 @@ public class DDiscordMessageTests {
         Assert.IsNull(sample.GetTeamTwo());
 
         Assert.IsNotNull(sample.id);
-        Assert.AreEqual(sample.content, "@Charm, @frigglefrackler, @bazzcannon, @volterohh, @TopHattMatt, @Gengar");
+        Assert.AreEqual(sample.content, "@vetta, @Mr Bitch, @Codyy, @taysech, @JNava8, @Dewy413");
         Assert.IsNotNull(sample.author);
         Assert.AreEqual(sample.author.nickname, "Bot 6MansBot");
         Assert.AreEqual(sample.author.name, "6MansBot");
@@ -306,13 +333,12 @@ public class DDiscordMessageTests {
     public void TestGetPlayerNamesFromTeamPickedMessage() {
         var msg = GetTeamsPickedMessage();
         Assert.IsNotNull(msg);
-
         var sample0 = msg.GetPlayerNamesFromTeamPickedMessage();
         Assert.IsNotNull(sample0);
         Assert.IsTrue(sample0.Length == 6);
         Console.WriteLine(sample0);
-        Assert.AreEqual("Whale-", sample0[0]);
-        Assert.AreEqual("ohtits", sample0[1]);
-        Assert.AreEqual("kimo", sample0[2]);
+        Assert.AreEqual("taysech", sample0[0]);
+        Assert.AreEqual("Nava", sample0[1]);
+        Assert.AreEqual("Codyy", sample0[2]);
     }
 }

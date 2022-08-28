@@ -12,6 +12,8 @@ public class DQueue : IDatabaseComponent {
     public DDiscordMessage teams_picked_message { get; set; }
     public List<string>    not_matched          { get; set; }
 
+    public DQueue(){}
+
     // Precondition: Expects player names/objects to be deserialized 
     public DQueue(DDiscordMessage teams_picked_message) {
         not_matched = new List<string>();
@@ -70,6 +72,25 @@ public class DQueue : IDatabaseComponent {
         else not_matched.Add(p6_name); // TODO: log
 
         if (not_matched.Count > 0) bError = true;
+    }
+
+    public bool IsPlayerInTeam(ETeamLabel team, ulong discord_id) {
+        switch (team) {
+            case ETeamLabel.TEAM_ONE:
+                if ((!ReferenceEquals(team_one.player_one, null) && team_one.player_one.discord_id == discord_id) ||
+                    (!ReferenceEquals(team_one.player_two, null) && team_one.player_two.discord_id == discord_id) ||
+                    (!ReferenceEquals(team_one.player_three, null) && team_one.player_three.discord_id == discord_id))
+                    return true;
+                return false;
+            case ETeamLabel.TEAM_TWO:
+                if ((!ReferenceEquals(team_two.player_one, null) && team_two.player_one.discord_id == discord_id) ||
+                    (!ReferenceEquals(team_two.player_two, null) && team_two.player_two.discord_id == discord_id) ||
+                    (!ReferenceEquals(team_two.player_three, null) && team_two.player_three.discord_id == discord_id))
+                    return true;
+                return false;
+            default:
+                return false;
+        }
     }
 
     public override string ToString() {

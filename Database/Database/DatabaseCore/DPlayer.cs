@@ -3,15 +3,15 @@
 namespace Database.Database.DatabaseCore;
 
 public class DPlayer : IDatabaseComponent {
-    public ulong             discord_id     { get; set; } = 0;
-    public List<string>      recorded_names { get; set; }
-    public List<FGameRecord> game_history   { get; set; }
-    public int               iTotalWins     { get; set; } = 0;
-    public int               iTotalLosses   { get; set; } = 0;
+    public ulong              discord_id     { get; set; } = 0;
+    public List<string>       recorded_names { get; set; }
+    public List<FGameRecord?> game_history   { get; set; }
+    public int                iTotalWins     { get; set; } = 0;
+    public int                iTotalLosses   { get; set; } = 0;
 
     public DPlayer(ulong discord_id, string discord_name, string nickname = "", string link_name = "") : base(ConsoleColor.Yellow, 1, "DPlayer"){
         this.discord_id = discord_id;
-        game_history = new List<FGameRecord>();
+        game_history = new List<FGameRecord?>();
         recorded_names = new List<string>();
         recorded_names.Add(discord_name);
         if(nickname.Length > 0 && nickname != discord_name) recorded_names.Add(nickname);
@@ -26,14 +26,6 @@ public class DPlayer : IDatabaseComponent {
         return false;
     }
 
-    public FGameRecord GetPlayerGameRecord(FSeasonLabel season, int match_id) {
-        /*
-         * Get season object here
-         */
-
-        return new FGameRecord();
-    }
-
     public void TryAddName(string name) {
         bool found = false;
         foreach (var player_name in recorded_names) {
@@ -44,18 +36,6 @@ public class DPlayer : IDatabaseComponent {
         }
 
         if(!found) recorded_names.Add(name);
-    }
-
-    public void TryAddGameRecord(FGameRecord record) {
-        bool found = false;
-        foreach (var rec in game_history) {
-            if (rec.queue == record.queue) {
-                found = true;
-                break;
-            }
-        }
-
-        if(!found) game_history.Add(record);
     }
 
     public static bool operator ==(DPlayer? lhs, string rhs) {

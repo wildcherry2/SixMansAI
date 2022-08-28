@@ -3,11 +3,11 @@ using Database.Structs;
 
 namespace Database.Database.DatabaseCore.Season.Cleaners; 
 
-public class ScoreReportCleaner {
+public class ScoreReportCleaner : ILogger {
     private static ScoreReportCleaner? singleton   { get; set; }
     private        FMessageList?       messages    { get; set; }
     public         bool                bIsComplete { get; set; } = false;
-    private ScoreReportCleaner() {
+    private ScoreReportCleaner() : base(ConsoleColor.Yellow, 1, "ScoreReportCleaner"){
         messages = DDatabaseCore.GetSingleton().LoadAndGetAllDiscordChatMessages(DDatabaseCore.sr_path);
     }
 
@@ -17,7 +17,10 @@ public class ScoreReportCleaner {
     }
 
     public void ProcessChat() {
-        if(messages == null) return;
+        if (messages == null) {
+            Log("Preconditions not met! Score report chat data was not set!");
+            return;
+        }
         FMessageList result = new FMessageList();
 
         int unverified = 0;
@@ -40,8 +43,9 @@ public class ScoreReportCleaner {
             }
         }
 
-        Console.WriteLine("Unverified score reports = {0}, score reports with invalid length = {1}", unverified, notlong);
+        Log("Unverified score reports = {0}, score reports with invalid length = {1}", unverified.ToString(), notlong.ToString());
         if (result.messages.Count > 0) bIsComplete = true;
+        else Log("Error cleaning score reports! No messages were filtered!");
         DDatabaseCore.GetSingleton().all_score_report_messages = result;
     }
 

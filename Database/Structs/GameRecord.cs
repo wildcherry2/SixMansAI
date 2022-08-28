@@ -1,6 +1,11 @@
-﻿namespace Database.Structs;
+﻿using Database.Database.DatabaseCore.Season.Queue;
+using Database.Enums;
 
-public struct FGameRecord {
-    public Database.DatabaseCore.Season.Queue.DQueue queue;
-    public bool                                      bPlayerWon;
+namespace Database.Structs;
+
+public class FGameRecord {
+    public DQueue     queue { get; set; } = new DQueue();
+    public ETeamLabel team  { get; set; } = ETeamLabel.NOT_SET;
+    public bool   bPlayerWon { get; set; }
+    public bool   bError     { get; set; } = false;
 }

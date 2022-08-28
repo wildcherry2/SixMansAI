@@ -6,10 +6,10 @@ using Database.Structs;
 
 namespace Database.Database.DatabaseCore; 
 
-public class PlayerFactory {
+public class PlayerFactory : ILogger {
     private static PlayerFactory? singleton   { get; set; }
     public         bool           bIsComplete { get; set; } = false;
-    private PlayerFactory() {}
+    private PlayerFactory() : base(ConsoleColor.Yellow, 1, "PlayerFactory"){}
 
     public static PlayerFactory GetSingleton() {
         if (singleton == null) singleton = new PlayerFactory();
@@ -19,7 +19,10 @@ public class PlayerFactory {
     // Precondition: expects chat_messages to have already run through ChatCleaner.ProcessChat
     // Postcondition: DDatabaseCore's singleton's all_players field is initialized with data
     public void ProcessChat(FMessageList chat_messages) {
-        if (!ChatCleaner.GetSingleton().bIsComplete) return;
+        if (!ChatCleaner.GetSingleton().bIsComplete) {
+            Log("Precondition not met! Chat has not been cleaned!");
+            return;
+        }
 
         var players = DDatabaseCore.GetSingleton().all_players;
         for (var i = 2; i < chat_messages.messages.Count - 2; i++) {
@@ -47,6 +50,7 @@ public class PlayerFactory {
         }
 
         if (players.Count > 0) bIsComplete = true;
+        else Log("No players have been created");
         DDatabaseCore.GetSingleton().all_players = players;
     }
 

@@ -50,7 +50,7 @@ public abstract class IDatabaseComponent {
         Console.ForegroundColor = current_color;
         string msg = "";
         for (int i = 0; i < iTabs; i++) msg += "\t";
-        msg += "[" + class_name + "] " + message;
+            msg += "[" + class_name + "] " + message;
 
         if (subs_strings != null && subs_strings.Length > 0)
             Console.WriteLine(msg, subs_strings);

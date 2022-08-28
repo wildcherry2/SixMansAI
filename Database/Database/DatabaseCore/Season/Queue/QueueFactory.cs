@@ -4,11 +4,11 @@ using Database.Structs;
 
 namespace Database.Database.DatabaseCore.Season.Queue;
 
-public class QueueFactory {
+public class QueueFactory : ILogger {
     private static QueueFactory? singleton    { get; set; }
     private        FMessageList? _messageList { get; set; }
     public         bool          bIsComplete  { get; set; } = false;
-    private QueueFactory(FMessageList? season_message_list = null) {
+    private QueueFactory(FMessageList? season_message_list = null) : base(ConsoleColor.Yellow, 1, "QueueFactory"){
         if (season_message_list == null)
             _messageList = DDatabaseCore.GetSingleton().LoadAndGetAllDiscordChatMessages(DDatabaseCore.chat_path);
         else
@@ -33,6 +33,11 @@ public class QueueFactory {
             }
 
             bIsComplete = true;
+        }
+        else {
+            Log("Preconditions not met! Preconditions status:\nChatCleaner.bIsComplete = {0}\nPlayerFactory.bIsComplete = {1}\nmessage_list = {2}",
+                ChatCleaner.GetSingleton().bIsComplete.ToString(), PlayerFactory.GetSingleton().bIsComplete.ToString(),
+                _messageList != null ? "Not null" : "Null");
         }
 
         DDatabaseCore.GetSingleton().all_queues = ret;

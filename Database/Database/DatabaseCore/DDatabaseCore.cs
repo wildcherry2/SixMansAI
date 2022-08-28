@@ -37,9 +37,9 @@ public class DDatabaseCore : IDatabaseComponent {
         PlayerFactory.GetSingleton().ProcessChat(all_discord_chat_messages);
         ScoreReportFactory.GetSingleton().ProcessChat(all_score_report_messages);
         QueueFactory.GetSingleton(all_discord_chat_messages).ProcessChat();
+        QueueReportBinder.GetSingleton().BindReportsToQueues();
         
         // TODO: add inference for situations where only 1 name is unmatched in the queue to lookup by the one discord id (from the mention) that isn't matched
-        // TODO: link score reports and queues
     }
 
     // Will later use CLoader
