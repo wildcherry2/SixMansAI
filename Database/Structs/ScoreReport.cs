@@ -9,6 +9,7 @@ public class FScoreReport {
     public DPlayer? subbed_in    { get; set; }
     public DPlayer? subbed_out   { get; set; }
 
+    public bool bError { get; set; } = false;
     public override string ToString() {
         return "Reporter name = " +
                (reporter != null ? reporter.recorded_names[0] : "null") +

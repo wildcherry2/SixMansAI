@@ -27,9 +27,14 @@ public class ScoreReportFactory {
             report.iMatchId = message.GetMatchId();
             report.bReportedWin = GetReportedWin(ref message);
             report.reporter = GetReporter(ref message);
-            if (message.HasSubstitutes()) {
+            bool subs = message.HasSubstitutes();
+            if (subs) {
                 SetSubstitutes(ref report, ref message);
             }
+
+
+            if (report.iMatchId == -1 || ReferenceEquals(report.reporter, null) || (subs && (ReferenceEquals(report.subbed_in, null) || ReferenceEquals(report.subbed_out, null)))) 
+                report.bError = true;
 
             ret.Add(report);
         }
