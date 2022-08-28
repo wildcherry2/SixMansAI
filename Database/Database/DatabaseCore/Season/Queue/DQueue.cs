@@ -4,13 +4,13 @@ using Database.Structs;
 namespace Database.Database.DatabaseCore.Season.Queue;
 
 public class DQueue : IDatabaseComponent {
-    public        int             match_id             { get; set; } = -1;
-    public        FTeam           team_one             { get; set; }
-    public        FTeam           team_two             { get; set; }
-    public        FScoreReport    score_report         { get; set; }
-    public        ETeamLabel      winner               { get; set; } = ETeamLabel.NOT_SET;
-    public        DDiscordMessage teams_picked_message { get; set; }
-    public List<string>   not_matched          { get; set; }
+    public int             match_id             { get; set; } = -1;
+    public FTeam           team_one             { get; set; }
+    public FTeam           team_two             { get; set; }
+    public FScoreReport?   score_report         { get; set; }
+    public ETeamLabel      winner               { get; set; } = ETeamLabel.NOT_SET;
+    public DDiscordMessage teams_picked_message { get; set; }
+    public List<string>    not_matched          { get; set; }
 
     // Precondition: Expects player names/objects to be deserialized 
     public DQueue(DDiscordMessage teams_picked_message) {
@@ -25,7 +25,7 @@ public class DQueue : IDatabaseComponent {
                 team_two = new FTeam();
                 TryAssignToTeam(ref names);
 
-                score_report = new FScoreReport(); // maybe parse names and score reports before chat so that we can go ahead and set it and winner now?}
+                //score_report = new FScoreReport(); // maybe parse names and score reports before chat so that we can go ahead and set it and winner now?}
                 this.teams_picked_message = teams_picked_message;
             }
             else
