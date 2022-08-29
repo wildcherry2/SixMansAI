@@ -25,7 +25,7 @@ public class DDatabaseCore : IDatabaseComponent {
 
     private DDatabaseCore() : base(ConsoleColor.Green, 0, "DDatabaseCore") {
         all_players = new List<DPlayer>();
-
+        all_seasons = new List<DSeason>();
     }
 
     public static DDatabaseCore GetSingleton() {
@@ -34,9 +34,10 @@ public class DDatabaseCore : IDatabaseComponent {
         return singleton;
     }
 
+    // Look into situations in QueueReportBinder where reporter is true but 
     public void BuildDatabase(bool bUsingDirectory = false) {
-        ChatCleaner.GetSingleton().ProcessChat();
-        ScoreReportCleaner.GetSingleton().ProcessChat();
+        ChatCleaner.GetSingleton(true).ProcessChat();
+        ScoreReportCleaner.GetSingleton(true).ProcessChat();
         PlayerFactory.GetSingleton().ProcessChat(all_discord_chat_messages);
         QueueFactory.GetSingleton(all_discord_chat_messages).ProcessChat();
         ScoreReportFactory.GetSingleton().ProcessChat(all_score_report_messages);

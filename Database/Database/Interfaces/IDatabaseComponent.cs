@@ -12,8 +12,7 @@ public abstract class IDatabaseComponent : ILogger
     protected int iErrorCount;
 
     public static implicit operator bool(IDatabaseComponent? component) { return component != null && !component.bError; }
-    public static bool operator ==(IDatabaseComponent? lhs, IDatabaseComponent? rhs)
-    {
+    public static bool operator ==(IDatabaseComponent? lhs, IDatabaseComponent? rhs) {
         if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null)) return false;
 
         if (lhs.IsEqual(rhs)) return true;

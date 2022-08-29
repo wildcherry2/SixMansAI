@@ -54,10 +54,9 @@ public class DPlayer : IDatabaseComponent {
 
     #region Inherited Overrides
     protected override bool IsEqual(IDatabaseComponent? rhs) {
-    
         var rhs_casted = rhs != null ? (rhs as DPlayer) : null;
-        if(!ReferenceEquals(rhs_casted, null)) 
-            return discord_id == rhs_casted.discord_id;
+        if(ReferenceEquals(rhs_casted, null) && ReferenceEquals(this, null)) return true;
+        if(!ReferenceEquals(rhs_casted, null) && !ReferenceEquals(this, null)) return discord_id == rhs_casted.discord_id;
         return false;
     }
     protected override bool IsLessThan(IDatabaseComponent? rhs) {

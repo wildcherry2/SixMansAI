@@ -30,6 +30,7 @@ public class ScoreReportFactory : ILogger {
             report.iMatchId = message.GetMatchId();
             report.bReportedWin = GetReportedWin(ref message);
             report.reporter = GetReporter(ref message);
+            report.report_msg = message;
             bool subs = message.HasSubstitutes();
             if (subs) {
                 SetSubstitutes(ref report, ref message);

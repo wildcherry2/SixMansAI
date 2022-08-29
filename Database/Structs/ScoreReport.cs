@@ -1,15 +1,17 @@
 ﻿using Database.Database.DatabaseCore;
+using Database.Database.DatabaseCore.Season;
 using Database.Database.Interfaces;
 
 namespace Database.Structs;
 
 public class FScoreReport : ILogger {
-    public DPlayer? reporter     { get; set; }
-    public bool     bReportedWin { get; set; } = false;
-    public int      iMatchId     { get; set; } = -1;
-    public bool     bHasSubs     { get; set; }
-    public DPlayer? subbed_in    { get; set; }
-    public DPlayer? subbed_out   { get; set; }
+    public DPlayer?        reporter     { get; set; }
+    public bool            bReportedWin { get; set; } = false;
+    public int             iMatchId     { get; set; } = -1;
+    public bool            bHasSubs     { get; set; }
+    public DPlayer?        subbed_in    { get; set; }
+    public DPlayer?        subbed_out   { get; set; }
+    public DDiscordMessage report_msg   { get; set; }
 
     public FScoreReport() : base(ConsoleColor.Cyan, 2, "FScoreReport"){}
     public bool IsValid() {

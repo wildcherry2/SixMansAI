@@ -8,7 +8,11 @@ namespace Database.Database.DatabaseCore;
 
 public class QueueReportBinder : ILogger {
     private static QueueReportBinder? singleton { get; set; }
-    private QueueReportBinder() : base(ConsoleColor.Yellow, 1, "QueueReportBinder") {}
+    private        List<DQueue>       problems  { get; set; }
+
+    private QueueReportBinder() : base(ConsoleColor.Yellow, 1, "QueueReportBinder") {
+        problems = new List<DQueue>();
+    }
     public static QueueReportBinder GetSingleton() {
         if (singleton == null) singleton = new QueueReportBinder();
         return singleton;
@@ -47,41 +51,53 @@ public class QueueReportBinder : ILogger {
                 queue.score_report = new FScoreReport();
                 queue.score_report.bError = true;
                 err_count++;
+                problems.Add(queue);
             }
         }
 
-        Log("{0} queues bound to reports, {1} errors!", (core.all_queues.Count - err_count).ToString(), err_count.ToString());
+        Log("{0} rank b queues bound to reports, {1} rank b queues not accounted for!", (core.all_queues.Count - err_count).ToString(), err_count.ToString());
+        Log("Printing problem queues...");
+        foreach (var queue in problems) {
+            Log(queue.ToString());
+        }
         bIsComplete = true;
     }
 
     private void SetWinnerInQueue(DQueue queue) {
         var report = queue.score_report;
         if (ReferenceEquals(report.reporter, null) || ReferenceEquals(report, null)) {
-            Log("Can't set winner! Report = {0}, Reporter = {1}", ReferenceEquals(report, null).ToString(), ReferenceEquals(report.reporter, null).ToString());
+            Log("Can't set winner!\n\t\tReport = {0}\n\t\tReporter = {1}\n\t\tScore Report message content = {2}\n\t\tScore report message author = {3}", 
+                (!ReferenceEquals(report, null)).ToString(), 
+                (!ReferenceEquals(report.reporter, null)).ToString(),
+                report.report_msg.content,
+                report.report_msg.author.name);
             return;
         }
 
-        if (!ReferenceEquals(queue.team_one.player_one, null) && queue.team_one.player_one.discord_id == report.reporter.discord_id) {
+        bool team_one_not_null = !ReferenceEquals(queue.team_one, null);
+        bool team_two_not_null = !ReferenceEquals(queue.team_two, null);
+
+        if (team_one_not_null && !ReferenceEquals(queue.team_one.player_one, null) && queue.team_one.player_one.discord_id == report.reporter.discord_id) {
             queue.winner = ETeamLabel.TEAM_ONE;
         }
 
-        else if (!ReferenceEquals(queue.team_one.player_two, null) && queue.team_one.player_two.discord_id == report.reporter.discord_id) {
+        else if (team_one_not_null && !ReferenceEquals(queue.team_one.player_two, null) && queue.team_one.player_two.discord_id == report.reporter.discord_id) {
             queue.winner = ETeamLabel.TEAM_ONE;
         }
 
-        else if (!ReferenceEquals(queue.team_one.player_three, null) && queue.team_one.player_three.discord_id == report.reporter.discord_id) {
+        else if (team_one_not_null && !ReferenceEquals(queue.team_one.player_three, null) && queue.team_one.player_three.discord_id == report.reporter.discord_id) {
             queue.winner = ETeamLabel.TEAM_ONE;
         }
 
-        else if (!ReferenceEquals(queue.team_two.player_one, null) && queue.team_two.player_one.discord_id == report.reporter.discord_id) {
+        else if (team_two_not_null && !ReferenceEquals(queue.team_two.player_one, null) && queue.team_two.player_one.discord_id == report.reporter.discord_id) {
             queue.winner = ETeamLabel.TEAM_TWO;
         }
 
-        else if (!ReferenceEquals(queue.team_two.player_two, null) && queue.team_two.player_two.discord_id == report.reporter.discord_id) {
+        else if (team_two_not_null &&!ReferenceEquals(queue.team_two.player_two, null) && queue.team_two.player_two.discord_id == report.reporter.discord_id) {
             queue.winner = ETeamLabel.TEAM_TWO;
         }
 
-        else if (!ReferenceEquals(queue.team_two.player_three, null) && queue.team_two.player_three.discord_id == report.reporter.discord_id) {
+        else if (team_two_not_null && !ReferenceEquals(queue.team_two.player_three, null) && queue.team_two.player_three.discord_id == report.reporter.discord_id) {
             queue.winner = ETeamLabel.TEAM_TWO;
         }
 

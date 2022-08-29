@@ -231,16 +231,18 @@ public class DQueue : IDatabaseComponent {
 
         ret += "Match ID = " + match_id + "\n";
         ret += "Team One = ";
-        ret += team_one.player_one.recorded_names[0] + " (" + team_one.player_one.discord_id + "),\t";
-        ret += team_one.player_two.recorded_names[0] + " (" + team_one.player_two.discord_id + "),\t";
-        ret += team_one.player_three.recorded_names[0] + " (" + team_one.player_three.discord_id + ")\n";
+
+        ret += !ReferenceEquals(team_one.player_one, null) ? team_one.player_one.recorded_names[0] + " (" + team_one.player_one.discord_id + "),\t" : "null,\t";
+        ret += !ReferenceEquals(team_one.player_two, null) ? team_one.player_two.recorded_names[0] + " (" + team_one.player_two.discord_id + "),\t": "null,\t";
+        ret += !ReferenceEquals(team_one.player_three, null) ? team_one.player_three.recorded_names[0] + " (" + team_one.player_three.discord_id + ")\n": "null\n";
 
         ret += "Team Two = ";
-        ret += team_two.player_one.recorded_names[0] + " (" + team_two.player_one.discord_id + "),\t";
-        ret += team_two.player_two.recorded_names[0] + " (" + team_two.player_two.discord_id + "),\t";
-        ret += team_two.player_three.recorded_names[0] + " (" + team_two.player_three.discord_id + ")\n";
+        ret += !ReferenceEquals(team_two.player_one, null) ? team_two.player_one.recorded_names[0] + " (" + team_two.player_one.discord_id + "),\t": "null,\t";
+        ret += !ReferenceEquals(team_two.player_two, null) ? team_two.player_two.recorded_names[0] + " (" + team_two.player_two.discord_id + "),\t": "null,\t";
+        ret += !ReferenceEquals(team_two.player_three, null) ? team_two.player_three.recorded_names[0] + " (" + team_two.player_three.discord_id + ")\n": "null\n";
 
         ret += "Winner = " + winner + "\n";
+        ret += "Season = " + teams_picked_message.timestamp.Value.Month + " " + teams_picked_message.timestamp.Value.Year + "\n";
 
         return ret;
     }

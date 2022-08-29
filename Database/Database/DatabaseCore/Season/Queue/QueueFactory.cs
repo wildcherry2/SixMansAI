@@ -9,11 +9,8 @@ public class QueueFactory : ILogger {
     private static QueueFactory? singleton    { get; set; }
     private        FMessageList? _messageList { get; set; }
     public         bool          bIsComplete  { get; set; } = false;
-    private QueueFactory(FMessageList? season_message_list = null) : base(ConsoleColor.Yellow, 1, "QueueFactory"){
-        if (season_message_list == null)
-            _messageList = DDatabaseCore.GetSingleton().LoadAndGetAllDiscordChatMessages(DDatabaseCore.chat_path);
-        else
-            _messageList = season_message_list;
+    private QueueFactory(FMessageList? season_message_list = null) : base(ConsoleColor.Yellow, 1, "QueueFactory") {
+        _messageList = DDatabaseCore.GetSingleton().all_discord_chat_messages;
     }
 
     public static QueueFactory GetSingleton(FMessageList? season_message_list = null) {
