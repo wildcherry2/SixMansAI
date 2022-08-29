@@ -5,18 +5,18 @@ namespace Database.Database.Interfaces;
 
 public class ILogger
 {
-    protected ConsoleColor current_color { get; set; } = ConsoleColor.White;
-    protected int iTabs { get; set; } = 0;
-    protected string class_name { get; set; } = "";
+    protected ConsoleColor current_color { get; init; } = ConsoleColor.White;
+    protected int iTabs { get; init; } = 0;
+    protected string class_name { get; init; } = "";
 
-    protected ILogger(ConsoleColor current_color, int iTabs, string class_name)
+    protected ILogger(in ConsoleColor current_color, in int iTabs, in string class_name)
     {
         this.current_color = current_color;
         this.iTabs = iTabs;
         this.class_name = class_name;
     }
 
-    protected virtual void Log(string message, params string[]? subs_strings)
+    protected virtual void Log(in string message, params string[]? subs_strings)
     {
         Console.ForegroundColor = current_color;
         string msg = "";

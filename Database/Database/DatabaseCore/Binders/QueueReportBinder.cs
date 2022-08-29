@@ -21,7 +21,7 @@ public class QueueReportBinder : ILogger
         return singleton;
     }
 
-    public bool bIsComplete { get; set; } = false;
+    public bool bIsComplete { get; private set; } = false;
 
     // Precondition: QueueFactory's and ScoreReportFactory's ProcessChat must be successful
     // Postcondition: All queues in DDatabaseCore's singleton's queues field has a valid score report field, if a score report exists 
@@ -73,7 +73,7 @@ public class QueueReportBinder : ILogger
         bIsComplete = true;
     }
 
-    private void SetWinnerInQueue(DQueue queue)
+    private void SetWinnerInQueue(in DQueue queue)
     {
         var report = queue.score_report;
         if (ReferenceEquals(report.reporter, null) || ReferenceEquals(report, null))

@@ -8,25 +8,25 @@ namespace Database.Database.DatabaseCore.MainComponents;
 public class DDiscordMessage : IDatabaseComponent
 {
     [JsonPropertyName("id")]
-    public string? id { get; set; }
+    public string? id { get; init; }
 
     [JsonPropertyName("content")]
     public string? content { get; set; }
 
     [JsonPropertyName("timestamp")]
-    public DateTime? timestamp { get; set; }
+    public DateTime? timestamp { get; init; }
 
     [JsonPropertyName("author")]
-    public FAuthor? author { get; set; }
+    public FAuthor? author { get; init; }
 
     [JsonPropertyName("reactions")]
-    public List<FReaction>? reactions { get; set; }
+    public List<FReaction>? reactions { get; init; }
 
     [JsonPropertyName("mentions")]
-    public List<FAuthor>? mentions { get; set; }
+    public List<FAuthor>? mentions { get; init; }
 
     [JsonPropertyName("embeds")]
-    public List<FEmbed>? embeds { get; set; }
+    public List<FEmbed>? embeds { get; init; }
 
     [JsonIgnore]
     public EMessageType type { get; set; } = EMessageType.UNKNOWN;
@@ -136,13 +136,12 @@ public class DDiscordMessage : IDatabaseComponent
         return embeds != null && embeds.Count > 0 ? embeds[0].description : null;
     }
 
-    public FField? GetEmbeddedField(int index)
+    public FField? GetEmbeddedField(in int index)
     {
         return embeds != null && embeds.Count > 0 && embeds[0].fields.Count >= index + 1 ? embeds[0].fields[index] : null;
     }
 
-    public string? GetPlayerNameFromEmbeddedLink(string? embedded_link)
-    {
+    public string? GetPlayerNameFromEmbeddedLink(in string? embedded_link) {
         if (embedded_link != null)
         {
             var pre_match = RegularExpressions.name_from_embedded_link_regex.Match(embedded_link);

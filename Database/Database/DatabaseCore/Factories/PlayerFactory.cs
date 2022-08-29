@@ -9,7 +9,7 @@ namespace Database.Database.DatabaseCore.Factories;
 public class PlayerFactory : ILogger
 {
     private static PlayerFactory? singleton { get; set; }
-    public bool bIsComplete { get; set; } = false;
+    public bool bIsComplete { get; private set; } = false;
     private PlayerFactory() : base(ConsoleColor.Yellow, 1, "PlayerFactory") { }
 
     public static PlayerFactory GetSingleton()
@@ -20,7 +20,7 @@ public class PlayerFactory : ILogger
 
     // Precondition: expects chat_messages to have already run through ChatCleaner.ProcessChat
     // Postcondition: DDatabaseCore's singleton's all_players field is initialized with data
-    public void ProcessChat(FMessageList chat_messages)
+    public void ProcessChat(in FMessageList chat_messages)
     {
         if (!ChatCleaner.GetSingleton().bIsComplete)
         {

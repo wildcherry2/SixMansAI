@@ -36,7 +36,7 @@ public class DDatabaseCore : IDatabaseComponent {
     }
 
     // Look into situations in QueueReportBinder where reporter is true but 
-    public void BuildDatabase(bool bUsingDirectory = false) {
+    public void BuildDatabase(in bool bUsingDirectory = false) {
         ChatCleaner.GetSingleton(true).ProcessChat();
         ScoreReportCleaner.GetSingleton(true).ProcessChat();
         PlayerFactory.GetSingleton().ProcessChat(all_discord_chat_messages);
@@ -46,7 +46,7 @@ public class DDatabaseCore : IDatabaseComponent {
     }
 
     // Will later use CLoader
-    public FMessageList? LoadAndGetAllDiscordChatMessages(string path) {
+    public FMessageList? LoadAndGetAllDiscordChatMessages(in string path) {
         FMessageList? list = null;
         try {
             list = JsonSerializer.Deserialize<FMessageList>(new StreamReader(path).ReadToEnd());
@@ -62,7 +62,7 @@ public class DDatabaseCore : IDatabaseComponent {
     }
 
     // TODO: move to cquerier
-    public DPlayer? GetPlayerIfExists(ulong discord_id) {
+    public DPlayer? GetPlayerIfExists(in ulong discord_id) {
         if (discord_id == 0 || all_players == null) return null;
         foreach (var player in all_players) {
             if (player.discord_id == discord_id) 
@@ -73,7 +73,7 @@ public class DDatabaseCore : IDatabaseComponent {
     }
 
         // TODO: move to cquerier
-    public DPlayer? GetPlayerIfExists(string name) {
+    public DPlayer? GetPlayerIfExists(in string name) {
         if (name.Length == 0 || all_players == null) return null;
         foreach (var player in all_players) {
             foreach (var this_name in player.recorded_names) {

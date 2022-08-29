@@ -5,7 +5,7 @@ namespace Database.Database.DatabaseCore.MainComponents;
 
 public class DSeason : IDatabaseComponent
 {
-    public DSeason(List<DQueue> queues) : base(ConsoleColor.Yellow, 1, "DSeason")
+    public DSeason(in List<DQueue> queues) : base(ConsoleColor.Yellow, 1, "DSeason")
     {
         var ts = queues[queues.Count / 2].teams_picked_message.timestamp;
         season_label = new FSeasonLabel(ts);
@@ -20,7 +20,7 @@ public class DSeason : IDatabaseComponent
     private FSeasonLabel season_label { get; set; }
     private List<DQueue> queues { get; set; }
 
-    public bool IsSeason(FSeasonLabel label)
+    public bool IsSeason(in FSeasonLabel label)
     {
         return season_label == label;
     }

@@ -5,13 +5,13 @@ namespace Database.Database.DatabaseCore.MainComponents;
 
 public class DPlayer : IDatabaseComponent
 {
-    public ulong discord_id { get; set; } = 0;
+    public ulong discord_id { get; init; } = 0;
     public List<string> recorded_names { get; set; }
     public List<FGameRecord?> game_history { get; set; }
     public int iTotalWins { get; set; } = 0;
     public int iTotalLosses { get; set; } = 0;
 
-    public DPlayer(ulong discord_id, string discord_name, string nickname = "", string link_name = "") : base(ConsoleColor.Yellow, 1, "DPlayer")
+    public DPlayer(in ulong discord_id, in string discord_name, in string nickname = "", in string link_name = "") : base(ConsoleColor.Yellow, 1, "DPlayer")
     {
         this.discord_id = discord_id;
         game_history = new List<FGameRecord?>();
@@ -21,7 +21,7 @@ public class DPlayer : IDatabaseComponent
         if (link_name.Length > 0 && link_name != discord_name && link_name != nickname) recorded_names.Add(link_name);
     }
 
-    public bool HasName(string name)
+    public bool HasName(in string name)
     {
         foreach (var player_name in recorded_names)
         {
@@ -31,7 +31,7 @@ public class DPlayer : IDatabaseComponent
         return false;
     }
 
-    public void TryAddName(string name)
+    public void TryAddName(in string name)
     {
         bool found = false;
         foreach (var player_name in recorded_names)
@@ -46,7 +46,7 @@ public class DPlayer : IDatabaseComponent
         if (!found) recorded_names.Add(name);
     }
 
-    public static bool operator ==(DPlayer? lhs, string rhs)
+    public static bool operator ==(in DPlayer? lhs, in string rhs)
     {
         if (!lhs) return false;
         foreach (var name in lhs.recorded_names)
@@ -57,7 +57,7 @@ public class DPlayer : IDatabaseComponent
         return false;
     }
 
-    public static bool operator !=(DPlayer? lhs, string rhs)
+    public static bool operator !=(in DPlayer? lhs, in string rhs)
     {
         return !(lhs == rhs);
     }

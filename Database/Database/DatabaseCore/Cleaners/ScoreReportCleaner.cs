@@ -12,12 +12,12 @@ public class ScoreReportCleaner : ILogger
     public bool bIsComplete { get; set; } = false;
     public bool bUsingDirectory { get; set; }
 
-    private ScoreReportCleaner(bool bUsingDirectory = false) : base(ConsoleColor.Yellow, 1, "ScoreReportCleaner")
+    private ScoreReportCleaner(in bool bUsingDirectory = false) : base(ConsoleColor.Yellow, 1, "ScoreReportCleaner")
     {
         this.bUsingDirectory = bUsingDirectory;
     }
 
-    public static ScoreReportCleaner GetSingleton(bool bUsingDirectory = false)
+    public static ScoreReportCleaner GetSingleton(in bool bUsingDirectory = false)
     {
         if (singleton == null) singleton = new ScoreReportCleaner(bUsingDirectory);
         return singleton;
@@ -97,7 +97,7 @@ public class ScoreReportCleaner : ILogger
         message.content = RegularExpressions.select_multiple_spaces_in_score_report_regex.Replace(message.content, " ");
     }
 
-    private FMessageList? LoadMessages(string override_path = "")
+    private FMessageList? LoadMessages(in string override_path = "")
     {
         if (!bUsingDirectory) return DDatabaseCore.GetSingleton().LoadAndGetAllDiscordChatMessages(override_path);
         else

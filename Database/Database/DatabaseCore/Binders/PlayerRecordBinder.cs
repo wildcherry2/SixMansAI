@@ -48,7 +48,7 @@ public class PlayerRecordBinder : ILogger
         bComplete = true;
     }
 
-    private void SetRecord(DQueue queue, ETeamLabel team_label, DPlayer player)
+    private void SetRecord(in DQueue queue, in ETeamLabel team_label, in DPlayer player)
     {
         DPlayer? target = null;
         if (queue.score_report != null && queue.score_report.bHasSubs)

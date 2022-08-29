@@ -3,8 +3,5 @@
 namespace Database.Structs;
 public class FReaction {
     [JsonPropertyName("emoji")]
-    public FEmoji emoji { get; set; }
-
-    //[JsonPropertyName("count")]
-
+    public FEmoji emoji { get; init; }
 }

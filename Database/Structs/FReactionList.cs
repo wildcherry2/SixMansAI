@@ -4,5 +4,5 @@ using System.Text.Json.Serialization;
 namespace Database.Structs; 
 
 public class FReactionList {
-    public List<FReaction> reactions { get; set; }
+    public List<FReaction> reactions { get; init; }
 }

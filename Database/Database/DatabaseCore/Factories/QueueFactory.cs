@@ -10,13 +10,13 @@ public class QueueFactory : ILogger
 {
     private static QueueFactory? singleton { get; set; }
     private FMessageList? _messageList { get; set; }
-    public bool bIsComplete { get; set; } = false;
-    private QueueFactory(FMessageList? season_message_list = null) : base(ConsoleColor.Yellow, 1, "QueueFactory")
+    public bool bIsComplete { get; private set; } = false;
+    private QueueFactory(in FMessageList? season_message_list = null) : base(ConsoleColor.Yellow, 1, "QueueFactory")
     {
         _messageList = DDatabaseCore.GetSingleton().all_discord_chat_messages;
     }
 
-    public static QueueFactory GetSingleton(FMessageList? season_message_list = null)
+    public static QueueFactory GetSingleton(in FMessageList? season_message_list = null)
     {
         if (singleton == null) singleton = new QueueFactory(season_message_list);
         else if (season_message_list != null) singleton._messageList = season_message_list;

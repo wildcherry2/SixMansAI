@@ -11,16 +11,16 @@ public class ChatCleaner : ILogger
     public bool bIsComplete { get; set; } = false;
     public bool bUsingDirectory { get; set; }
 
-    private ChatCleaner(bool bUsingDirectory = false) : base(ConsoleColor.Yellow, 1, "ChatCleaner")
+    private ChatCleaner(in bool bUsingDirectory = false) : base(ConsoleColor.Yellow, 1, "ChatCleaner")
     {
         this.bUsingDirectory = bUsingDirectory;
     }
-    public static ChatCleaner GetSingleton(bool bUsingDirectory = false)
+    public static ChatCleaner GetSingleton(in bool bUsingDirectory = false)
     {
         if (singleton == null) singleton = new ChatCleaner(bUsingDirectory);
         return singleton;
     }
-    public void ProcessChat(string override_path = "")
+    public void ProcessChat(in string override_path = "")
     {
         var core = DDatabaseCore.GetSingleton();
         var all_messages = LoadMessages(override_path == "" ? DDatabaseCore.chat_path : override_path);
@@ -42,12 +42,12 @@ public class ChatCleaner : ILogger
         else Log("Error cleaning chat data! No messages were filtered!");
         core.all_discord_chat_messages = filtered_messages;
     }
-    private bool IsRelevantMessage(DDiscordMessage message)
+    private bool IsRelevantMessage(in DDiscordMessage message)
     {
         return message.type != EMessageType.UNKNOWN;
     }
 
-    private FMessageList? LoadMessages(string override_path = "")
+    private FMessageList? LoadMessages(in string override_path = "")
     {
         if (!bUsingDirectory) return DDatabaseCore.GetSingleton().LoadAndGetAllDiscordChatMessages(override_path);
         else

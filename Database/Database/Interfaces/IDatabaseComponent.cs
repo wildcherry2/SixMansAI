@@ -42,7 +42,7 @@ public abstract class IDatabaseComponent : ILogger
     }
     protected abstract bool IsEqual(IDatabaseComponent? rhs);
     protected abstract bool IsLessThan(IDatabaseComponent? rhs);
-    protected IDatabaseComponent(ConsoleColor color = ConsoleColor.White, int tabs = 0, string class_name = "IDatabaseComponent") : base(color, tabs, class_name) { }
+    protected IDatabaseComponent(in ConsoleColor color = ConsoleColor.White, in int tabs = 0, in string class_name = "IDatabaseComponent") : base(color, tabs, class_name) { }
     public abstract string ToJson();
     public abstract void ToJson(string save_path);
     public abstract void FromJson(string save_path);

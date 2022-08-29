@@ -3,8 +3,8 @@
 namespace Database.Structs;
 public class FEmoji {
     [JsonPropertyName("id")]
-    public string id { get; set; }
+    public string id { get; init; }
 
     [JsonPropertyName("name")]
-    public string name { get; set; }
+    public string name { get; init; }
 }

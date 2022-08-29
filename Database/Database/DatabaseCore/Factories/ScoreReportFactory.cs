@@ -20,7 +20,7 @@ public class ScoreReportFactory : ILogger
 
     // Precondition: ScoreReportCleaner.ProcessChat has already been called with messages
     // Postcondition: DDatabaseCore's singleton's all_score_reports field is initialized with data
-    public void ProcessChat(FMessageList messages)
+    public void ProcessChat(in FMessageList messages)
     {
         Log("Deserializing {0} messages into FScoreReports...", messages.messages.Count.ToString());
         if (!ScoreReportCleaner.GetSingleton().bIsComplete) return;
