@@ -11,4 +11,7 @@ public static class RegularExpressions {
     public static Regex name_from_embedded_link_regex                = new Regex(@"(?:(?!^\[|\]\().)+", RegexOptions.Compiled);
     public static Regex is_link_regex                                = new Regex(@"^\[.+\]\(https://www\.rl6mans\.com/profile/.+\) has joined.$", RegexOptions.Compiled);
     public static Regex lobby_id_lobby_cancelled_regex               = new Regex(@"(?:(?!(^.+\*\*))+(?!(\*\*Match ID ))+(?!(\*\*\..+$))[0-9]+)", RegexOptions.Compiled);
+
+    // Match 1 = month, Match 2 = year
+    public static Regex season_from_file_name_regex                  = new Regex(@"(?:\D+|\d+)", RegexOptions.Compiled);
 }

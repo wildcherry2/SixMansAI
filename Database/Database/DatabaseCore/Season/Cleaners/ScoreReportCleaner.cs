@@ -48,7 +48,10 @@ public class ScoreReportCleaner : ILogger {
         }
 
         Log("Unverified score reports = {0}, score reports with invalid length = {1}", unverified.ToString(), notlong.ToString());
-        if (result.messages.Count > 0) bIsComplete = true;
+        if (result.messages.Count > 0) {
+            Log("Filtered {0} reports from {1} messages!", result.messages.Count.ToString(), messages.messages.Count.ToString());
+            bIsComplete = true;
+        }
         else Log("Error cleaning score reports! No messages were filtered!");
         DDatabaseCore.GetSingleton().all_score_report_messages = result;
     }
