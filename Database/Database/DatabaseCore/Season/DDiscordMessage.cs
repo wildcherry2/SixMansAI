@@ -1,5 +1,6 @@
 ﻿
 using System.Text.Json.Serialization;
+using Database.Database.Interfaces;
 using Database.Enums;
 using Database.Structs;
 
@@ -203,7 +204,6 @@ public class DDiscordMessage : IDatabaseComponent {
         return ret;
     }
 
-    // TODO: Use GetPlayerNamesFromTeamPickedMessage to get names instead, then do a lookup for either team in one function with an ETeamLabel to indicate the team in the parameters
     public List<DPlayer>? GetTeamOne() {
         if (!IsTeamsPickedMessage()) return null;
 

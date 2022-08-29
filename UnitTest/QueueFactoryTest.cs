@@ -12,6 +12,7 @@ public class QueueFactoryTests {
     private PlayerFactory pfactory          { get; set; }
     private FMessageList  filtered_messages { get; set; }
     private List<DPlayer> all_players       { get; set; }
+    private List<DQueue>? result            { get; set; }
 
     [TestMethod, TestInitialize]
     public void Construct() {
@@ -64,6 +65,7 @@ public class QueueFactoryTests {
         }
 
         Console.WriteLine("Partially built queues = {0}, Useless queues = {1}", partials, nothing);
+        result = res;
 
         Assert.AreEqual(0, nothing);
     }

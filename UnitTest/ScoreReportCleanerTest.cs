@@ -9,13 +9,13 @@ public class ScoreReportCleanerTests {
     private ScoreReportCleaner sr_cleaner { get; set; }
 
     [TestMethod, TestInitialize]
-    public void Construct() {
+    public void AConstruct() {
         sr_cleaner = ScoreReportCleaner.GetSingleton();
         Assert.IsNotNull(sr_cleaner);
     }
 
     [TestMethod]
-    public void TestProcessChat() {
+    public void BTestProcessChat() {
         sr_cleaner.ProcessChat();
         var ret = DDatabaseCore.GetSingleton().all_score_report_messages;
         Assert.IsNotNull(ret);
@@ -27,5 +27,11 @@ public class ScoreReportCleanerTests {
             Assert.IsTrue(chat.type == EMessageType.SCORE_REPORT);
             Assert.IsTrue(RegularExpressions.score_report_strict_regex.Match(chat.content).Success);
         }
+    }
+
+    [TestMethod]
+    public void CTestLoadMessagesFromDirectory() {
+        sr_cleaner.bUsingDirectory = true;
+        BTestProcessChat();
     }
 }

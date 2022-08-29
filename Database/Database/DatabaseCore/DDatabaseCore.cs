@@ -3,9 +3,10 @@ using System.Text.Json;
 using Database.Database.DatabaseCore.Season;
 using Database.Database.DatabaseCore.Season.Cleaners;
 using Database.Database.DatabaseCore.Season.Queue;
+using Database.Database.Interfaces;
 using Database.Structs;
 
-namespace Database.Database.DatabaseCore; 
+namespace Database.Database.DatabaseCore;
 
 public class DDatabaseCore : IDatabaseComponent {
     public         List<DPlayer>?      all_players               { get; set; }
@@ -17,8 +18,10 @@ public class DDatabaseCore : IDatabaseComponent {
     private static DDatabaseCore?      singleton                 { get; set; }
 
     // Will move to CLoader
-    public static string chat_path = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\rank-b\July2022.json";
-    public static string sr_path   = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\score-report\July2022.json";
+    public static string chat_path { get; set; } = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\rank-b\July2022.json";
+    public static string sr_path   { get; set; } = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\score-report\July2022.json";
+    public static string chat_dir  { get; set; } = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\rank-b";
+    public static string sr_dir    { get; set; } = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\score-report";
 
     private DDatabaseCore() : base(ConsoleColor.Green, 0, "DDatabaseCore") {
         all_players = new List<DPlayer>();
@@ -31,15 +34,13 @@ public class DDatabaseCore : IDatabaseComponent {
         return singleton;
     }
 
-    public void BuildDatabase() {
+    public void BuildDatabase(bool bUsingDirectory = false) {
         ChatCleaner.GetSingleton().ProcessChat();
         ScoreReportCleaner.GetSingleton().ProcessChat();
         PlayerFactory.GetSingleton().ProcessChat(all_discord_chat_messages);
-        ScoreReportFactory.GetSingleton().ProcessChat(all_score_report_messages);
         QueueFactory.GetSingleton(all_discord_chat_messages).ProcessChat();
+        ScoreReportFactory.GetSingleton().ProcessChat(all_score_report_messages);
         QueueReportBinder.GetSingleton().BindReportsToQueues();
-        
-        // TODO: add inference for situations where only 1 name is unmatched in the queue to lookup by the one discord id (from the mention) that isn't matched
     }
 
     // Will later use CLoader

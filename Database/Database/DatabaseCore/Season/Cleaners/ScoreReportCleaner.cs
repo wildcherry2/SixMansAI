@@ -1,22 +1,26 @@
-﻿using Database.Enums;
+﻿using Database.Database.Interfaces;
+using Database.Enums;
 using Database.Structs;
 
-namespace Database.Database.DatabaseCore.Season.Cleaners; 
+namespace Database.Database.DatabaseCore.Season.Cleaners;
 
 public class ScoreReportCleaner : ILogger {
-    private static ScoreReportCleaner? singleton   { get; set; }
-    private        FMessageList?       messages    { get; set; }
-    public         bool                bIsComplete { get; set; } = false;
-    private ScoreReportCleaner() : base(ConsoleColor.Yellow, 1, "ScoreReportCleaner"){
-        messages = DDatabaseCore.GetSingleton().LoadAndGetAllDiscordChatMessages(DDatabaseCore.sr_path);
+    private static ScoreReportCleaner? singleton       { get; set; }
+    private        FMessageList?       messages        { get; set; }
+    public         bool                bIsComplete     { get; set; } = false;
+    public        bool                bUsingDirectory { get; set; }
+
+    private ScoreReportCleaner(bool bUsingDirectory = false) : base(ConsoleColor.Yellow, 1, "ScoreReportCleaner") {
+        this.bUsingDirectory = bUsingDirectory;
     }
 
-    public static ScoreReportCleaner GetSingleton() {
-        if(singleton == null) singleton = new ScoreReportCleaner();
+    public static ScoreReportCleaner GetSingleton(bool bUsingDirectory = false) {
+        if(singleton == null) singleton = new ScoreReportCleaner(bUsingDirectory);
         return singleton;
     }
 
     public void ProcessChat() {
+        messages = LoadMessages(DDatabaseCore.sr_path);
         if (messages == null) {
             Log("Preconditions not met! Score report chat data was not set!");
             return;
@@ -70,5 +74,29 @@ public class ScoreReportCleaner : ILogger {
     private void CleanContentString(ref DDiscordMessage message) {
         message.content = message.content.Replace("\n", " ");
         message.content = RegularExpressions.select_multiple_spaces_in_score_report_regex.Replace(message.content, " ");
+    }
+
+    private FMessageList? LoadMessages(string override_path = "") {
+        if (!bUsingDirectory) return DDatabaseCore.GetSingleton().LoadAndGetAllDiscordChatMessages(override_path);
+        else {
+            try {
+                FMessageList list = new FMessageList();
+                var files = Directory.GetFiles(DDatabaseCore.sr_dir);
+                if (files.Length == 0) throw new Exception("Exception: No files found! Terminating process!");
+                foreach (var file in files) {
+                    var temp = DDatabaseCore.GetSingleton().LoadAndGetAllDiscordChatMessages(file);
+                    if (temp == null) throw new Exception("Exception: File path " + file + " is invalid! Terminating process!");
+                    list.messages.AddRange(temp.messages);
+                }
+
+                return list;
+            }
+            catch (Exception e) {
+                Log(e.Message); 
+                Environment.Exit(1);
+            }
+        }
+
+        return null;
     }
 }

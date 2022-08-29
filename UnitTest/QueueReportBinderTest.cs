@@ -14,9 +14,9 @@ public class QueueReportBinderTests {
         PlayerFactory.GetSingleton().ProcessChat(core.all_discord_chat_messages);
         //ScoreReportFactory.GetSingleton().ProcessChat(core.all_score_report_messages);
         QueueFactory.GetSingleton(core.all_discord_chat_messages).ProcessChat();
-        QueueReportBinder.GetSingleton();
         ScoreReportFactory.GetSingleton().ProcessChat(core.all_score_report_messages); //putting this after player factory and queue factory could give the score report factory more names to work with
-
+        QueueReportBinder.GetSingleton();
+        
         Assert.AreNotEqual(false, ChatCleaner.GetSingleton().bIsComplete);
         Assert.AreNotEqual(false, ScoreReportCleaner.GetSingleton().bIsComplete);
         Assert.AreNotEqual(false, PlayerFactory.GetSingleton().bIsComplete);
@@ -51,7 +51,8 @@ public class QueueReportBinderTests {
 
             Assert.IsTrue(queue.bError || queue.match_id > 0);
             Assert.IsTrue(queue.score_report.bError || queue.score_report.iMatchId > 0);
+            if(queue) Console.WriteLine(queue.ToString());
         }
-        Console.WriteLine("");
+        
     }
 }

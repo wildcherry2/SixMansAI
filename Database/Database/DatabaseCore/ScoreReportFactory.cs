@@ -1,9 +1,10 @@
 ﻿
 using Database.Database.DatabaseCore.Season;
 using Database.Database.DatabaseCore.Season.Cleaners;
+using Database.Database.Interfaces;
 using Database.Structs;
 
-namespace Database.Database.DatabaseCore; 
+namespace Database.Database.DatabaseCore;
 
 public class ScoreReportFactory : ILogger {
     private static ScoreReportFactory? singleton   { get; set; }
@@ -76,7 +77,5 @@ public class ScoreReportFactory : ILogger {
         report.subbed_in = DDatabaseCore.GetSingleton().GetPlayerIfExists(message.mentions[0].id);
         report.subbed_out = DDatabaseCore.GetSingleton().GetPlayerIfExists(message.mentions[1].id);
         report.bHasSubs = true;
-
-        // TODO: log if either subbed_in or subbed_out is null
     }
 }

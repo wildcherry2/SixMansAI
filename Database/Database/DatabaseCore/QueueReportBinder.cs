@@ -1,9 +1,10 @@
 ﻿
 using Database.Database.DatabaseCore.Season.Queue;
+using Database.Database.Interfaces;
 using Database.Enums;
 using Database.Structs;
 
-namespace Database.Database.DatabaseCore; 
+namespace Database.Database.DatabaseCore;
 
 public class QueueReportBinder : ILogger {
     private static QueueReportBinder? singleton { get; set; }

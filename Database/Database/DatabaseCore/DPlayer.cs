@@ -1,4 +1,5 @@
-﻿using Database.Structs;
+﻿using Database.Database.Interfaces;
+using Database.Structs;
 
 namespace Database.Database.DatabaseCore;
 

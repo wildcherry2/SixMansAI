@@ -1,8 +1,9 @@
 ﻿using Database.Database.DatabaseCore.Season.Queue;
+using Database.Database.Interfaces;
 using Database.Enums;
 using Database.Structs;
 
-namespace Database.Database.DatabaseCore; 
+namespace Database.Database.DatabaseCore;
 
 public class PlayerRecordBinder : ILogger {
     private static PlayerRecordBinder? singleton { get; set; } = null;

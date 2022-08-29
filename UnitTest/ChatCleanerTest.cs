@@ -9,13 +9,13 @@ namespace UnitTest;
 public class ChatCleanerTests {
     public ChatCleaner cleaner { get; set; }
     [TestMethod, TestInitialize]
-    public void TestIfSingletonIsCreated() {
+    public void ATestIfSingletonIsCreated() {
         cleaner = ChatCleaner.GetSingleton();
         Assert.IsNotNull(cleaner);
     }
 
     [TestMethod]
-    public void TestProcessChat() {
+    public void BTestProcessChat() {
         cleaner.ProcessChat();
         var result = DDatabaseCore.GetSingleton().all_discord_chat_messages;
         Assert.IsNotNull(result);
@@ -33,5 +33,11 @@ public class ChatCleanerTests {
         }
 
         Console.WriteLine("Cleaned messages = {0}", result.messages.Count);
+    }
+
+    [TestMethod]
+    public void CTestLoadMessagesFromDirectory() {
+        cleaner.bUsingDirectory = true;
+        BTestProcessChat();
     }
 }

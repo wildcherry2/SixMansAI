@@ -1,4 +1,5 @@
-﻿using Database.Enums;
+﻿using Database.Database.Interfaces;
+using Database.Enums;
 using Database.Structs;
 
 namespace Database.Database.DatabaseCore.Season.Queue;
@@ -51,6 +52,7 @@ public class DQueue : IDatabaseComponent {
         }
     }
 
+    [Obsolete("IsQueueCreation isn't needed and isn't guaranteed to produce an accurate result.", true)]
     public bool IsQueueCreationComplete() {
         if(match_id == -1){Log("Match ID is invalid!"); return false; }
         if (!IsTeamValid(ETeamLabel.TEAM_ONE)) return false;
@@ -228,19 +230,17 @@ public class DQueue : IDatabaseComponent {
         var ret = "";
 
         ret += "Match ID = " + match_id + "\n";
-        ret += "Team One\n";
+        ret += "Team One = ";
         ret += team_one.player_one.recorded_names[0] + " (" + team_one.player_one.discord_id + "),\t";
         ret += team_one.player_two.recorded_names[0] + " (" + team_one.player_two.discord_id + "),\t";
-        ret += team_one.player_three.recorded_names[0] + " (" + team_one.player_three.discord_id + ")\n\n";
+        ret += team_one.player_three.recorded_names[0] + " (" + team_one.player_three.discord_id + ")\n";
 
-        ret += "Team Two\n";
+        ret += "Team Two = ";
         ret += team_two.player_one.recorded_names[0] + " (" + team_two.player_one.discord_id + "),\t";
         ret += team_two.player_two.recorded_names[0] + " (" + team_two.player_two.discord_id + "),\t";
-        ret += team_two.player_three.recorded_names[0] + " (" + team_two.player_three.discord_id + ")";
+        ret += team_two.player_three.recorded_names[0] + " (" + team_two.player_three.discord_id + ")\n";
 
-        /*
-         * TODO: add mined score report stuff later
-         */
+        ret += "Winner = " + winner + "\n";
 
         return ret;
     }

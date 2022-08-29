@@ -1,10 +1,11 @@
 ﻿
 using Database.Database.DatabaseCore.Season;
 using Database.Database.DatabaseCore.Season.Cleaners;
+using Database.Database.Interfaces;
 using Database.Enums;
 using Database.Structs;
 
-namespace Database.Database.DatabaseCore; 
+namespace Database.Database.DatabaseCore;
 
 public class PlayerFactory : ILogger {
     private static PlayerFactory? singleton   { get; set; }
