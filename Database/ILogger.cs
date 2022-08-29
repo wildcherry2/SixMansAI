@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace Database; 
 
-public abstract class ILogger {
+public class ILogger {
     protected ConsoleColor current_color { get; set; } = ConsoleColor.White;
     protected int          iTabs          { get; set; } = 0;
     protected string       class_name    { get; set; } = "";
@@ -14,7 +14,7 @@ public abstract class ILogger {
         this.class_name = class_name;
     }
 
-    protected void Log(string message, params string[]? subs_strings) {
+    protected virtual void Log(string message, params string[]? subs_strings) {
        Console.ForegroundColor = current_color;
         string msg = "";
         var caller = new StackFrame(1).GetMethod();
