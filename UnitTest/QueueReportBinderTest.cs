@@ -12,9 +12,10 @@ public class QueueReportBinderTests {
         ChatCleaner.GetSingleton().ProcessChat();
         ScoreReportCleaner.GetSingleton().ProcessChat();
         PlayerFactory.GetSingleton().ProcessChat(core.all_discord_chat_messages);
-        ScoreReportFactory.GetSingleton().ProcessChat(core.all_score_report_messages);
+        //ScoreReportFactory.GetSingleton().ProcessChat(core.all_score_report_messages);
         QueueFactory.GetSingleton(core.all_discord_chat_messages).ProcessChat();
         QueueReportBinder.GetSingleton();
+        ScoreReportFactory.GetSingleton().ProcessChat(core.all_score_report_messages); //putting this after player factory and queue factory could give the score report factory more names to work with
 
         Assert.AreNotEqual(false, ChatCleaner.GetSingleton().bIsComplete);
         Assert.AreNotEqual(false, ScoreReportCleaner.GetSingleton().bIsComplete);

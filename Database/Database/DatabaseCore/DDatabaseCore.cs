@@ -62,7 +62,8 @@ public class DDatabaseCore : IDatabaseComponent {
     public DPlayer? GetPlayerIfExists(ulong discord_id) {
         if (discord_id == 0 || all_players == null) return null;
         foreach (var player in all_players) {
-            if (player.discord_id == discord_id) return player;
+            if (player.discord_id == discord_id) 
+                return player;
         }
 
         return null;
@@ -73,7 +74,8 @@ public class DDatabaseCore : IDatabaseComponent {
         if (name.Length == 0 || all_players == null) return null;
         foreach (var player in all_players) {
             foreach (var this_name in player.recorded_names) {
-                if(this_name == name) return player;
+                if(this_name == name) 
+                    return player;
             }
         }
 

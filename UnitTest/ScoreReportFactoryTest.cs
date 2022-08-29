@@ -2,6 +2,7 @@
 using Database.Database.DatabaseCore;
 using Database.Database.DatabaseCore.Season.Cleaners;
 using Database.Database.DatabaseCore.Season.Queue;
+using Database.Structs;
 
 namespace UnitTest; 
 
@@ -12,6 +13,7 @@ public class ScoreReportFactoryTests {
     private ChatCleaner        ccleaner   { get; set; }
     private QueueFactory       qfactory   { get; set; }
     private PlayerFactory      pfactory   { get; set; }
+    //private FMessageList       clean      { get; set; }
 
     [TestMethod, TestInitialize]
     public void Construct() {
@@ -27,8 +29,8 @@ public class ScoreReportFactoryTests {
         Assert.IsNotNull(pfactory);
 
         ccleaner.ProcessChat();
-        var chat_clean_res = DDatabaseCore.GetSingleton().all_discord_chat_messages;
-        pfactory.ProcessChat(chat_clean_res);
+       var clean = DDatabaseCore.GetSingleton().all_discord_chat_messages;
+        pfactory.ProcessChat(clean);
         var all_players = DDatabaseCore.GetSingleton().all_players;
         //var qfact_res = qfactory.ProcessChat();
     }

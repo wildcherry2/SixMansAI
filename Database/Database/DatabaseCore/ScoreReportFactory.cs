@@ -8,6 +8,7 @@ namespace Database.Database.DatabaseCore;
 public class ScoreReportFactory : ILogger {
     private static ScoreReportFactory? singleton   { get; set; }
     public         bool                bIsComplete { get; set; } = false;
+    
     private ScoreReportFactory() : base(ConsoleColor.Yellow, 1, "ScoreReportFactory"){}
 
     public static ScoreReportFactory GetSingleton() {
@@ -18,9 +19,10 @@ public class ScoreReportFactory : ILogger {
     // Precondition: ScoreReportCleaner.ProcessChat has already been called with messages
     // Postcondition: DDatabaseCore's singleton's all_score_reports field is initialized with data
     public void ProcessChat(FMessageList messages) {
+        Log("Deserializing {0} messages into FScoreReports...",messages.messages.Count.ToString());
         if (!ScoreReportCleaner.GetSingleton().bIsComplete) return;
         List<FScoreReport> ret = new List<FScoreReport>();
-
+        int err_count = 0;
         for(var i = 0; i < messages.messages.Count; i++) {
             var message = messages.messages[i];
             FScoreReport report = new FScoreReport();
@@ -39,16 +41,19 @@ public class ScoreReportFactory : ILogger {
                     report.iMatchId.ToString(),!ReferenceEquals(report.reporter, null) ? report.reporter.recorded_names[0] : "Null Reporter!",
                     subs.ToString(), subs ? (!ReferenceEquals(report.subbed_in, null) ? report.subbed_in.recorded_names[0] : "Null subbed in player!") : "",
                     subs ? (!ReferenceEquals(report.subbed_out, null) ? report.subbed_out.recorded_names[0] : "Null subbed out player!") : "");
+                err_count++;
             }
-
             ret.Add(report);
         }
 
-        if (ret.Count > 0) {
+        if (ret.Count == 0) {
             Log("Error creating score report list! No reports were added to the list!");
-            bIsComplete = true;
         }
-        DDatabaseCore.GetSingleton().all_score_reports = ret;
+        else {
+            Log("{0} score reports generated with {1} errors! Valid score reports = {2}", ret.Count.ToString(), err_count.ToString(), (ret.Count - err_count).ToString());
+            bIsComplete = true;
+            DDatabaseCore.GetSingleton().all_score_reports = ret;
+        }
     }
 
     private bool GetReportedWin(ref DDiscordMessage message) {
@@ -61,9 +66,9 @@ public class ScoreReportFactory : ILogger {
     }
 
     private DPlayer? GetReporter(ref DDiscordMessage message) {
-        var name = message.author.name;
-        if (name == null) return null;
-        return DDatabaseCore.GetSingleton().GetPlayerIfExists(name);
+        var id = message.author.id;
+        if (id == null) return null;
+        return DDatabaseCore.GetSingleton().GetPlayerIfExists(ulong.Parse(id));
     }
 
     private void SetSubstitutes(ref FScoreReport report, ref DDiscordMessage message) {

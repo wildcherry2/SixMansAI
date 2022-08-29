@@ -1,4 +1,7 @@
 ﻿//change abstract members to virtual where applicable? wouldnt have to reimplement everywhere
+
+using System.Diagnostics;
+
 namespace Database;
 
 public abstract class IDatabaseComponent {
@@ -49,8 +52,10 @@ public abstract class IDatabaseComponent {
     protected void Log(string message, params string[]? subs_strings) {
         Console.ForegroundColor = current_color;
         string msg = "";
+        var caller = new StackFrame(1).GetMethod();
+        string caller_name = "[" + (caller != null ? caller.Name : "") + "] ";
         for (int i = 0; i < iTabs; i++) msg += "\t";
-            msg += "[" + class_name + "] " + message;
+        msg += "[" + class_name + "] " + caller_name + message;
 
         if (subs_strings != null && subs_strings.Length > 0)
             Console.WriteLine(msg, subs_strings);

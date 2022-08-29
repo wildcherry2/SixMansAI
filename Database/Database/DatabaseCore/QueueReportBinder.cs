@@ -7,7 +7,7 @@ namespace Database.Database.DatabaseCore;
 
 public class QueueReportBinder : ILogger {
     private static QueueReportBinder? singleton { get; set; }
-    private QueueReportBinder() : base(ConsoleColor.Yellow, 1, "ScoreReportFactory") {}
+    private QueueReportBinder() : base(ConsoleColor.Yellow, 1, "QueueReportBinder") {}
     public static QueueReportBinder GetSingleton() {
         if (singleton == null) singleton = new QueueReportBinder();
         return singleton;
@@ -19,14 +19,18 @@ public class QueueReportBinder : ILogger {
     // Postcondition: All queues in DDatabaseCore's singleton's queues field has a valid score report field, if a score report exists 
     public void BindReportsToQueues() {
         var core = DDatabaseCore.GetSingleton();
+        
+        #region Precondition Checks
         if (!QueueFactory.GetSingleton().bIsComplete || !ScoreReportFactory.GetSingleton().bIsComplete || core.all_queues == null || core.all_score_reports == null) {
             Log("Preconditions not met! Preconditions status:\nQueueFactory.bIsComplete = {0}\nScoreReportFactory.bIsComplete = {1}" +
                 "\nDDatabaseCore.all_queues = {2},\nDDatabaseCore.all_score_reports = {3}", QueueFactory.GetSingleton().bIsComplete.ToString(),
-                ScoreReportFactory.GetSingleton().bIsComplete.ToString(), DDatabaseCore.GetSingleton().all_queues != null ? "Not null" : "Null",
-                DDatabaseCore.GetSingleton().all_score_reports != null ? "Not null" : "Null");
+                ScoreReportFactory.GetSingleton().bIsComplete.ToString(), core.all_queues != null ? "Not null" : "Null",
+                core.all_score_reports != null ? "Not null" : "Null");
             return;
         }
+        #endregion
 
+        int err_count = 0;
         foreach (var queue in core.all_queues) {
             bool found = false;
             foreach (var report in core.all_score_reports) {
@@ -38,11 +42,14 @@ public class QueueReportBinder : ILogger {
             }
 
             if (!found) {
+                Log("Could not match score report to lobby {0}!", queue.match_id.ToString());
                 queue.score_report = new FScoreReport();
                 queue.score_report.bError = true;
+                err_count++;
             }
         }
 
+        Log("{0} queues bound to reports, {1} errors!", (core.all_queues.Count - err_count).ToString(), err_count.ToString());
         bIsComplete = true;
     }
 

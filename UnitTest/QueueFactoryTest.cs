@@ -49,10 +49,10 @@ public class QueueFactoryTests {
                 Assert.IsNotNull(queue.team_two.player_three);
                 Assert.IsTrue(queue.match_id > 0);
             }
-            else if(queue.not_matched.Count > 0) {
+            else if(queue.names_not_matched.Count > 0) {
                 string build = "Match {0} is missing player(s): ";
-                for (int i = 0; i < queue.not_matched.Count; i++) {
-                    build += queue.not_matched[i] + "\t";
+                for (int i = 0; i < queue.names_not_matched.Count; i++) {
+                    build += queue.names_not_matched[i] + "\t";
                 }
 
                 Console.WriteLine(build, queue.match_id);

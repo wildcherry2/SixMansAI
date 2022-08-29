@@ -32,6 +32,7 @@ public class QueueFactory : ILogger {
                 }
             }
 
+            Log("Created {0} queues!", ret.Count.ToString());
             bIsComplete = true;
         }
         else {
