@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using Database.Database.DatabaseCore.Season;
+using Database.Database.DatabaseCore.MainComponents;
 using Database.Enums;
 using Database.Structs;
 using Newtonsoft.Json;

@@ -4,8 +4,9 @@ using Database.Database.Interfaces;
 using Database.Enums;
 using Database.Structs;
 
-namespace Database.Database.DatabaseCore.Season;
-public class DDiscordMessage : IDatabaseComponent {
+namespace Database.Database.DatabaseCore.MainComponents;
+public class DDiscordMessage : IDatabaseComponent
+{
     [JsonPropertyName("id")]
     public string? id { get; set; }
 
@@ -13,7 +14,7 @@ public class DDiscordMessage : IDatabaseComponent {
     public string? content { get; set; }
 
     [JsonPropertyName("timestamp")]
-    public DateTime?        timestamp  { get; set; }
+    public DateTime? timestamp { get; set; }
 
     [JsonPropertyName("author")]
     public FAuthor? author { get; set; }
@@ -28,10 +29,11 @@ public class DDiscordMessage : IDatabaseComponent {
     public List<FEmbed>? embeds { get; set; }
 
     [JsonIgnore]
-    public EMessageType    type       { get; set; } = EMessageType.UNKNOWN;
+    public EMessageType type { get; set; } = EMessageType.UNKNOWN;
 
     [JsonConstructor]
-    public DDiscordMessage(string? id, string? content, DateTime? timestamp, FAuthor? author, List<FReaction>? reactions, List<FAuthor>? mentions, List<FEmbed>? embeds) : base(ConsoleColor.Magenta, 4, "DDiscordMessage") {
+    public DDiscordMessage(string? id, string? content, DateTime? timestamp, FAuthor? author, List<FReaction>? reactions, List<FAuthor>? mentions, List<FEmbed>? embeds) : base(ConsoleColor.Magenta, 4, "DDiscordMessage")
+    {
         this.id = id;
         this.content = content;
         this.timestamp = timestamp;
@@ -42,10 +44,13 @@ public class DDiscordMessage : IDatabaseComponent {
         SetMessageType();
     }
 
-    public int GetMatchId() {
+    public int GetMatchId()
+    {
         if (IsAuthorHuman() && !IsScoreReportMessage()) return -1;
-        try {
-            switch (type) {
+        try
+        {
+            switch (type)
+            {
                 case EMessageType.VOTING_COMPLETE:
                     return GetMatchIdFromVotingCompleteMessage();
                 case EMessageType.TEAMS_PICKED:
@@ -58,72 +63,91 @@ public class DDiscordMessage : IDatabaseComponent {
                     return -1;
             }
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Log(ex.Message);
             return -1;
         }
     }
 
-    private int GetMatchIdFromScoreReportMessage() {
-        try {
+    private int GetMatchIdFromScoreReportMessage()
+    {
+        try
+        {
             if (!IsScoreReportMessage()) return -1;
             return int.Parse(content.Split(' ')[1]);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Log("Could not parse match ID from score report message! Content = {0}, Exception = {1}", content, ex.Message);
             return -1;
         }
     }
 
-    private int GetMatchIdFromVotingCompleteMessage() {
-        try {
+    private int GetMatchIdFromVotingCompleteMessage()
+    {
+        try
+        {
             if (!IsVotingCompleteMessage()) return -1;
             return int.Parse(RegularExpressions.lobby_id_regex.Match(embeds[0].title).Value);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Log("Could not parse match ID from voting complete message! Content = {0}, Exception = {1}", content, ex.Message);
             return -1;
         }
     }
 
-    private int GetMatchIdFromTeamsPickedMessage() {
-        try {
+    private int GetMatchIdFromTeamsPickedMessage()
+    {
+        try
+        {
             if (!IsTeamsPickedMessage()) return -1;
             return int.Parse(RegularExpressions.lobby_id_regex.Match(embeds[0].title).Value);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Log("Could not parse match ID from teams picked message! Content = {0}, Exception = {1}", content, ex.Message);
             return -1;
         }
     }
 
-    private int GetMatchIdFromBotLobbyCancelledNoPickMessage() {
-        try {
+    private int GetMatchIdFromBotLobbyCancelledNoPickMessage()
+    {
+        try
+        {
             if (!IsLobbyCancelledNoPickMessage()) return -1;
             return int.Parse(RegularExpressions.lobby_id_lobby_cancelled_regex.Match(content).Value);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Log("Could not parse match ID from teams picked message! Content = {0}, Exception = {1}", content, ex.Message);
             return -1;
         }
     }
 
-    public string? GetEmbeddedTitle() {
-        return (embeds != null && embeds.Count > 0 && embeds[0].title != null) ? embeds[0].title : null;
+    public string? GetEmbeddedTitle()
+    {
+        return embeds != null && embeds.Count > 0 && embeds[0].title != null ? embeds[0].title : null;
     }
 
-    public string? GetEmbeddedDescription() {
-        return embeds != null && embeds.Count > 0? embeds[0].description : null;
+    public string? GetEmbeddedDescription()
+    {
+        return embeds != null && embeds.Count > 0 ? embeds[0].description : null;
     }
 
-    public FField? GetEmbeddedField(int index) {
+    public FField? GetEmbeddedField(int index)
+    {
         return embeds != null && embeds.Count > 0 && embeds[0].fields.Count >= index + 1 ? embeds[0].fields[index] : null;
     }
 
-    public string? GetPlayerNameFromEmbeddedLink(string? embedded_link) {
-        if (embedded_link != null ) {
+    public string? GetPlayerNameFromEmbeddedLink(string? embedded_link)
+    {
+        if (embedded_link != null)
+        {
             var pre_match = RegularExpressions.name_from_embedded_link_regex.Match(embedded_link);
-            if(pre_match != null && pre_match.Success) {
+            if (pre_match != null && pre_match.Success)
+            {
                 return pre_match.Value;
             }
         }
@@ -131,23 +155,28 @@ public class DDiscordMessage : IDatabaseComponent {
         return null;
     }
 
-    public bool HasSubstitutes() {
+    public bool HasSubstitutes()
+    {
         return IsScoreReportMessage() && mentions != null && mentions.Count == 2;
     }
 
-    public string[]? GetPlayerNamesFromTeamPickedMessage() {
-        if (!IsTeamsPickedMessage()) {
+    public string[]? GetPlayerNamesFromTeamPickedMessage()
+    {
+        if (!IsTeamsPickedMessage())
+        {
             Log("Tried to get embedded player names from a message that isn't a team picked message! Content = {0}", content ?? "null");
             return null;
         }
         var ret = new string[6];
         var link_fields = GetEmbeddedField(0);
-        if (link_fields == null) {
+        if (link_fields == null)
+        {
             Log("Tried to get embedded player names from a message without field 0! Content = {0}", content ?? "null");
             return null;
         }
         var link_strings = link_fields.value.Split(",");
-        if (link_strings.Length != 3) {
+        if (link_strings.Length != 3)
+        {
             Log("Could not gather 3 players with links! Content = {0}", content ?? "null");
             return null;
         }
@@ -155,7 +184,8 @@ public class DDiscordMessage : IDatabaseComponent {
         string? str_name = GetPlayerNameFromEmbeddedLink(link_strings[0].Trim());
         if (str_name != null)
             ret[0] = str_name;
-        else {
+        else
+        {
             Log("Could not get player name from link string 0! String = {0}", link_strings[0]);
             return null;
         }
@@ -173,12 +203,14 @@ public class DDiscordMessage : IDatabaseComponent {
             return null;
 
         link_fields = GetEmbeddedField(1);
-        if (link_fields == null) {
+        if (link_fields == null)
+        {
             Log("Tried to get embedded player names from a message without field 1! Content = {0}", content ?? "null");
             return null;
         }
         link_strings = link_fields.value.Split(", ");
-        if (link_strings.Length != 3) {
+        if (link_strings.Length != 3)
+        {
             Log("Could not gather 3 players with links! Content = {0}", content ?? "null");
             return null;
         }
@@ -204,19 +236,24 @@ public class DDiscordMessage : IDatabaseComponent {
         return ret;
     }
 
-    public List<DPlayer>? GetTeamOne() {
+    public List<DPlayer>? GetTeamOne()
+    {
         if (!IsTeamsPickedMessage()) return null;
 
         var all_players = DDatabaseCore.GetSingleton().all_players;
         var link_strings = GetEmbeddedField(0).value.Split(", ");
         var team_one = new List<DPlayer>();
 
-        foreach (var str in link_strings) {
+        foreach (var str in link_strings)
+        {
             var name = RegularExpressions.name_from_embedded_link_regex.Match(str);
             bool found = false;
-            if (name.Success) {
-                foreach (var player in all_players) {
-                    if (player == name.Value) {
+            if (name.Success)
+            {
+                foreach (var player in all_players)
+                {
+                    if (player == name.Value)
+                    {
                         found = true;
                         team_one.Add(player);
                         break;
@@ -224,7 +261,8 @@ public class DDiscordMessage : IDatabaseComponent {
                 }
 
                 // All names should have been parsed at this point, so if it's not found that means I missed something and the result is erroneous
-                if (!found) {
+                if (!found)
+                {
                     bError = true;
                     Log("Could not find player with name {0}", name.Value);
                     return null;
@@ -235,19 +273,24 @@ public class DDiscordMessage : IDatabaseComponent {
         return team_one;
     }
 
-    public List<DPlayer>? GetTeamTwo() {
+    public List<DPlayer>? GetTeamTwo()
+    {
         if (!IsTeamsPickedMessage()) return null;
 
         var all_players = DDatabaseCore.GetSingleton().all_players;
         var link_strings = GetEmbeddedField(0).value.Split(", ");
         var team_two = new List<DPlayer>();
 
-        foreach (var str in link_strings) {
+        foreach (var str in link_strings)
+        {
             var name = RegularExpressions.name_from_embedded_link_regex.Match(str);
             bool found = false;
-            if (name.Success) {
-                foreach (var player in all_players) {
-                    if (player == name.Value) {
+            if (name.Success)
+            {
+                foreach (var player in all_players)
+                {
+                    if (player == name.Value)
+                    {
                         found = true;
                         team_two.Add(player);
                         break;
@@ -255,7 +298,8 @@ public class DDiscordMessage : IDatabaseComponent {
                 }
 
                 // All names should have been parsed at this point, so if it's not found that means I missed something and the result is erroneous
-                if (!found) {
+                if (!found)
+                {
                     bError = true;
                     Log("Could not find player with name {0}", name.Value);
                     return null;
@@ -266,7 +310,8 @@ public class DDiscordMessage : IDatabaseComponent {
         return team_two;
     }
 
-    private void SetMessageType() {
+    private void SetMessageType()
+    {
         if (IsQMessage()) type = EMessageType.PLAYER_Q;
         else if (IsLeaveMessage()) type = EMessageType.PLAYER_LEAVE;
         else if (IsBotResponseToPlayerQ()) type = EMessageType.BOT_RESPONSE_TO_PLAYER_Q;
@@ -275,79 +320,96 @@ public class DDiscordMessage : IDatabaseComponent {
         else if (IsTeamsPickedMessage()) type = EMessageType.TEAMS_PICKED;
         else if (IsVotingCompleteMessage()) type = EMessageType.VOTING_COMPLETE;
         else if (IsLobbyCancelledNoPickMessage()) type = EMessageType.BOT_LOBBY_CANCELLED;
-        else {
+        else
+        {
             type = EMessageType.UNKNOWN;
             bError = true;
         }
     }
 
-    private bool IsQMessage() {
+    private bool IsQMessage()
+    {
         return content != null && content == @"!q";
     }
 
-    private bool IsLeaveMessage() {
+    private bool IsLeaveMessage()
+    {
         return content != null && content == @"!leave";
     }
 
-    private bool IsVotingCompleteMessage() {
+    private bool IsVotingCompleteMessage()
+    {
         return IsAuthorBot() && embeds != null && embeds.Count > 0 && embeds[0].description.Contains("All players must join within 7 minutes and then teams will be chosen.\n**Vote result:**");
     }
 
-    private bool IsScoreReportMessage() {
+    private bool IsScoreReportMessage()
+    {
         return IsAuthorHuman() && content != null && RegularExpressions.score_report_relaxed_regex.IsMatch(content);
     }
 
-    private bool IsTeamsPickedMessage() {
+    private bool IsTeamsPickedMessage()
+    {
         return IsAuthorBot() && GetEmbeddedDescription() == "You may now join the team channels";
     }
 
     // With PlayerFactory, if this is true then reset the counter, since captains not picking resets the queue
-    private bool IsLobbyCancelledNoPickMessage() {
+    private bool IsLobbyCancelledNoPickMessage()
+    {
         return IsAuthorBot() && content != null && content.Contains("Captain failed to pick players for **Match ID");
     }
 
-    private bool IsAuthorBot() {
+    private bool IsAuthorBot()
+    {
         return author != null && author.isBot != null && author.isBot.Value;
     }
 
-    private bool IsAuthorHuman() {
+    private bool IsAuthorHuman()
+    {
         return !IsAuthorBot();
     }
 
     // Returns true if this message is a bot response to a player !q or !leave command
-    public bool IsBotResponse() {
+    public bool IsBotResponse()
+    {
         return IsBotResponseToPlayerQ() || IsBotResponseToPlayerLeave();
     }
 
     // Returns true if this message is a voting complete or teams picked message
-    public bool IsBotNotification() {
+    public bool IsBotNotification()
+    {
         return IsVotingCompleteMessage() || IsTeamsPickedMessage() || IsLobbyCancelledNoPickMessage();
     }
 
-    private bool IsBotResponseToPlayerQ() {
+    private bool IsBotResponseToPlayerQ()
+    {
         return IsAuthorBot() && embeds != null && embeds.Count > 0 && embeds[0].description.Contains(") has joined.");
     }
 
-    private bool IsBotResponseToPlayerLeave() {
+    private bool IsBotResponseToPlayerLeave()
+    {
         return IsAuthorBot() && embeds != null && embeds.Count > 0 && embeds[0].description.Contains(") has left (using command).");
     }
 
     #region Inherited Overrides
-    protected override bool IsEqual(IDatabaseComponent? rhs) {
-        var rhs_casted = rhs != null ? (rhs as DDiscordMessage) : null;
-        if(rhs_casted) 
+    protected override bool IsEqual(IDatabaseComponent? rhs)
+    {
+        var rhs_casted = rhs != null ? rhs as DDiscordMessage : null;
+        if (rhs_casted)
             return id == rhs_casted.id;
         return false;
     }
-    protected override bool IsLessThan(IDatabaseComponent? rhs) {
-        var rhs_casted = rhs != null ? (rhs as DDiscordMessage) : null;
-        if (rhs_casted) {
+    protected override bool IsLessThan(IDatabaseComponent? rhs)
+    {
+        var rhs_casted = rhs != null ? rhs as DDiscordMessage : null;
+        if (rhs_casted)
+        {
             return ulong.Parse(id) < ulong.Parse(rhs_casted.id);
         }
 
         return false;
     }
-    public override string ToJson() {
+    public override string ToJson()
+    {
         /*
          *
          *  CONVERT TO JSON
@@ -356,10 +418,12 @@ public class DDiscordMessage : IDatabaseComponent {
 
         return "";
     }
-    public override void ToJson(string save_path) {
+    public override void ToJson(string save_path)
+    {
 
     }
-    public override void FromJson(string save_path) {
+    public override void FromJson(string save_path)
+    {
 
     }
     #endregion

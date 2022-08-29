@@ -1,4 +1,4 @@
-﻿using Database.Database.DatabaseCore;
+﻿using Database.Database.DatabaseCore.MainComponents;
 
 namespace Database.Structs;
 

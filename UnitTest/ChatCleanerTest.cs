@@ -1,6 +1,6 @@
 ﻿
 using Database.Database.DatabaseCore;
-using Database.Database.DatabaseCore.Season.Cleaners;
+using Database.Database.DatabaseCore.Cleaners;
 using Database.Enums;
 
 namespace UnitTest;

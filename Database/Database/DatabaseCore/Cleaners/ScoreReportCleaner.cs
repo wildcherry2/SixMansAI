@@ -1,27 +1,33 @@
-﻿using Database.Database.Interfaces;
+﻿using Database.Database.DatabaseCore.MainComponents;
+using Database.Database.Interfaces;
 using Database.Enums;
 using Database.Structs;
 
-namespace Database.Database.DatabaseCore.Season.Cleaners;
+namespace Database.Database.DatabaseCore.Cleaners;
 
-public class ScoreReportCleaner : ILogger {
-    private static ScoreReportCleaner? singleton       { get; set; }
-    private        FMessageList?       messages        { get; set; }
-    public         bool                bIsComplete     { get; set; } = false;
-    public        bool                bUsingDirectory { get; set; }
+public class ScoreReportCleaner : ILogger
+{
+    private static ScoreReportCleaner? singleton { get; set; }
+    private FMessageList? messages { get; set; }
+    public bool bIsComplete { get; set; } = false;
+    public bool bUsingDirectory { get; set; }
 
-    private ScoreReportCleaner(bool bUsingDirectory = false) : base(ConsoleColor.Yellow, 1, "ScoreReportCleaner") {
+    private ScoreReportCleaner(bool bUsingDirectory = false) : base(ConsoleColor.Yellow, 1, "ScoreReportCleaner")
+    {
         this.bUsingDirectory = bUsingDirectory;
     }
 
-    public static ScoreReportCleaner GetSingleton(bool bUsingDirectory = false) {
-        if(singleton == null) singleton = new ScoreReportCleaner(bUsingDirectory);
+    public static ScoreReportCleaner GetSingleton(bool bUsingDirectory = false)
+    {
+        if (singleton == null) singleton = new ScoreReportCleaner(bUsingDirectory);
         return singleton;
     }
 
-    public void ProcessChat() {
+    public void ProcessChat()
+    {
         messages = LoadMessages(DDatabaseCore.sr_path);
-        if (messages == null) {
+        if (messages == null)
+        {
             Log("Preconditions not met! Score report chat data was not set!");
             return;
         }
@@ -29,26 +35,33 @@ public class ScoreReportCleaner : ILogger {
 
         int unverified = 0;
         int notlong = 0;
-        for (int i = 0; i < messages.messages.Count; i++) {
+        for (int i = 0; i < messages.messages.Count; i++)
+        {
             var message = messages.messages[i];
-            if (message.type == EMessageType.SCORE_REPORT) {
-                if (IsValidLength(ref message)) {
-                    if (IsMatchVerified(ref message)) {
+            if (message.type == EMessageType.SCORE_REPORT)
+            {
+                if (IsValidLength(ref message))
+                {
+                    if (IsMatchVerified(ref message))
+                    {
                         CleanContentString(ref message);
                         result.messages.Add(message);
                     }
-                    else {
+                    else
+                    {
                         unverified++;
                     }
                 }
-                else {
+                else
+                {
                     notlong++;
                 }
             }
         }
 
         Log("Unverified score reports = {0}, score reports with invalid length = {1}", unverified.ToString(), notlong.ToString());
-        if (result.messages.Count > 0) {
+        if (result.messages.Count > 0)
+        {
             Log("Filtered {0} reports from {1} messages!", result.messages.Count.ToString(), messages.messages.Count.ToString());
             bIsComplete = true;
         }
@@ -56,37 +69,46 @@ public class ScoreReportCleaner : ILogger {
         DDatabaseCore.GetSingleton().all_score_report_messages = result;
     }
 
-    private bool IsValidLength(ref DDiscordMessage message) {
+    private bool IsValidLength(ref DDiscordMessage message)
+    {
         return message.content != null && message.content.Length > 0;
     }
 
-    private bool IsMatchVerified(ref DDiscordMessage message) {
+    private bool IsMatchVerified(ref DDiscordMessage message)
+    {
         if (message.reactions == null || message.reactions.Count == 0) return false;
 
-        foreach (var reaction in message.reactions) {
+        foreach (var reaction in message.reactions)
+        {
 
-            if (reaction.emoji.name.Contains("✅")) { //✅
+            if (reaction.emoji.name.Contains("✅"))
+            { //✅
                 return true;
             }
-            
+
         }
 
         return false;
     }
 
-    private void CleanContentString(ref DDiscordMessage message) {
+    private void CleanContentString(ref DDiscordMessage message)
+    {
         message.content = message.content.Replace("\n", " ");
         message.content = RegularExpressions.select_multiple_spaces_in_score_report_regex.Replace(message.content, " ");
     }
 
-    private FMessageList? LoadMessages(string override_path = "") {
+    private FMessageList? LoadMessages(string override_path = "")
+    {
         if (!bUsingDirectory) return DDatabaseCore.GetSingleton().LoadAndGetAllDiscordChatMessages(override_path);
-        else {
-            try {
+        else
+        {
+            try
+            {
                 FMessageList list = new FMessageList();
                 var files = Directory.GetFiles(DDatabaseCore.sr_dir);
                 if (files.Length == 0) throw new Exception("Exception: No files found! Terminating process!");
-                foreach (var file in files) {
+                foreach (var file in files)
+                {
                     var temp = DDatabaseCore.GetSingleton().LoadAndGetAllDiscordChatMessages(file);
                     if (temp == null) throw new Exception("Exception: File path " + file + " is invalid! Terminating process!");
                     list.messages.AddRange(temp.messages);
@@ -94,8 +116,9 @@ public class ScoreReportCleaner : ILogger {
 
                 return list;
             }
-            catch (Exception e) {
-                Log(e.Message); 
+            catch (Exception e)
+            {
+                Log(e.Message);
                 Environment.Exit(1);
             }
         }

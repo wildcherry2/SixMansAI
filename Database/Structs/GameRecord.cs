@@ -1,4 +1,4 @@
-﻿using Database.Database.DatabaseCore.Season.Queue;
+﻿using Database.Database.DatabaseCore.MainComponents;
 using Database.Enums;
 
 namespace Database.Structs;

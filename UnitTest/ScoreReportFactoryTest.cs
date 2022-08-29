@@ -1,10 +1,10 @@
 ﻿
 using Database.Database.DatabaseCore;
-using Database.Database.DatabaseCore.Season.Cleaners;
-using Database.Database.DatabaseCore.Season.Queue;
+using Database.Database.DatabaseCore.Cleaners;
+using Database.Database.DatabaseCore.Factories;
 using Database.Structs;
 
-namespace UnitTest; 
+namespace UnitTest;
 
 [TestClass]
 public class ScoreReportFactoryTests {

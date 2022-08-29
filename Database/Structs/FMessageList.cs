@@ -1,8 +1,8 @@
 ﻿
 using System.Text.Json.Serialization;
-using Database.Database.DatabaseCore.Season;
+using Database.Database.DatabaseCore.MainComponents;
 
-namespace Database.Structs; 
+namespace Database.Structs;
 
 public class FMessageList {
     [JsonPropertyName("messages")]
