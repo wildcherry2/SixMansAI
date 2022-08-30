@@ -407,16 +407,16 @@ public class DDiscordMessage : IDatabaseComponent
 
         return false;
     }
-    public override string ToJson()
-    {
-        /*
-         *
-         *  CONVERT TO JSON
-         *
-         */
+    //public override string ToJson()
+    //{
+    //    /*
+    //     *
+    //     *  CONVERT TO JSON
+    //     *
+    //     */
 
-        return "";
-    }
+    //    return "";
+    //}
     public override void ToJson(string save_path)
     {
 

@@ -1,6 +1,7 @@
 ﻿using Database.Database.DatabaseCore.Factories;
 using Database.Database.Interfaces;
 using Database.Enums;
+using Newtonsoft.Json;
 using Database.Structs;
 
 namespace Database.Database.DatabaseCore.MainComponents {
@@ -8,7 +9,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
         public DQueue() { }
 
         // Precondition: Expects player names/objects to be deserialized 
-        public DQueue(in DDiscordMessage teams_picked_message) {
+        public DQueue(in DDiscordMessage teams_picked_message) : base(ConsoleColor.Yellow, 1, "DQueue"){
             if (!PlayerFactory.GetSingleton().bIsComplete) {
                 // log precondition fail
             }
@@ -45,10 +46,15 @@ namespace Database.Database.DatabaseCore.MainComponents {
         public  FTeam           team_two               { get; set; }
         public  FScoreReport?   score_report           { get; set; }
         public  ETeamLabel      winner                 { get; set; } = ETeamLabel.NOT_SET;
+        [JsonIgnore]
         public  DDiscordMessage teams_picked_message   { get; set; }
+        [JsonIgnore]
         public  List<string>    names_not_matched      { get; set; }
+        [JsonIgnore]
         public  List<DPlayer>   matched                { get; set; }
+        [JsonIgnore]
         private ETeamLabel      unmatched_label        { get; set; } = ETeamLabel.NOT_SET;
+        [JsonIgnore]
         private int             unmatched_player_index { get; set; }
 
         [Obsolete("IsQueueCreation isn't needed and isn't guaranteed to produce an accurate result.", true)]

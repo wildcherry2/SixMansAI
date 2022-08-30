@@ -1,5 +1,6 @@
 ﻿using Database.Database.Interfaces;
 using Database.Structs;
+using Newtonsoft.Json;
 
 namespace Database.Database.DatabaseCore.MainComponents;
 
@@ -10,7 +11,6 @@ public class DPlayer : IDatabaseComponent
     public List<FGameRecord?> game_history { get; set; }
     public int iTotalWins { get; set; } = 0;
     public int iTotalLosses { get; set; } = 0;
-
     public DPlayer(in ulong discord_id, in string discord_name, in string nickname = "", in string link_name = "") : base(ConsoleColor.Yellow, 1, "DPlayer")
     {
         this.discord_id = discord_id;
@@ -80,16 +80,9 @@ public class DPlayer : IDatabaseComponent
 
         return false;
     }
-    public override string ToJson()
-    {
-        /*
-         *
-         *  CONVERT TO JSON
-         *
-         */
-
-        return "";
-    }
+    //public override string ToJson(){
+    //    return JsonConvert.SerializeObject(this, Formatting.Indented);
+    //}
     public override void ToJson(string save_path)
     {
 

@@ -1,6 +1,7 @@
 ﻿//change abstract members to virtual where applicable? wouldnt have to reimplement everywhere
 
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace Database.Database.Interfaces;
 
@@ -43,7 +44,9 @@ public abstract class IDatabaseComponent : ILogger
     protected abstract bool IsEqual(IDatabaseComponent? rhs);
     protected abstract bool IsLessThan(IDatabaseComponent? rhs);
     protected IDatabaseComponent(in ConsoleColor color = ConsoleColor.White, in int tabs = 0, in string class_name = "IDatabaseComponent") : base(color, tabs, class_name) { }
-    public abstract string ToJson();
+    public virtual string ToJson() {
+        return JsonConvert.SerializeObject(this);
+    }
     public abstract void ToJson(string save_path);
     public abstract void FromJson(string save_path);
     public static IDatabaseComponent? GetSingleton() { return null; }

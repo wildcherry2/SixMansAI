@@ -19,8 +19,9 @@ public class DDatabaseCore : IDatabaseComponent {
     private static DDatabaseCore?      singleton                 { get; set; }
 
     // Will move to CLoader
-    public static string chat_path { get; set; } = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\rank-b\July2022.json";
-    public static string sr_path   { get; set; } = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\score-report\July2022.json";
+    // Current directory config: laptop
+    public static string chat_path { get; set; } = @"C:\Users\tyler\source\repos\AI\SixMans\RawData\rank-b\June2022.json";
+    public static string sr_path   { get; set; } = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\score-report\June2022.json";
     public static string chat_dir  { get; set; } = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\rank-b";
     public static string sr_dir    { get; set; } = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\score-report";
 
@@ -37,12 +38,16 @@ public class DDatabaseCore : IDatabaseComponent {
 
     // Look into situations in QueueReportBinder where reporter is true but 
     public void BuildDatabase(in bool bUsingDirectory = false) {
-        ChatCleaner.GetSingleton(true).ProcessChat();
-        ScoreReportCleaner.GetSingleton(true).ProcessChat();
+        ChatCleaner.GetSingleton(bUsingDirectory).ProcessChat();
+        //ScoreReportCleaner.GetSingleton(true).ProcessChat();
         PlayerFactory.GetSingleton().ProcessChat(all_discord_chat_messages);
         QueueFactory.GetSingleton(all_discord_chat_messages).ProcessChat();
-        ScoreReportFactory.GetSingleton().ProcessChat(all_score_report_messages);
-        QueueReportBinder.GetSingleton().BindReportsToQueues();
+        //ScoreReportFactory.GetSingleton().ProcessChat(all_score_report_messages);
+        //QueueReportBinder.GetSingleton().BindReportsToQueues();
+
+        foreach(var player in all_players) {
+            Console.WriteLine(player.ToJson());
+        }
     }
 
     // Will later use CLoader
