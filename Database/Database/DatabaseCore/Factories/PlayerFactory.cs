@@ -36,7 +36,7 @@ namespace Database.Database.DatabaseCore.Factories {
                     var link = next.GetPlayerNameFromEmbeddedLink(next.GetEmbeddedDescription());
                     if (ReferenceEquals(search, null)) {
                         var player = new DPlayer(ulong.Parse(current.author.id), current.author.name, current.author.nickname, link ?? "");
-                        player.TrySetPrimaryKey();
+                        player.TryGetOrCreatePrimaryKey();
                         players.Add(player);
                     }
                     else {

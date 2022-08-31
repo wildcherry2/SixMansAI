@@ -127,7 +127,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
             var p5_name = names[4];
             var p6_name = names[5];
             var core = DDatabaseCore.GetSingleton();
-
+            
             var current = core.GetPlayerIfExists(p1_name);
             if (!ReferenceEquals(current, null)) {
                 team_one.player_one = current;
@@ -341,11 +341,12 @@ namespace Database.Database.DatabaseCore.MainComponents {
         public override void FromJson(string save_path) { }
 
         // Since messages don't have overriden primary keys, it's acceptable to use its ID
-        public override void TrySetPrimaryKey() {
-            if (bIsPrimaryKeySet) return;
+        public override ulong TryGetOrCreatePrimaryKey() {
+            if (bIsPrimaryKeySet) return primary_key;
             primary_key = ulong.Parse(teams_picked_message.id);
             default_incremental_primary_key--;
             bIsPrimaryKeySet = true;
+            return primary_key;
         }
 
         #endregion
