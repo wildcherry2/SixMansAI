@@ -32,9 +32,10 @@ public class QueueFactory : ILogger
         {
             foreach (var message in _messageList.messages)
             {
-                if (message.type == EMessageType.TEAMS_PICKED)
-                {
-                    ret.Add(new DQueue(message));
+                if (message.type == EMessageType.TEAMS_PICKED) {
+                    var queue = new DQueue(message);
+                    queue.TrySetPrimaryKey();
+                    ret.Add(queue);
                 }
             }
 

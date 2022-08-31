@@ -10,7 +10,6 @@ public class QueueReportBinder : ILogger
 {
     private static QueueReportBinder? singleton { get; set; }
     private List<DQueue> problems { get; set; }
-
     private QueueReportBinder() : base(ConsoleColor.Yellow, 1, "QueueReportBinder")
     {
         problems = new List<DQueue>();
@@ -20,7 +19,6 @@ public class QueueReportBinder : ILogger
         if (singleton == null) singleton = new QueueReportBinder();
         return singleton;
     }
-
     public bool bIsComplete { get; private set; } = false;
 
     // Precondition: QueueFactory's and ScoreReportFactory's ProcessChat must be successful
@@ -28,7 +26,6 @@ public class QueueReportBinder : ILogger
     public void BindReportsToQueues()
     {
         var core = DDatabaseCore.GetSingleton();
-
         #region Precondition Checks
         if (!QueueFactory.GetSingleton().bIsComplete || !ScoreReportFactory.GetSingleton().bIsComplete || core.all_queues == null || core.all_score_reports == null)
         {
@@ -72,7 +69,6 @@ public class QueueReportBinder : ILogger
         }
         bIsComplete = true;
     }
-
     private void SetWinnerInQueue(in DQueue queue)
     {
         var report = queue.score_report;

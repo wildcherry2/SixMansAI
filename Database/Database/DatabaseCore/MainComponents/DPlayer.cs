@@ -91,5 +91,15 @@ public class DPlayer : IDatabaseComponent
     {
 
     }
+
+    // Primary key is the Discord user ID
+    public override void TrySetPrimaryKey() {
+        if (bIsPrimaryKeySet) return;
+
+        primary_key = discord_id;
+        default_incremental_primary_key--;
+
+        bIsPrimaryKeySet = true;
+    }
     #endregion
 }

@@ -11,7 +11,8 @@
     <OutputPath>.</OutputPath>
     <Name>AIModel</Name>
     <RootNamespace>AIModel</RootNamespace>
-    <InterpreterId>CondaEnv|CondaEnv|TensorFlow2</InterpreterId>
+    <InterpreterId>CondaEnv|CondaEnv|ai</InterpreterId>
+    <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,7 +26,7 @@
     <Compile Include="AIModel.py" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="CondaEnv|CondaEnv|TensorFlow2" />
+    <InterpreterReference Include="CondaEnv|CondaEnv|ai" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

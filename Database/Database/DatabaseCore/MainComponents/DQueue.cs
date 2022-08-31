@@ -6,6 +6,17 @@ using Database.Structs;
 
 namespace Database.Database.DatabaseCore.MainComponents {
     public class DQueue : IDatabaseComponent {
+        public               int             match_id               { get; set; } = -1;
+        public               FTeam           team_one               { get; set; }
+        public               FTeam           team_two               { get; set; }
+        public               FScoreReport?   score_report           { get; set; }
+        public               ETeamLabel      winner                 { get; set; } = ETeamLabel.NOT_SET;
+        [JsonIgnore] public  DDiscordMessage teams_picked_message   { get; set; }
+        [JsonIgnore] public  List<string>    names_not_matched      { get; set; }
+        [JsonIgnore] public  List<DPlayer>   matched                { get; set; }
+        [JsonIgnore] private ETeamLabel      unmatched_label        { get; set; } = ETeamLabel.NOT_SET;
+        [JsonIgnore] private int             unmatched_player_index { get; set; }
+
         public DQueue() { }
 
         // Precondition: Expects player names/objects to be deserialized 
@@ -41,21 +52,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
             }
         }
 
-        public  int             match_id               { get; set; } = -1;
-        public  FTeam           team_one               { get; set; }
-        public  FTeam           team_two               { get; set; }
-        public  FScoreReport?   score_report           { get; set; }
-        public  ETeamLabel      winner                 { get; set; } = ETeamLabel.NOT_SET;
-        [JsonIgnore]
-        public  DDiscordMessage teams_picked_message   { get; set; }
-        [JsonIgnore]
-        public  List<string>    names_not_matched      { get; set; }
-        [JsonIgnore]
-        public  List<DPlayer>   matched                { get; set; }
-        [JsonIgnore]
-        private ETeamLabel      unmatched_label        { get; set; } = ETeamLabel.NOT_SET;
-        [JsonIgnore]
-        private int             unmatched_player_index { get; set; }
+       
 
         [Obsolete("IsQueueCreation isn't needed and isn't guaranteed to produce an accurate result.", true)]
         public bool IsQueueCreationComplete() {
@@ -203,15 +200,18 @@ namespace Database.Database.DatabaseCore.MainComponents {
         public bool IsPlayerInTeam(in ETeamLabel team, in ulong discord_id) {
             switch (team) {
                 case ETeamLabel.TEAM_ONE:
-                    if ((!ReferenceEquals(team_one.player_one, null) && team_one.player_one.discord_id == discord_id) ||
-                        (!ReferenceEquals(team_one.player_two, null) && team_one.player_two.discord_id == discord_id) ||
-                        (!ReferenceEquals(team_one.player_three, null) && team_one.player_three.discord_id == discord_id)) { return true; }
-
+                    if (!ReferenceEquals(team_one, null)) {
+                        if ((!ReferenceEquals(team_one.player_one, null) && team_one.player_one.discord_id == discord_id) ||
+                            (!ReferenceEquals(team_one.player_two, null) && team_one.player_two.discord_id == discord_id) ||
+                            (!ReferenceEquals(team_one.player_three, null) && team_one.player_three.discord_id == discord_id)) { return true; }
+                    }
                     return false;
                 case ETeamLabel.TEAM_TWO:
-                    if ((!ReferenceEquals(team_two.player_one, null) && team_two.player_one.discord_id == discord_id) ||
-                        (!ReferenceEquals(team_two.player_two, null) && team_two.player_two.discord_id == discord_id) ||
-                        (!ReferenceEquals(team_two.player_three, null) && team_two.player_three.discord_id == discord_id)) { return true; }
+                    if (!ReferenceEquals(team_two, null)) {
+                        if ((!ReferenceEquals(team_two.player_one, null) && team_two.player_one.discord_id == discord_id) ||
+                            (!ReferenceEquals(team_two.player_two, null) && team_two.player_two.discord_id == discord_id) ||
+                            (!ReferenceEquals(team_two.player_three, null) && team_two.player_three.discord_id == discord_id)) { return true; }
+                    }
 
                     return false;
                 default:
@@ -339,6 +339,14 @@ namespace Database.Database.DatabaseCore.MainComponents {
         public override void ToJson(string save_path) { }
 
         public override void FromJson(string save_path) { }
+
+        // Since messages don't have overriden primary keys, it's acceptable to use its ID
+        public override void TrySetPrimaryKey() {
+            if (bIsPrimaryKeySet) return;
+            primary_key = ulong.Parse(teams_picked_message.id);
+            default_incremental_primary_key--;
+            bIsPrimaryKeySet = true;
+        }
 
         #endregion
     }

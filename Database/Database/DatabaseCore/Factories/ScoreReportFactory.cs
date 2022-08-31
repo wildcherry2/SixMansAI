@@ -50,6 +50,7 @@ public class ScoreReportFactory : ILogger
                     subs ? !ReferenceEquals(report.subbed_out, null) ? report.subbed_out.recorded_names[0] : "Null subbed out player!" : "");
                 err_count++;
             }
+            report.TrySetPrimaryKey();
             ret.Add(report);
         }
 

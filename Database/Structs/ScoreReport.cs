@@ -1,17 +1,20 @@
-﻿using Database.Database.DatabaseCore.MainComponents;
+﻿
+using System.Data;
+using Database.Database.DatabaseCore.MainComponents;
 using Database.Database.Interfaces;
 
 namespace Database.Structs;
 
-public class FScoreReport : ILogger {
-    public DPlayer?        reporter     { get; set; }
-    public bool            bReportedWin { get; set; } = false;
-    public int             iMatchId     { get; set; } = -1;
-    public bool            bHasSubs     { get; set; }
-    public DPlayer?        subbed_in    { get; set; }
-    public DPlayer?        subbed_out   { get; set; }
-    public DDiscordMessage report_msg   { get; set; }
-
+public class FScoreReport : ILogger, IPrimaryKey {
+    public    DPlayer?        reporter         { get; set; }
+    public    bool            bReportedWin     { get; set; } = false;
+    public    int             iMatchId         { get; set; } = -1;
+    public    bool            bHasSubs         { get; set; }
+    public    DPlayer?        subbed_in        { get; set; }
+    public    DPlayer?        subbed_out       { get; set; }
+    public    DDiscordMessage report_msg       { get; set; }
+    public    ulong           primary_key      { get; private set; }
+    private bool              bIsPrimaryKeySet { get; set; } = false;
     public FScoreReport() : base(ConsoleColor.Cyan, 2, "FScoreReport"){}
     public bool IsValid() {
         if(iMatchId == -1) {Log("Match ID invalid in score report!"); return false; }
@@ -34,5 +37,11 @@ public class FScoreReport : ILogger {
                iMatchId +
                (subbed_in != null ? "\nSubbed in name = " + subbed_in.recorded_names[0] : "") +
                (subbed_in != null ? "\nSubbed out name = " + subbed_out.recorded_names[0] : "");
+    }
+
+    public void TrySetPrimaryKey() {
+        if (bIsPrimaryKeySet) return;
+        primary_key = ulong.Parse(report_msg.id);
+        bIsPrimaryKeySet = true;
     }
 }
