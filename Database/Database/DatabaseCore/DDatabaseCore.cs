@@ -1,5 +1,4 @@
-﻿
-using System.Text.Json;
+﻿using System.Text.Json;
 using Database.Database.DatabaseCore.Binders;
 using Database.Database.DatabaseCore.Cleaners;
 using Database.Database.DatabaseCore.Factories;
@@ -28,6 +27,7 @@ public class DDatabaseCore : IDatabaseComponent {
     private DDatabaseCore() : base(ConsoleColor.Green, 0, "DDatabaseCore") {
         all_players = new List<DPlayer>();
         all_seasons = new List<DSeason>();
+        
     }
 
     public static DDatabaseCore GetSingleton() {

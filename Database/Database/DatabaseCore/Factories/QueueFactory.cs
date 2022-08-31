@@ -34,7 +34,7 @@ public class QueueFactory : ILogger
             {
                 if (message.type == EMessageType.TEAMS_PICKED) {
                     var queue = new DQueue(message);
-                    queue.TrySetPrimaryKey();
+                    queue.TryGetOrCreatePrimaryKey();
                     ret.Add(queue);
                 }
             }
