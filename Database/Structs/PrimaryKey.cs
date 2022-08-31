@@ -5,6 +5,7 @@ namespace Database.Structs;
 
 public struct PrimaryKey { 
     public ulong key { get; init; }
+
     public PrimaryKey(in ulong              key) { this.key = key; }
     public PrimaryKey(in IDatabaseComponent component) { key = component.TryGetOrCreatePrimaryKey(); }
     public static bool operator ==(in PrimaryKey lhs, in PrimaryKey rhs) {
