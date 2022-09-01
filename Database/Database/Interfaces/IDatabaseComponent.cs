@@ -4,7 +4,7 @@ using Database.Structs;
 using Newtonsoft.Json;
 
 namespace Database.Database.Interfaces {
-    public abstract class IDatabaseComponent : ILogger, IPrimaryKey {
+    public abstract class IDatabaseComponent : ILogger, IPrimaryKey, IComparable<IDatabaseComponent> {
         protected PrimaryKey primary_key;
         protected IDatabaseComponent() {
             logger = this as ILogger;
@@ -30,59 +30,55 @@ namespace Database.Database.Interfaces {
         public static implicit operator bool(IDatabaseComponent? component) { return component != null && !component.bError; }
 
         public static bool operator ==(IDatabaseComponent? lhs, IDatabaseComponent? rhs) {
-            if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null)) { return false; }
+            if (ReferenceEquals(lhs, null) && ReferenceEquals(rhs, null)) { return true; }
+            if (ReferenceEquals(lhs, null) && !ReferenceEquals(rhs, null)) { return false; }
+            if (!ReferenceEquals(lhs, null) && ReferenceEquals(rhs, null)) { return false; }
 
-            if (lhs.IsEqual(rhs)) { return true; }
-
-            return false;
+            return lhs.primary_key == rhs.primary_key;
         }
 
         public static bool operator !=(IDatabaseComponent? lhs, IDatabaseComponent? rhs) { return !(lhs == rhs); }
 
         public static bool operator <(IDatabaseComponent? lhs, IDatabaseComponent? rhs) {
-            if (!lhs || !rhs) { return false; }
+            if (lhs == rhs) return false;
+            if (lhs != null && rhs == null) return false;
+            if (lhs == null && rhs != null) return true;
 
-            return lhs.IsLessThan(rhs);
+            return lhs.primary_key < rhs.primary_key;
         }
 
         public static bool operator >(IDatabaseComponent? lhs, IDatabaseComponent? rhs) {
-            if (!lhs || !rhs) { return false; }
+            if (lhs == rhs) return false;
+            if (lhs != null && rhs == null) return true;
+            if (lhs == null && rhs != null) return false;
 
-            return !(lhs < rhs) && lhs != rhs;
+            return lhs.primary_key > rhs.primary_key;
         }
 
         public static bool operator >=(IDatabaseComponent? lhs, IDatabaseComponent? rhs) {
-            if (!lhs || !rhs) { return false; }
-
-            return !(lhs < rhs) || lhs == rhs;
+            return !(lhs < rhs);
         }
 
         public static bool operator <=(IDatabaseComponent? lhs, IDatabaseComponent? rhs) {
-            if (!lhs || !rhs) { return false; }
-
-            return lhs < rhs || lhs == rhs;
+            return !(lhs > rhs);
         }
 
         protected virtual bool IsEqual(IDatabaseComponent? rhs) {
-            if(rhs == null) return false;
-            if(rhs == this) return true;
-
-            if(primary_key == rhs.primary_key) return true;
-
-            return false;
+            return this == rhs;
         }
         protected virtual bool IsLessThan(IDatabaseComponent? rhs) {
-            return !IsEqual(rhs);
+            return this < rhs;
         }
 
         public virtual string ToJson() { return JsonConvert.SerializeObject(this, Formatting.None, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }); }
 
         public override bool Equals(object? obj) {
-            if (ReferenceEquals(this, obj)) { return true; }
+            return IsEqual(obj as IDatabaseComponent);
+        }
 
-            if (ReferenceEquals(obj, null)) { return false; }
-
-            throw new NotImplementedException();
+        public int CompareTo(IDatabaseComponent? rhs) {
+            if (rhs == null) return 1;
+            return primary_key.CompareTo(rhs.primary_key);
         }
     }
 }

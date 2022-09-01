@@ -18,6 +18,10 @@ namespace Database.Database.DatabaseCore.MainComponents {
         [JsonIgnore] private int             unmatched_player_index { get; set; }
 
         public DQueue() {}
+        public DQueue(in PrimaryKey key) {
+            primary_key = key;
+            bIsPrimaryKeySet = true;
+        }
 
         // Precondition: Expects player names/objects to be deserialized 
         public DQueue(in DDiscordMessage teams_picked_message){

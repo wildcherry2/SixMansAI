@@ -17,6 +17,10 @@ public class FScoreReport : IDatabaseComponent {
     //private PrimaryKey      primary_key;
     private bool            bIsPrimaryKeySet { get; set; } = false;
     public FScoreReport(){}
+    public FScoreReport(in PrimaryKey key) {
+        primary_key      = key;
+        bIsPrimaryKeySet = true;
+    }
     public bool IsValid() {
         if(iMatchId == -1) {logger.Log("Match ID invalid in score report!"); return false; }
         if(ReferenceEquals(reporter, null)) { logger.Log("Null reporter in score report for lobby {0}!", iMatchId.ToString()); return false; }

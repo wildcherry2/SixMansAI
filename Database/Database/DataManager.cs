@@ -1,41 +1,77 @@
 ﻿using Database.Database.DatabaseCore;
+using Database.Database.DatabaseCore.MainComponents;
 using Database.Database.Interfaces;
 using Database.Structs;
 
-public class DataManager : IDatabaseComponent{
+namespace Database.Database;
+
+public partial class DataManager : IDatabaseComponent {
+    private DataManager() {}
+    public        List<DPlayer>?      all_players               { get; private set; }
+    public        List<DSeason>?      all_seasons               { get; private set; }
+    public        List<FScoreReport>? all_score_reports         { get; private set; }
+    public        List<DQueue>?       all_queues                { get; private set; }
+    public        FMessageList        all_discord_chat_messages { get; private set; }
+    public        FMessageList        all_score_report_messages { get; private set; }
+    private static DataManager?        singleton                 { get; set; }
+    public static DataManager GetSingleton() {
+        if (singleton == null) singleton = new DataManager();
+
+        return singleton;
+    }
     public void SortAllTables() {
         if (!IsInitialized()) return;
-        var core = DDatabaseCore.GetSingleton();
-        core.all_players.Sort(CompareKeys);
-        core.all_queues.Sort(CompareKeys);
-        core.all_score_reports.Sort(CompareKeys);
-
+        all_players.Sort(CompareKeysOfComponents);
+        all_queues.Sort(CompareKeysOfComponents);
+        all_score_reports.Sort(CompareKeysOfComponents);
     }
-    private  bool IsInitialized() {
-        var core = DDatabaseCore.GetSingleton();
-        if (ReferenceEquals(core.all_players, null)) return false;
-        if (ReferenceEquals(core.all_queues, null)) return false;
-        if (ReferenceEquals(core.all_score_reports, null)) return false;
+
+    public void Insert(in IDatabaseComponent? component) {
+        if (component == null) return;
+        var search_res = QueryFactory.GetSingleton().Search(component);
+        if (search_res != int.MinValue && search_res < 0) {
+            switch (component.TryGetOrCreatePrimaryKey().key_type) {
+                case EPrimaryKeyType.PLAYER:
+                    all_players.Insert(~search_res, component as DPlayer);
+                    break;
+                case EPrimaryKeyType.SCORE_REPORT:
+                    all_score_reports.Insert(~search_res, component as FScoreReport);
+                    break;
+                case EPrimaryKeyType.QUEUE:
+                    all_queues.Insert(~search_res, component as DQueue);
+                    break;
+                default:
+                    return;
+            }
+        }
+    }
+
+    private bool IsInitialized() {
+        //var core = DDatabaseCore.GetSingleton();
+        if (ReferenceEquals(all_players, null)) return false;
+        if (ReferenceEquals(all_queues, null)) return false;
+        if (ReferenceEquals(all_score_reports, null)) return false;
+
         return true;
     }
 
     /*
-     *  Less than 0 	x is less than y.
-     *  0 	x equals y.
-     *  Greater than 0 	x is greater than y. 
-     */
-    private static int CompareKeys(IDatabaseComponent? lhs, IDatabaseComponent? rhs) {
+ *  Less than 0 	x is less than y.
+ *  0 	x equals y.
+ *  Greater than 0 	x is greater than y. 
+ */
+    public static int CompareKeysOfComponents<Component>(Component? lhs, Component? rhs) where Component : IDatabaseComponent {
         if (lhs == null) {
             if (rhs == null) return 0;
+
             return -1;
         }
-        else {
-            if(rhs == null) return 1;
-            else {
-                if(lhs == rhs) return 0;
-                if(rhs < lhs) return -1;
-                return 1;
-            }
-        }
+
+        if (rhs == null) { return 1; }
+
+        if (lhs == rhs) return 0;
+        if (rhs < lhs) return -1;
+
+        return 1;
     }
 }

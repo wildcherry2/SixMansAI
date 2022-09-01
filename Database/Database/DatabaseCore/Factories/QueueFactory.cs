@@ -12,8 +12,7 @@ public class QueueFactory : FactoryBase {
     public         bool          bIsComplete  { get; private set; }
 
     public static QueueFactory GetSingleton(in FMessageList? season_message_list = null) {
-        if (singleton == null)
-            singleton                                                = new QueueFactory(season_message_list);
+        if (singleton == null) singleton                                                = new QueueFactory(season_message_list);
         else if (season_message_list != null) singleton._messageList = season_message_list;
 
         return singleton;
