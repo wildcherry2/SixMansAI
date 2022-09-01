@@ -6,7 +6,7 @@ using Database.Structs;
 
 namespace Database.Database.DatabaseCore.Binders;
 
-public class QueueReportBinder : ILogger
+public class QueueReportBinder : BinderBase
 {
     private static QueueReportBinder? singleton { get; set; }
     private List<DQueue> problems { get; set; }
@@ -29,7 +29,7 @@ public class QueueReportBinder : ILogger
         #region Precondition Checks
         if (!QueueFactory.GetSingleton().bIsComplete || !ScoreReportFactory.GetSingleton().bIsComplete || core.all_queues == null || core.all_score_reports == null)
         {
-            logger.Log"Preconditions not met! Preconditions status:\nQueueFactory.bIsComplete = {0}\nScoreReportFactory.bIsComplete = {1}" +
+            logger.Log("Preconditions not met! Preconditions status:\nQueueFactory.bIsComplete = {0}\nScoreReportFactory.bIsComplete = {1}" +
                 "\nDDatabaseCore.all_queues = {2},\nDDatabaseCore.all_score_reports = {3}", QueueFactory.GetSingleton().bIsComplete.ToString(),
                 ScoreReportFactory.GetSingleton().bIsComplete.ToString(), core.all_queues != null ? "Not null" : "Null",
                 core.all_score_reports != null ? "Not null" : "Null");
@@ -53,7 +53,7 @@ public class QueueReportBinder : ILogger
 
             if (!found)
             {
-                logger.Log"Could not match score report to lobby {0}!", queue.match_id.ToString());
+                logger.Log("Could not match score report to lobby {0}!", queue.match_id.ToString());
                 queue.score_report = new FScoreReport();
                 queue.score_report.bError = true;
                 err_count++;
@@ -61,11 +61,11 @@ public class QueueReportBinder : ILogger
             }
         }
 
-        logger.Log"{0} rank b queues bound to reports, {1} rank b queues not accounted for!", (core.all_queues.Count - err_count).ToString(), err_count.ToString());
-        logger.Log"Printing problem queues...");
+        logger.Log("{0} rank b queues bound to reports, {1} rank b queues not accounted for!", (core.all_queues.Count - err_count).ToString(), err_count.ToString());
+        logger.Log("Printing problem queues...");
         foreach (var queue in problems)
         {
-            logger.Logqueue.ToString());
+            logger.Log(queue.ToString());
         }
         bIsComplete = true;
     }
@@ -74,7 +74,7 @@ public class QueueReportBinder : ILogger
         var report = queue.score_report;
         if (ReferenceEquals(report.reporter, null) || ReferenceEquals(report, null))
         {
-            logger.Log"Can't set winner!\n\t\tReport = {0}\n\t\tReporter = {1}\n\t\tScore Report message content = {2}\n\t\tScore report message author = {3}",
+            logger.Log("Can't set winner!\n\t\tReport = {0}\n\t\tReporter = {1}\n\t\tScore Report message content = {2}\n\t\tScore report message author = {3}",
                 (!ReferenceEquals(report, null)).ToString(),
                 (!ReferenceEquals(report.reporter, null)).ToString(),
                 report.report_msg.content,

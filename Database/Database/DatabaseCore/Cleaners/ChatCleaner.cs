@@ -5,7 +5,7 @@ using Database.Structs;
 
 namespace Database.Database.DatabaseCore.Cleaners;
 
-public class ChatCleaner : ILogger
+public class ChatCleaner : CleanerBase
 {
     private static ChatCleaner? singleton { get; set; }
     public bool bIsComplete { get; set; } = false;
@@ -35,11 +35,11 @@ public class ChatCleaner : ILogger
         }
         else
         {
-            logger.Log"Preconditions not met! Score report chat data was not set!");
+            logger.Log("Preconditions not met! Score report chat data was not set!");
         }
 
         if (filtered_messages.messages.Count > 0) bIsComplete = true;
-        else logger.Log"Error cleaning chat data! No messages were filtered!");
+        else logger.Log("Error cleaning chat data! No messages were filtered!");
         core.all_discord_chat_messages = filtered_messages;
     }
     private bool IsRelevantMessage(in DDiscordMessage message)
@@ -68,7 +68,7 @@ public class ChatCleaner : ILogger
             }
             catch (Exception e)
             {
-                logger.Loge.Message);
+                logger.Log(e.Message);
                 Environment.Exit(1);
             }
         }

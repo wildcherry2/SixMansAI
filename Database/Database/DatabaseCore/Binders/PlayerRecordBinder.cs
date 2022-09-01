@@ -4,7 +4,7 @@ using Database.Enums;
 using Database.Structs;
 
 namespace Database.Database.DatabaseCore.Binders {
-    public class PlayerRecordBinder : ILogger {
+    public class PlayerRecordBinder : BinderBase {
         private PlayerRecordBinder() {}
         private static PlayerRecordBinder? singleton { get; set; }
         public         bool                bComplete { get; set; }
@@ -34,7 +34,7 @@ namespace Database.Database.DatabaseCore.Binders {
                     if (num_assigned == 6) { break; }
                 }
 
-                if (num_assigned != 6) { logger.Log"Not all players linked to queue {0}! Number of assigned players = {1}", queue.match_id.ToString(), num_assigned.ToString()); }
+                if (num_assigned != 6) { logger.Log("Not all players linked to queue {0}! Number of assigned players = {1}", queue.match_id.ToString(), num_assigned.ToString()); }
             }
 
             bComplete = true;
@@ -58,7 +58,7 @@ namespace Database.Database.DatabaseCore.Binders {
                 else { target.iTotalLosses++; }
             }
             else {
-                logger.Log"Failed to get match results for queue with Match ID = {0} and Player Name = {1}", queue.match_id.ToString(), player.recorded_names[0]);
+                logger.Log("Failed to get match results for queue with Match ID = {0} and Player Name = {1}", queue.match_id.ToString(), player.recorded_names[0]);
                 rec.bError = true;
                 player.game_history.Add(rec);
             }

@@ -20,7 +20,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
         public DQueue() {}
 
         // Precondition: Expects player names/objects to be deserialized 
-        public DQueue(in DDiscordMessage teams_picked_message) : base(ConsoleColor.Yellow, 1, "DQueue"){
+        public DQueue(in DDiscordMessage teams_picked_message){
             if (!PlayerFactory.GetSingleton().bIsComplete) {
                 // logger.Log precondition fail
             }

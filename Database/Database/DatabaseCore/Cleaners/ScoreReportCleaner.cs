@@ -5,7 +5,7 @@ using Database.Structs;
 
 namespace Database.Database.DatabaseCore.Cleaners;
 
-public class ScoreReportCleaner : ILogger
+public class ScoreReportCleaner : CleanerBase
 {
     private static ScoreReportCleaner? singleton { get; set; }
     private FMessageList? messages { get; set; }
@@ -28,7 +28,7 @@ public class ScoreReportCleaner : ILogger
         messages = LoadMessages(DDatabaseCore.sr_path);
         if (messages == null)
         {
-            logger.Log"Preconditions not met! Score report chat data was not set!");
+            logger.Log("Preconditions not met! Score report chat data was not set!");
             return;
         }
         FMessageList result = new FMessageList();
@@ -59,13 +59,13 @@ public class ScoreReportCleaner : ILogger
             }
         }
 
-        logger.Log"Unverified score reports = {0}, score reports with invalid length = {1}", unverified.ToString(), notlong.ToString());
+        logger.Log("Unverified score reports = {0}, score reports with invalid length = {1}", unverified.ToString(), notlong.ToString());
         if (result.messages.Count > 0)
         {
-            logger.Log"Filtered {0} reports from {1} messages!", result.messages.Count.ToString(), messages.messages.Count.ToString());
+            logger.Log("Filtered {0} reports from {1} messages!", result.messages.Count.ToString(), messages.messages.Count.ToString());
             bIsComplete = true;
         }
-        else logger.Log"Error cleaning score reports! No messages were filtered!");
+        else logger.Log("Error cleaning score reports! No messages were filtered!");
         DDatabaseCore.GetSingleton().all_score_report_messages = result;
     }
 
@@ -118,7 +118,7 @@ public class ScoreReportCleaner : ILogger
             }
             catch (Exception e)
             {
-                logger.Loge.Message);
+                logger.Log(e.Message);
                 Environment.Exit(1);
             }
         }

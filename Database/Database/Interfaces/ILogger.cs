@@ -33,15 +33,15 @@ namespace Database.Database.Interfaces;
 //}
 
 public interface ILogger {
-    void Log<T>(in string message, params T[]? subs) where T : IDatabaseComponent {
+    public void Log<T>(in string message, params T[]? subs) where T : IDatabaseComponent {
         var header = GetLogLineHeader();
         Console.WriteLine(header + message, subs);
     }
-    void Log(in string message, params string[]? substrings) {
+    public void Log(in string message, params string[]? substrings) {
         var header = GetLogLineHeader();
         Console.WriteLine(header + message, substrings);
     }
-    static Dictionary<int, ConsoleColor> FrameCountToColor { get; set; } = new Dictionary<int, ConsoleColor>() {
+    protected static Dictionary<int, ConsoleColor> FrameCountToColor { get; set; } = new Dictionary<int, ConsoleColor>() {
         { 0, ConsoleColor.White },
         { 1, ConsoleColor.Yellow },
         { 2, ConsoleColor.Green },
@@ -52,8 +52,8 @@ public interface ILogger {
         { 7, ConsoleColor.DarkBlue }
     };
 
-    string GetLogLineHeader() {
-        var calling_frame_method = new StackFrame(1).GetMethod();
+    private string GetLogLineHeader() {
+        var calling_frame_method = new StackFrame(2).GetMethod();
         if (calling_frame_method != null) {
             var calling_frame_class = calling_frame_method.DeclaringType;
             if (calling_frame_class != null) {
@@ -67,11 +67,11 @@ public interface ILogger {
         return "[Unknown Caller] ";
     }
 
-    string GetLogLineAttributes() {
+    private string GetLogLineAttributes() {
         var st = new StackTrace(1);
-        Console.ForegroundColor = FrameCountToColor[st.FrameCount];
+        Console.ForegroundColor = FrameCountToColor[st.FrameCount - 4];
         string tabs = "";
-        for(int i = 0; i < st.FrameCount; i++)
+        for(int i = 0; i < st.FrameCount - 4; i++)
             tabs += '\t';
 
         return tabs;

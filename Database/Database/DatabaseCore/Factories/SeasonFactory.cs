@@ -1,31 +1,27 @@
 ﻿using Database.Database.DatabaseCore.MainComponents;
-using Database.Enums;
 using Database.Structs;
 
 namespace Database.Database.DatabaseCore.Factories;
 
-public class SeasonFactory
-{
-    private static SeasonFactory? singleton { get; set; }
-    private FMessageList? chat_messages { get; set; }
-
-    private SeasonFactory(FMessageList? chat = null)
-    {
+public class SeasonFactory : FactoryBase {
+    private SeasonFactory(FMessageList? chat = null) {
         if (chat == null)
             chat_messages = DDatabaseCore.GetSingleton().LoadAndGetAllDiscordChatMessages(DDatabaseCore.chat_path);
         else
             chat_messages = chat;
     }
+    private static SeasonFactory? singleton     { get; set; }
+    private        FMessageList?  chat_messages { get; set; }
 
-    public SeasonFactory GetSingleton(FMessageList? chat = null)
-    {
-        if (singleton == null) singleton = new SeasonFactory(chat_messages);
+    public SeasonFactory GetSingleton(FMessageList? chat = null) {
+        if (singleton == null)
+            singleton                                  = new SeasonFactory(chat_messages);
         else if (chat != null) singleton.chat_messages = chat;
+
         return singleton;
     }
 
-    public List<DSeason> ProcessChat()
-    {
+    public List<DSeason> ProcessChat() {
         var ret = new List<DSeason>();
 
         //if (chat_messages != null) {

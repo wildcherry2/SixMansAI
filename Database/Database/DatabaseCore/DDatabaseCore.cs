@@ -38,12 +38,12 @@ public class DDatabaseCore : IDatabaseComponent {
 
     // Look into situations in QueueReportBinder where reporter is true but 
     public void BuildDatabase(in bool bUsingDirectory = false) {
-        ChatCleaner.GetSingleton(bUsingDirectory).ProcessChat();
-        ScoreReportCleaner.GetSingleton(true).ProcessChat();
-        PlayerFactory.GetSingleton().ProcessChat(all_discord_chat_messages);
-        QueueFactory.GetSingleton(all_discord_chat_messages).ProcessChat();
-        ScoreReportFactory.GetSingleton().ProcessChat(all_score_report_messages);
-        QueueReportBinder.GetSingleton().BindReportsToQueues();
+        //ChatCleaner.GetSingleton(bUsingDirectory).ProcessChat();
+        //ScoreReportCleaner.GetSingleton(true).ProcessChat();
+        //PlayerFactory.GetSingleton().ProcessChat(all_discord_chat_messages);
+        //QueueFactory.GetSingleton(all_discord_chat_messages).ProcessChat();
+        //ScoreReportFactory.GetSingleton().ProcessChat(all_score_report_messages);
+        //QueueReportBinder.GetSingleton().BindReportsToQueues();
         //PlayerRecordBinder.GetSingleton().BindRecordsToPlayers();
 
         //foreach(var player in all_players) {
