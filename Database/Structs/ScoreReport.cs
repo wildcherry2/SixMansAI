@@ -5,15 +5,16 @@ using Database.Database.Interfaces;
 
 namespace Database.Structs;
 
-public class FScoreReport : ILogger, IPrimaryKey {
+public class FScoreReport : IDatabaseComponent {
     public  DPlayer?        reporter     { get; set; }
+    public  PrimaryKey      pk_season     { get; set; }
     public  bool            bReportedWin { get; set; } = false;
     public  int             iMatchId     { get; set; } = -1;
     public  bool            bHasSubs     { get; set; }
     public  DPlayer?        subbed_in    { get; set; }
     public  DPlayer?        subbed_out   { get; set; }
     public  DDiscordMessage report_msg   { get; set; }
-    private  ulong           primary_key;
+    //private PrimaryKey      primary_key;
     private bool            bIsPrimaryKeySet { get; set; } = false;
     public FScoreReport() : base(ConsoleColor.Cyan, 2, "FScoreReport"){}
     public bool IsValid() {
@@ -39,9 +40,9 @@ public class FScoreReport : ILogger, IPrimaryKey {
                (subbed_in != null ? "\nSubbed out name = " + subbed_out.recorded_names[0] : "");
     }
 
-    public ulong TryGetOrCreatePrimaryKey() {
+    public override PrimaryKey TryGetOrCreatePrimaryKey() {
         if (bIsPrimaryKeySet) return primary_key;
-        primary_key = ulong.Parse(report_msg.id);
+        primary_key      = new PrimaryKey(ulong.Parse(report_msg.id), EPrimaryKeyType.SCORE_REPORT);
         bIsPrimaryKeySet = true;
         return primary_key;
     }

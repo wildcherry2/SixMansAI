@@ -27,47 +27,13 @@ public class DSeason : IDatabaseComponent
 
     #region Inherited Overrides
 
-    protected override bool IsEqual(IDatabaseComponent? rhs)
-    {
-
-        var rhs_casted = rhs != null ? rhs as DSeason : null;
-        if (rhs_casted)
-            return season_label.month == rhs_casted.season_label.month && season_label.year == rhs_casted.season_label.year;
-        return false;
-    }
-    protected override bool IsLessThan(IDatabaseComponent? rhs)
-    {
-        var rhs_casted = rhs != null ? rhs as DSeason : null;
-        if (rhs_casted)
-        {
-            /*
-             *
-             *  COMPARE DATES
-             *
-             */
-            return true;
-        }
-
-        return false;
-    }
-    //public override string ToJson()
-    //{
-    //    /*
-    //     *
-    //     *  CONVERT TO JSON
-    //     *
-    //     */
-
-    //    return "";
+    //public override PrimaryKey TryGetOrCreatePrimaryKey() {
+    //    if (bIsPrimaryKeySet) return primary_key;
+    //    primary_key = new PrimaryKey(discord_id, EPrimaryKeyType.PLAYER);
+    //    default_incremental_primary_key--;
+    //    bIsPrimaryKeySet = true;
+    //    return primary_key;
     //}
-    public override void ToJson(string save_path)
-    {
-
-    }
-    public override void FromJson(string save_path)
-    {
-
-    }
 
     #endregion
 }

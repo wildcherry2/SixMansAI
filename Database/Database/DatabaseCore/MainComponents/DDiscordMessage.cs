@@ -305,19 +305,6 @@ namespace Database.Database.DatabaseCore.MainComponents {
 
             return false;
         }
-        //public override string ToJson()
-        //{
-        //    /*
-        //     *
-        //     *  CONVERT TO JSON
-        //     *
-        //     */
-
-        //    return "";
-        //}
-        public override void ToJson(string save_path) { }
-
-        public override void FromJson(string save_path) { }
 
         #endregion
     }

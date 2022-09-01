@@ -1,10 +1,11 @@
 ﻿//change abstract members to virtual where applicable? wouldnt have to reimplement everywhere
 
+using Database.Structs;
 using Newtonsoft.Json;
 
 namespace Database.Database.Interfaces {
     public abstract class IDatabaseComponent : ILogger, IPrimaryKey {
-        protected ulong primary_key = default_incremental_primary_key++;
+        protected PrimaryKey primary_key; 
         protected IDatabaseComponent(in ConsoleColor color = ConsoleColor.White, in int tabs = 0, in string class_name = "IDatabaseComponent") : base(color, tabs, class_name) { }
         private static   IDatabaseComponent? singleton                       { get; }
         public           bool                bError                          { get; set; } = false;
@@ -13,10 +14,10 @@ namespace Database.Database.Interfaces {
 
         // Factories can call an override of this to set a primary key unique to the class, no need for this with singletons.
         // Overrides should decrement the default key for consistency, and only set the key if the bool indicates it isn't already set.
-        public virtual ulong TryGetOrCreatePrimaryKey() {
+        public virtual PrimaryKey TryGetOrCreatePrimaryKey() {
             if (bIsPrimaryKeySet) { return primary_key; }
 
-            primary_key = default_incremental_primary_key++;
+            primary_key = new PrimaryKey(default_incremental_primary_key++, EPrimaryKeyType.UNKNOWN);
             bIsPrimaryKeySet = true;
             return primary_key;
         }
@@ -59,13 +60,19 @@ namespace Database.Database.Interfaces {
             return lhs < rhs || lhs == rhs;
         }
 
-        protected abstract bool IsEqual(IDatabaseComponent?    rhs);
-        protected abstract bool IsLessThan(IDatabaseComponent? rhs);
+        protected virtual bool IsEqual(IDatabaseComponent? rhs) {
+            if(rhs == null) return false;
+            if(rhs == this) return true;
+
+            if(primary_key == rhs.primary_key) return true;
+
+            return false;
+        }
+        protected virtual bool IsLessThan(IDatabaseComponent? rhs) {
+            return !IsEqual(rhs);
+        }
 
         public virtual string ToJson() { return JsonConvert.SerializeObject(this, Formatting.None, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }); }
-
-        public abstract void ToJson(string   save_path);
-        public abstract void FromJson(string save_path);
 
         public override bool Equals(object? obj) {
             if (ReferenceEquals(this, obj)) { return true; }

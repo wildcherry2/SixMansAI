@@ -74,7 +74,6 @@ public class DDatabaseCore : IDatabaseComponent {
             if (player.discord_id == discord_id) 
                 return player;
         }
-
         return null;
     }
 
@@ -87,7 +86,6 @@ public class DDatabaseCore : IDatabaseComponent {
                     return player;
             }
         }
-
         return null;
     }
 
@@ -99,21 +97,6 @@ public class DDatabaseCore : IDatabaseComponent {
     }
     protected override bool IsLessThan(IDatabaseComponent? rhs) {
         return false;
-    }
-    //public override string ToJson() {
-    //    /*
-    // *
-    // *  CONVERT TO JSON
-    // *
-    // */
-
-    //    return "";
-    //}
-    public override void ToJson(string save_path) {
-
-    }
-    public override void FromJson(string save_path) {
-
     }
 
     #endregion

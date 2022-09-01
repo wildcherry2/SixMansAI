@@ -1,5 +1,7 @@
-﻿namespace Database.Database.Interfaces; 
+﻿using Database.Structs;
+
+namespace Database.Database.Interfaces; 
 
 public interface IPrimaryKey {
-    public ulong TryGetOrCreatePrimaryKey();
+    public PrimaryKey TryGetOrCreatePrimaryKey();
 }

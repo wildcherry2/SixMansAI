@@ -17,7 +17,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
         [JsonIgnore] private ETeamLabel      unmatched_label        { get; set; } = ETeamLabel.NOT_SET;
         [JsonIgnore] private int             unmatched_player_index { get; set; }
 
-        public DQueue() { }
+        public DQueue() : base(ConsoleColor.Cyan, 2, "") {}
 
         // Precondition: Expects player names/objects to be deserialized 
         public DQueue(in DDiscordMessage teams_picked_message) : base(ConsoleColor.Yellow, 1, "DQueue"){
@@ -51,8 +51,6 @@ namespace Database.Database.DatabaseCore.MainComponents {
                 bError = true;
             }
         }
-
-       
 
         [Obsolete("IsQueueCreation isn't needed and isn't guaranteed to produce an accurate result.", true)]
         public bool IsQueueCreationComplete() {
@@ -312,38 +310,10 @@ namespace Database.Database.DatabaseCore.MainComponents {
 
         #region Inherited Overrides
 
-        protected override bool IsEqual(IDatabaseComponent? rhs) {
-            var rhs_casted = rhs != null ? rhs as DQueue : null;
-            if (rhs_casted) { return match_id == rhs_casted.match_id; }
-
-            return false;
-        }
-
-        protected override bool IsLessThan(IDatabaseComponent? rhs) {
-            var rhs_casted = rhs != null ? rhs as DQueue : null;
-            if (rhs_casted) { return match_id < rhs_casted.match_id; }
-
-            return false;
-        }
-
-        //public override string ToJson() {
-        //    /*
-        //     *
-        //     *  CONVERT TO JSON
-        //     *
-        //     */
-
-        //    return "";
-        //}
-
-        public override void ToJson(string save_path) { }
-
-        public override void FromJson(string save_path) { }
-
         // Since messages don't have overriden primary keys, it's acceptable to use its ID
-        public override ulong TryGetOrCreatePrimaryKey() {
+        public override PrimaryKey TryGetOrCreatePrimaryKey() {
             if (bIsPrimaryKeySet) return primary_key;
-            primary_key = ulong.Parse(teams_picked_message.id);
+            primary_key = new PrimaryKey(ulong.Parse(teams_picked_message.id), EPrimaryKeyType.QUEUE);
             default_incremental_primary_key--;
             bIsPrimaryKeySet = true;
             return primary_key;
