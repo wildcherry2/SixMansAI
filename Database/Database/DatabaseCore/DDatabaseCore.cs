@@ -24,7 +24,7 @@ public class DDatabaseCore : IDatabaseComponent {
     public static string chat_dir  { get; set; } = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\rank-b";
     public static string sr_dir    { get; set; } = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\score-report";
 
-    private DDatabaseCore() : base(ConsoleColor.Green, 0, "DDatabaseCore") {
+    private DDatabaseCore() {
         all_players = new List<DPlayer>();
         all_seasons = new List<DSeason>();
         
@@ -46,9 +46,9 @@ public class DDatabaseCore : IDatabaseComponent {
         QueueReportBinder.GetSingleton().BindReportsToQueues();
         //PlayerRecordBinder.GetSingleton().BindRecordsToPlayers();
 
-        foreach(var player in all_players) {
-            Console.WriteLine(player.ToJson());
-        }
+        //foreach(var player in all_players) {
+        //    Console.WriteLine(player.ToJson());
+        //}
     }
 
     // Will later use CLoader
@@ -59,7 +59,7 @@ public class DDatabaseCore : IDatabaseComponent {
             if (list == null || list.messages == null) return null;
         }
         catch (Exception e) {
-            Log("Deserialization exception for file {0}, message = {1}", path, e.Message);
+            logger.Log("Deserialization exception for file {0}, message = {1}", path, e.Message);
             return null;
         }
 

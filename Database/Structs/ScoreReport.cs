@@ -16,13 +16,13 @@ public class FScoreReport : IDatabaseComponent {
     public  DDiscordMessage report_msg   { get; set; }
     //private PrimaryKey      primary_key;
     private bool            bIsPrimaryKeySet { get; set; } = false;
-    public FScoreReport() : base(ConsoleColor.Cyan, 2, "FScoreReport"){}
+    public FScoreReport(){}
     public bool IsValid() {
-        if(iMatchId == -1) {Log("Match ID invalid in score report!"); return false; }
-        if(ReferenceEquals(reporter, null)) { Log("Null reporter in score report for lobby {0}!", iMatchId.ToString()); return false; }
+        if(iMatchId == -1) {logger.Log("Match ID invalid in score report!"); return false; }
+        if(ReferenceEquals(reporter, null)) { logger.Log("Null reporter in score report for lobby {0}!", iMatchId.ToString()); return false; }
         if (bHasSubs) {
-            if(ReferenceEquals(subbed_in, null)) {Log("Score report for lobby {0} has subs but subbed_in player was null!", iMatchId.ToString()); return false; }
-            if(ReferenceEquals(subbed_out, null)) {Log("Score report for lobby {0} has subs but subbed_out player was null!", iMatchId.ToString()); return false; }
+            if(ReferenceEquals(subbed_in, null)) {logger.Log("Score report for lobby {0} has subs but subbed_in player was null!", iMatchId.ToString()); return false; }
+            if(ReferenceEquals(subbed_out, null)) {logger.Log("Score report for lobby {0} has subs but subbed_out player was null!", iMatchId.ToString()); return false; }
 
         }
         return true;

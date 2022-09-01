@@ -11,7 +11,7 @@ public class QueueFactory : ILogger
     private static QueueFactory? singleton { get; set; }
     private FMessageList? _messageList { get; set; }
     public bool bIsComplete { get; private set; } = false;
-    private QueueFactory(in FMessageList? season_message_list = null) : base(ConsoleColor.Yellow, 1, "QueueFactory")
+    private QueueFactory(in FMessageList? season_message_list = null)
     {
         _messageList = DDatabaseCore.GetSingleton().all_discord_chat_messages;
     }
@@ -39,12 +39,12 @@ public class QueueFactory : ILogger
                 }
             }
 
-            Log("Created {0} queues!", ret.Count.ToString());
+            logger.Log"Created {0} queues!", ret.Count.ToString());
             bIsComplete = true;
         }
         else
         {
-            Log("Preconditions not met! Preconditions status:\nChatCleaner.bIsComplete = {0}\nPlayerFactory.bIsComplete = {1}\nmessage_list = {2}",
+            logger.Log"Preconditions not met! Preconditions status:\nChatCleaner.bIsComplete = {0}\nPlayerFactory.bIsComplete = {1}\nmessage_list = {2}",
                 ChatCleaner.GetSingleton().bIsComplete.ToString(), PlayerFactory.GetSingleton().bIsComplete.ToString(),
                 _messageList != null ? "Not null" : "Null");
         }

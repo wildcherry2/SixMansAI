@@ -4,7 +4,7 @@ namespace Database.Database.Interfaces;
 
 public abstract class ITable<TableElementType, ComponentType> : ILogger where TableElementType : ITable<TableElementType, ComponentType> where ComponentType : IDatabaseComponent, new() {
     private SortedList<PrimaryKey, ComponentType> table_contents;
-    protected ITable(in ConsoleColor current_color, in int iTabs, in string class_name) : base(current_color, iTabs, class_name) {
+    protected ITable(in ConsoleColor current_color, in int iTabs, in string class_name) {
         //table_contents = new SortedList<PrimaryKey, ComponentType>(Compare);
     }
     public ComponentType? Search(in PrimaryKey key) {

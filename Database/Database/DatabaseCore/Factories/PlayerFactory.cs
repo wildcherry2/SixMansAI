@@ -6,7 +6,7 @@ using Database.Structs;
 
 namespace Database.Database.DatabaseCore.Factories {
     public class PlayerFactory : ILogger {
-        private PlayerFactory() : base(ConsoleColor.Yellow, 1, "PlayerFactory") { }
+        private PlayerFactory() {}
         private static PlayerFactory? singleton   { get; set; }
         public         bool           bIsComplete { get; private set; }
 
@@ -20,7 +20,7 @@ namespace Database.Database.DatabaseCore.Factories {
         // Postcondition: DDatabaseCore's singleton's all_players field is initialized with data
         public void ProcessChat(in FMessageList chat_messages) {
             if (!ChatCleaner.GetSingleton().bIsComplete) {
-                Log("Precondition not met! Chat has not been cleaned!");
+                logger.Log"Precondition not met! Chat has not been cleaned!");
                 return;
             }
 
@@ -50,7 +50,7 @@ namespace Database.Database.DatabaseCore.Factories {
             }
 
             if (players.Count > 0) { bIsComplete = true; }
-            else { Log("No players have been created"); }
+            else { logger.Log"No players have been created"); }
 
             DDatabaseCore.GetSingleton().all_players = players;
         }

@@ -3,27 +3,20 @@ using Database.Structs;
 
 namespace Database.Database.DatabaseCore.MainComponents;
 
-public class DSeason : IDatabaseComponent
-{
-    public DSeason(in List<DQueue> queues) : base(ConsoleColor.Yellow, 1, "DSeason")
-    {
+public class DSeason : IDatabaseComponent {
+    public DSeason(in List<DQueue> queues) {
         var ts = queues[queues.Count / 2].teams_picked_message.timestamp;
         season_label = new FSeasonLabel(ts);
-        this.queues = queues;
-
-        if (!season_label)
-        {
-            Log("Could not create season label for DateTime = {0}!", ts != null ? ts.ToString() : "Null DateTime");
+        this.queues  = queues;
+        if (!season_label) {
+            logger.Log("Could not create season label for DateTime = {0}!", ts != null ? ts.ToString() : "Null DateTime");
             bError = true;
         }
     }
-    private FSeasonLabel season_label { get; set; }
-    private List<DQueue> queues { get; set; }
+    private FSeasonLabel season_label { get; }
+    private List<DQueue> queues       { get; }
 
-    public bool IsSeason(in FSeasonLabel label)
-    {
-        return season_label == label;
-    }
+    public bool IsSeason(in FSeasonLabel label) { return season_label == label; }
 
     #region Inherited Overrides
 

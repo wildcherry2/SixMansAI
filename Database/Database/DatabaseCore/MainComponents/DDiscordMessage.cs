@@ -6,8 +6,7 @@ using Database.Structs;
 namespace Database.Database.DatabaseCore.MainComponents {
     public class DDiscordMessage : IDatabaseComponent {
         [JsonConstructor]
-        public DDiscordMessage(string? id, string? content, DateTime? timestamp, FAuthor? author, List<FReaction>? reactions, List<FAuthor>? mentions, List<FEmbed>? embeds) :
-            base(ConsoleColor.Magenta, 4, "DDiscordMessage") {
+        public DDiscordMessage(string? id, string? content, DateTime? timestamp, FAuthor? author, List<FReaction>? reactions, List<FAuthor>? mentions, List<FEmbed>? embeds) {
             this.id = id;
             this.content = content;
             this.timestamp = timestamp;
@@ -52,7 +51,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
                 }
             }
             catch (Exception ex) {
-                Log(ex.Message);
+                logger.Log(ex.Message);
                 return -1;
             }
         }
@@ -64,7 +63,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
                 return int.Parse(content.Split(' ')[1]);
             }
             catch (Exception ex) {
-                Log("Could not parse match ID from score report message! Content = {0}, Exception = {1}", content, ex.Message);
+                logger.Log("Could not parse match ID from score report message! Content = {0}, Exception = {1}", content, ex.Message);
                 return -1;
             }
         }
@@ -76,7 +75,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
                 return int.Parse(RegularExpressions.lobby_id_regex.Match(embeds[0].title).Value);
             }
             catch (Exception ex) {
-                Log("Could not parse match ID from voting complete message! Content = {0}, Exception = {1}", content, ex.Message);
+                logger.Log("Could not parse match ID from voting complete message! Content = {0}, Exception = {1}", content, ex.Message);
                 return -1;
             }
         }
@@ -88,7 +87,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
                 return int.Parse(RegularExpressions.lobby_id_regex.Match(embeds[0].title).Value);
             }
             catch (Exception ex) {
-                Log("Could not parse match ID from teams picked message! Content = {0}, Exception = {1}", content, ex.Message);
+                logger.Log("Could not parse match ID from teams picked message! Content = {0}, Exception = {1}", content, ex.Message);
                 return -1;
             }
         }
@@ -100,7 +99,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
                 return int.Parse(RegularExpressions.lobby_id_lobby_cancelled_regex.Match(content).Value);
             }
             catch (Exception ex) {
-                Log("Could not parse match ID from teams picked message! Content = {0}, Exception = {1}", content, ex.Message);
+                logger.Log("Could not parse match ID from teams picked message! Content = {0}, Exception = {1}", content, ex.Message);
                 return -1;
             }
         }
@@ -117,7 +116,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
                 if (pre_match != null && pre_match.Success) { return pre_match.Value; }
             }
 
-            Log("Get player name from embedded link failed! Link = {0} IsMatch = {1}", embedded_link ?? "null", RegularExpressions.name_from_embedded_link_regex.Match(embedded_link).Success ? "true" : "false");
+            logger.Log("Get player name from embedded link failed! Link = {0} IsMatch = {1}", embedded_link ?? "null", RegularExpressions.name_from_embedded_link_regex.Match(embedded_link).Success ? "true" : "false");
             return null;
         }
 
@@ -125,27 +124,27 @@ namespace Database.Database.DatabaseCore.MainComponents {
 
         public string[]? GetPlayerNamesFromTeamPickedMessage() {
             if (!IsTeamsPickedMessage()) {
-                Log("Tried to get embedded player names from a message that isn't a team picked message! Content = {0}", content ?? "null");
+                logger.Log("Tried to get embedded player names from a message that isn't a team picked message! Content = {0}", content ?? "null");
                 return null;
             }
 
             var ret = new string[6];
             var link_fields = GetEmbeddedField(0);
             if (link_fields == null) {
-                Log("Tried to get embedded player names from a message without field 0! Content = {0}", content ?? "null");
+                logger.Log("Tried to get embedded player names from a message without field 0! Content = {0}", content ?? "null");
                 return null;
             }
 
             var link_strings = link_fields.value.Split(",");
             if (link_strings.Length != 3) {
-                Log("Could not gather 3 players with links! Content = {0}", content ?? "null");
+                logger.Log("Could not gather 3 players with links! Content = {0}", content ?? "null");
                 return null;
             }
 
             var str_name = GetPlayerNameFromEmbeddedLink(link_strings[0].Trim());
             if (str_name != null) { ret[0] = str_name; }
             else {
-                Log("Could not get player name from link string 0! String = {0}", link_strings[0]);
+                logger.Log("Could not get player name from link string 0! String = {0}", link_strings[0]);
                 return null;
             }
 
@@ -159,13 +158,13 @@ namespace Database.Database.DatabaseCore.MainComponents {
 
             link_fields = GetEmbeddedField(1);
             if (link_fields == null) {
-                Log("Tried to get embedded player names from a message without field 1! Content = {0}", content ?? "null");
+                logger.Log("Tried to get embedded player names from a message without field 1! Content = {0}", content ?? "null");
                 return null;
             }
 
             link_strings = link_fields.value.Split(", ");
             if (link_strings.Length != 3) {
-                Log("Could not gather 3 players with links! Content = {0}", content ?? "null");
+                logger.Log("Could not gather 3 players with links! Content = {0}", content ?? "null");
                 return null;
             }
 
@@ -196,7 +195,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
                 var found = false;
                 if (name.Success) {
                     foreach (var player in all_players) {
-                        if (player == name.Value) {
+                        if (player.HasName(name.Value)) {
                             found = true;
                             team_one.Add(player);
                             break;
@@ -206,7 +205,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
                     // All names should have been parsed at this point, so if it's not found that means I missed something and the result is erroneous
                     if (!found) {
                         bError = true;
-                        Log("Could not find player with name {0}", name.Value);
+                        logger.Log("Could not find player with name {0}", name.Value);
                         return null;
                     }
                 }
@@ -227,7 +226,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
                 var found = false;
                 if (name.Success) {
                     foreach (var player in all_players) {
-                        if (player == name.Value) {
+                        if (player.HasName(name.Value)) {
                             found = true;
                             team_two.Add(player);
                             break;
@@ -237,7 +236,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
                     // All names should have been parsed at this point, so if it's not found that means I missed something and the result is erroneous
                     if (!found) {
                         bError = true;
-                        Log("Could not find player with name {0}", name.Value);
+                        logger.Log("Could not find player with name {0}", name.Value);
                         return null;
                     }
                 }

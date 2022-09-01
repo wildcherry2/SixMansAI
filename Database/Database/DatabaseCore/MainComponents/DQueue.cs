@@ -17,12 +17,12 @@ namespace Database.Database.DatabaseCore.MainComponents {
         [JsonIgnore] private ETeamLabel      unmatched_label        { get; set; } = ETeamLabel.NOT_SET;
         [JsonIgnore] private int             unmatched_player_index { get; set; }
 
-        public DQueue() : base(ConsoleColor.Cyan, 2, "") {}
+        public DQueue() {}
 
         // Precondition: Expects player names/objects to be deserialized 
         public DQueue(in DDiscordMessage teams_picked_message) : base(ConsoleColor.Yellow, 1, "DQueue"){
             if (!PlayerFactory.GetSingleton().bIsComplete) {
-                // log precondition fail
+                // logger.Log precondition fail
             }
 
             names_not_matched = new List<string>();
@@ -42,12 +42,12 @@ namespace Database.Database.DatabaseCore.MainComponents {
                     if (bError) { TryInferMissingPlayer(); }
                 }
                 else {
-                    Log("Error getting names from teams picked message with message ID = {0} and match ID = {1}", teams_picked_message.id, match_id.ToString());
+                    logger.Log("Error getting names from teams picked message with message ID = {0} and match ID = {1}", teams_picked_message.id, match_id.ToString());
                     bError = true;
                 }
             }
             else {
-                Log("Wrong message type passed into method! Type = {0}", teams_picked_message.type.ToString());
+                logger.Log("Wrong message type passed into method! Type = {0}", teams_picked_message.type.ToString());
                 bError = true;
             }
         }
@@ -55,7 +55,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
         [Obsolete("IsQueueCreation isn't needed and isn't guaranteed to produce an accurate result.", true)]
         public bool IsQueueCreationComplete() {
             if (match_id == -1) {
-                Log("Match ID is invalid!");
+                logger.Log("Match ID is invalid!");
                 return false;
             }
 
@@ -64,14 +64,14 @@ namespace Database.Database.DatabaseCore.MainComponents {
             if (!IsTeamValid(ETeamLabel.TEAM_TWO)) { return false; }
 
             if (ReferenceEquals(score_report, null)) {
-                Log("Missing score report for Match {0}!", match_id.ToString());
+                logger.Log("Missing score report for Match {0}!", match_id.ToString());
                 return false;
             }
 
             if (!score_report.IsValid()) { return false; }
 
             if (winner == ETeamLabel.NOT_SET) {
-                Log("Winning team not set for Match {0}!", match_id.ToString());
+                logger.Log("Winning team not set for Match {0}!", match_id.ToString());
                 return false;
             }
 
@@ -81,33 +81,33 @@ namespace Database.Database.DatabaseCore.MainComponents {
         private bool IsTeamValid(in ETeamLabel team) {
             if (team == ETeamLabel.TEAM_ONE) {
                 if (ReferenceEquals(team_one.player_one, null)) {
-                    Log("Match {0}, Team 1, player 1 is null!", match_id.ToString());
+                    logger.Log("Match {0}, Team 1, player 1 is null!", match_id.ToString());
                     return false;
                 }
 
                 if (ReferenceEquals(team_one.player_two, null)) {
-                    Log("Match {0}, Team 1, player 2 is null!", match_id.ToString());
+                    logger.Log("Match {0}, Team 1, player 2 is null!", match_id.ToString());
                     return false;
                 }
 
                 if (ReferenceEquals(team_one.player_three, null)) {
-                    Log("Match {0}, Team 1, player 3 is null!", match_id.ToString());
+                    logger.Log("Match {0}, Team 1, player 3 is null!", match_id.ToString());
                     return false;
                 }
             }
             else if (team == ETeamLabel.TEAM_TWO) {
                 if (ReferenceEquals(team_two.player_one, null)) {
-                    Log("Match {0}, Team 2, player 1 is null!", match_id.ToString());
+                    logger.Log("Match {0}, Team 2, player 1 is null!", match_id.ToString());
                     return false;
                 }
 
                 if (ReferenceEquals(team_two.player_two, null)) {
-                    Log("Match {0}, Team 2, player 2 is null!", match_id.ToString());
+                    logger.Log("Match {0}, Team 2, player 2 is null!", match_id.ToString());
                     return false;
                 }
 
                 if (ReferenceEquals(team_two.player_three, null)) {
-                    Log("Match {0}, Team 2, player 3 is null!", match_id.ToString());
+                    logger.Log("Match {0}, Team 2, player 3 is null!", match_id.ToString());
                     return false;
                 }
             }
@@ -222,17 +222,17 @@ namespace Database.Database.DatabaseCore.MainComponents {
             #region Precondition Checks
 
             if (names_not_matched.Count != 1) {
-                Log("Precondition failed: names_not_matched = {0}, should be 1!", names_not_matched.Count.ToString());
+                logger.Log("Precondition failed: names_not_matched = {0}, should be 1!", names_not_matched.Count.ToString());
                 return;
             }
 
             if (names_not_matched[0].Length == 0) {
-                Log("Precondition failed: names_not_matched[0].length = 0, should be > 0!");
+                logger.Log("Precondition failed: names_not_matched[0].length = 0, should be > 0!");
                 return;
             }
 
             if (teams_picked_message.mentions.Count != 6) {
-                Log("Precondition failed: teams_picked_message.mentions.Count = {0}, should be 6!", teams_picked_message.mentions.Count.ToString());
+                logger.Log("Precondition failed: teams_picked_message.mentions.Count = {0}, should be 6!", teams_picked_message.mentions.Count.ToString());
                 return;
             }
 
@@ -252,19 +252,19 @@ namespace Database.Database.DatabaseCore.MainComponents {
                 if (!found) {
                     var lost = DDatabaseCore.GetSingleton().GetPlayerIfExists(ulong.Parse(player.id));
                     if (!ReferenceEquals(lost, null)) {
-                        Log("Associated link_name {0} with player {1}!", link_name, lost.recorded_names[0]);
+                        logger.Log("Associated link_name {0} with player {1}!", link_name, lost.recorded_names[0]);
                         lost.recorded_names.Add(link_name);
                         if (!lost.HasName(player.name)) { lost.recorded_names.Add(player.name); }
 
                         if (!lost.HasName(player.nickname)) { lost.recorded_names.Add(player.nickname); }
                     }
                     else {
-                        Log("There are no registered players with the link_name {0}!", link_name);
+                        logger.Log("There are no registered players with the link_name {0}!", link_name);
                         // create new player instance with all 3 names in the player field
                         lost = new DPlayer(ulong.Parse(player.id), player.name, player.nickname, link_name);
                         DDatabaseCore.GetSingleton().all_players.Add(lost);
 
-                        Log("Created new player and added to queue! Name = {0}, Nickname = {1}, link_name = {2}, ID = {3}, Match ID = {4}, Team = {5}",
+                        logger.Log("Created new player and added to queue! Name = {0}, Nickname = {1}, link_name = {2}, ID = {3}, Match ID = {4}, Team = {5}",
                             player.name, player.nickname, link_name, player.id, match_id.ToString(), unmatched_label == ETeamLabel.TEAM_ONE ? "1" : "2");
                     }
 

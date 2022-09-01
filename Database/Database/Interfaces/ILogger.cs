@@ -16,7 +16,7 @@ namespace Database.Database.Interfaces;
 //        this.class_name = class_name;
 //    }
 
-//    protected virtual void Log(in string message, params string[]? subs_strings)
+//    protected virtual void logger.Login string message, params string[]? subs_strings)
 //    {
 //        Console.ForegroundColor = current_color;
 //        string msg = "";
@@ -33,18 +33,47 @@ namespace Database.Database.Interfaces;
 //}
 
 public interface ILogger {
-    protected ConsoleColor current_color { get; set; }
-    protected int          iTabs         { get; init; }
-    protected string       class_name    { get; set; }
-    protected void         Log<T>(in T      message, params T[]?      subs);
-    protected void         Log(in    string message, params string[]? substrings);
-    private string GetMethodName() {
-        var method = new StackFrame(1).GetMethod();
-        //class_name  = stack_frame.GetMethod().DeclaringType.Name;
-        return method != null ? method.Name : "UnknownMethod";
+    void Log<T>(in string message, params T[]? subs) where T : IDatabaseComponent {
+        var header = GetLogLineHeader();
+        Console.WriteLine(header + message, subs);
     }
-    private void PrintTabs() {
-        for(int i = 0; i < iTabs; i++)
-            Console.Write('\t');
+    void Log(in string message, params string[]? substrings) {
+        var header = GetLogLineHeader();
+        Console.WriteLine(header + message, substrings);
+    }
+    static Dictionary<int, ConsoleColor> FrameCountToColor { get; set; } = new Dictionary<int, ConsoleColor>() {
+        { 0, ConsoleColor.White },
+        { 1, ConsoleColor.Yellow },
+        { 2, ConsoleColor.Green },
+        { 3, ConsoleColor.Blue },
+        { 4, ConsoleColor.Red },
+        { 5, ConsoleColor.Magenta },
+        { 6, ConsoleColor.Cyan},
+        { 7, ConsoleColor.DarkBlue }
+    };
+
+    string GetLogLineHeader() {
+        var calling_frame_method = new StackFrame(1).GetMethod();
+        if (calling_frame_method != null) {
+            var calling_frame_class = calling_frame_method.DeclaringType;
+            if (calling_frame_class != null) {
+                var tabs = GetLogLineAttributes();
+                return $"{tabs}[{calling_frame_class.Name}] [{calling_frame_method.Name}] ";
+            }
+
+            return $"[UnknownClass] [{calling_frame_method.Name}] ";
+        }
+
+        return "[Unknown Caller] ";
+    }
+
+    string GetLogLineAttributes() {
+        var st = new StackTrace(1);
+        Console.ForegroundColor = FrameCountToColor[st.FrameCount];
+        string tabs = "";
+        for(int i = 0; i < st.FrameCount; i++)
+            tabs += '\t';
+
+        return tabs;
     }
 }

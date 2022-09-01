@@ -12,7 +12,7 @@ public class ScoreReportCleaner : ILogger
     public bool bIsComplete { get; set; } = false;
     public bool bUsingDirectory { get; set; }
 
-    private ScoreReportCleaner(in bool bUsingDirectory = false) : base(ConsoleColor.Yellow, 1, "ScoreReportCleaner")
+    private ScoreReportCleaner(in bool bUsingDirectory = false)
     {
         this.bUsingDirectory = bUsingDirectory;
     }
@@ -28,7 +28,7 @@ public class ScoreReportCleaner : ILogger
         messages = LoadMessages(DDatabaseCore.sr_path);
         if (messages == null)
         {
-            Log("Preconditions not met! Score report chat data was not set!");
+            logger.Log"Preconditions not met! Score report chat data was not set!");
             return;
         }
         FMessageList result = new FMessageList();
@@ -59,13 +59,13 @@ public class ScoreReportCleaner : ILogger
             }
         }
 
-        Log("Unverified score reports = {0}, score reports with invalid length = {1}", unverified.ToString(), notlong.ToString());
+        logger.Log"Unverified score reports = {0}, score reports with invalid length = {1}", unverified.ToString(), notlong.ToString());
         if (result.messages.Count > 0)
         {
-            Log("Filtered {0} reports from {1} messages!", result.messages.Count.ToString(), messages.messages.Count.ToString());
+            logger.Log"Filtered {0} reports from {1} messages!", result.messages.Count.ToString(), messages.messages.Count.ToString());
             bIsComplete = true;
         }
-        else Log("Error cleaning score reports! No messages were filtered!");
+        else logger.Log"Error cleaning score reports! No messages were filtered!");
         DDatabaseCore.GetSingleton().all_score_report_messages = result;
     }
 
@@ -118,7 +118,7 @@ public class ScoreReportCleaner : ILogger
             }
             catch (Exception e)
             {
-                Log(e.Message);
+                logger.Loge.Message);
                 Environment.Exit(1);
             }
         }

@@ -5,12 +5,15 @@ using Newtonsoft.Json;
 
 namespace Database.Database.Interfaces {
     public abstract class IDatabaseComponent : ILogger, IPrimaryKey {
-        protected PrimaryKey primary_key; 
-        protected IDatabaseComponent(in ConsoleColor color = ConsoleColor.White, in int tabs = 0, in string class_name = "IDatabaseComponent") : base(color, tabs, class_name) { }
+        protected PrimaryKey primary_key;
+        protected IDatabaseComponent() {
+            logger = this as ILogger;
+        }
         private static   IDatabaseComponent? singleton                       { get; }
         public           bool                bError                          { get; set; } = false;
         protected static ulong               default_incremental_primary_key { get; set; }
         protected        bool                bIsPrimaryKeySet                { get; set; }
+        protected        ILogger             logger                          { get; set; }
 
         // Factories can call an override of this to set a primary key unique to the class, no need for this with singletons.
         // Overrides should decrement the default key for consistency, and only set the key if the bool indicates it isn't already set.

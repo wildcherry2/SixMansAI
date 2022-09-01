@@ -11,7 +11,7 @@ public class ChatCleaner : ILogger
     public bool bIsComplete { get; set; } = false;
     public bool bUsingDirectory { get; set; }
 
-    private ChatCleaner(in bool bUsingDirectory = false) : base(ConsoleColor.Yellow, 1, "ChatCleaner")
+    private ChatCleaner(in bool bUsingDirectory = false)
     {
         this.bUsingDirectory = bUsingDirectory;
     }
@@ -35,11 +35,11 @@ public class ChatCleaner : ILogger
         }
         else
         {
-            Log("Preconditions not met! Score report chat data was not set!");
+            logger.Log"Preconditions not met! Score report chat data was not set!");
         }
 
         if (filtered_messages.messages.Count > 0) bIsComplete = true;
-        else Log("Error cleaning chat data! No messages were filtered!");
+        else logger.Log"Error cleaning chat data! No messages were filtered!");
         core.all_discord_chat_messages = filtered_messages;
     }
     private bool IsRelevantMessage(in DDiscordMessage message)
@@ -68,7 +68,7 @@ public class ChatCleaner : ILogger
             }
             catch (Exception e)
             {
-                Log(e.Message);
+                logger.Loge.Message);
                 Environment.Exit(1);
             }
         }

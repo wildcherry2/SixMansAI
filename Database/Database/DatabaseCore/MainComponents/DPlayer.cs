@@ -4,7 +4,7 @@ using Database.Structs;
 namespace Database.Database.DatabaseCore.MainComponents;
 
 public class DPlayer : IDatabaseComponent {
-    public DPlayer(in ulong discord_id, in string discord_name, in string nickname = "", in string link_name = "") : base(ConsoleColor.Yellow, 1, "DPlayer") {
+    public DPlayer(in ulong discord_id, in string discord_name, in string nickname = "", in string link_name = "") {
         this.discord_id = discord_id;
         game_history    = new List<FGameRecord?>();
         recorded_names  = new List<string>();
