@@ -19,6 +19,14 @@ public partial class DataManager : IDatabaseComponent {
 
         return singleton;
     }
+
+    public void InitializeData() {
+        /*
+         * init shit
+         */
+
+        SortAllTables();
+    }
     public void SortAllTables() {
         if (!IsInitialized()) return;
         all_players.Sort(CompareKeysOfComponents);
@@ -32,12 +40,15 @@ public partial class DataManager : IDatabaseComponent {
         if (search_res != int.MinValue && search_res < 0) {
             switch (component.TryGetOrCreatePrimaryKey().key_type) {
                 case EPrimaryKeyType.PLAYER:
+                    if(all_players.Count == 0) { all_players.Add(component as DPlayer); break; }
                     all_players.Insert(~search_res, component as DPlayer);
                     break;
                 case EPrimaryKeyType.SCORE_REPORT:
+                    if(all_score_reports.Count == 0) { all_score_reports.Add(component as FScoreReport); break; }
                     all_score_reports.Insert(~search_res, component as FScoreReport);
                     break;
                 case EPrimaryKeyType.QUEUE:
+                    if(all_queues.Count == 0) { all_queues.Add(component as DQueue); break; }
                     all_queues.Insert(~search_res, component as DQueue);
                     break;
                 default:

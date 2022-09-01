@@ -102,8 +102,9 @@ public class QueryFactory : FactoryBase {
 
         if (ReferenceEquals(players, null)) return null;
 
-        foreach (var player in players) {
-            if (player.TryGetOrCreatePrimaryKey() == primary_key) return player;
+        var search = Search(primary_key);
+        if (search >= 0) {
+            return players[search];
         }
 
         return null;
@@ -114,8 +115,9 @@ public class QueryFactory : FactoryBase {
 
         if (ReferenceEquals(queues, null)) return null;
 
-        foreach (var queue in queues) {
-            if (queue.TryGetOrCreatePrimaryKey() == primary_key) return queue;
+        var search = Search(primary_key);
+        if (search >= 0) {
+            return queues[search];
         }
 
         return null;
@@ -125,8 +127,9 @@ public class QueryFactory : FactoryBase {
 
         if (ReferenceEquals(reports, null)) return null;
 
-        foreach (var report in reports) {
-            if (report.TryGetOrCreatePrimaryKey() == primary_key) return report;
+        var search = Search(primary_key);
+        if (search >= 0) {
+            return reports[search];
         }
 
         return null;
