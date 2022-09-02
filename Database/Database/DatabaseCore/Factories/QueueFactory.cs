@@ -39,6 +39,6 @@ public class QueueFactory : FactoryBase {
                        _messageList != null ? "Not null" : "Null");
         }
 
-        DDatabaseCore.GetSingleton().all_queues = ret;
+        DataManager.GetSingleton().all_queues = ret;
     }
 }

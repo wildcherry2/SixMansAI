@@ -24,7 +24,7 @@ namespace Database.Database.DatabaseCore.Factories {
                 return;
             }
 
-            var players = DDatabaseCore.GetSingleton().all_players;
+            var players = DataManager.GetSingleton().all_players;
             for (var i = 2; i < chat_messages.messages.Count - 2; i++) {
                 var previous_previous = chat_messages.messages[i - 2];
                 var previous = chat_messages.messages[i - 1];
@@ -52,7 +52,7 @@ namespace Database.Database.DatabaseCore.Factories {
             if (players.Count > 0) { bIsComplete = true; }
             else { logger.Log("No players have been created"); }
 
-            DDatabaseCore.GetSingleton().all_players = players;
+            DataManager.GetSingleton().all_players = players;
         }
 
         private bool FollowsValidPattern(ref DDiscordMessage previous_previous, ref DDiscordMessage previous, ref DDiscordMessage current, ref DDiscordMessage next, ref DDiscordMessage next_next) {

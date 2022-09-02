@@ -4,12 +4,13 @@ using Database.Enums;
 using Newtonsoft.Json;
 using Database.Structs;
 
-namespace Database.Database.DatabaseCore.MainComponents {
+namespace Database.Database.DatabaseCore.MainComponents
+{
     public class DQueue : IDatabaseComponent {
         public               int             match_id               { get; set; } = -1;
         public               FTeam           team_one               { get; set; }
         public               FTeam           team_two               { get; set; }
-        public               FScoreReport?   score_report           { get; set; }
+        public               ScoreReport?   score_report           { get; set; }
         public               ETeamLabel      winner                 { get; set; } = ETeamLabel.NOT_SET;
         [JsonIgnore] public  DDiscordMessage teams_picked_message   { get; set; }
         [JsonIgnore] public  List<string>    names_not_matched      { get; set; }
@@ -41,7 +42,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
                     team_two = new FTeam();
                     TryAssignToTeam(ref names);
 
-                    //score_report = new FScoreReport(); // maybe parse names and score reports before chat so that we can go ahead and set it and winner now?}
+                    //score_report = new ScoreReport(); // maybe parse names and score reports before chat so that we can go ahead and set it and winner now?}
                     
                     if (bError) { TryInferMissingPlayer(); }
                 }

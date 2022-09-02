@@ -1,19 +1,16 @@
 ﻿using Database.Database.DatabaseCore;
 using Database.Database.DatabaseCore.MainComponents;
 using Database.Database.Interfaces;
-using Database.Structs;
 
 namespace Database.Database;
 
 public partial class DataManager : IDatabaseComponent {
     private DataManager() {}
-    public        List<DPlayer>?      all_players               { get; private set; }
-    public        List<DSeason>?      all_seasons               { get; private set; }
-    public        List<FScoreReport>? all_score_reports         { get; private set; }
-    public        List<DQueue>?       all_queues                { get; private set; }
-    //public        FMessageList        all_discord_chat_messages { get; private set; }
-    //public        FMessageList        all_score_report_messages { get; private set; }
-    private static DataManager?        singleton                 { get; set; }
+    public         List<DPlayer>?     all_players       { get; set; }
+    public         List<DSeason>?     all_seasons       { get; set; }
+    public         List<ScoreReport>? all_score_reports { get; set; }
+    public         List<DQueue>?      all_queues        { get; set; }
+    private static DataManager?       singleton         { get; set; }
     public static DataManager GetSingleton() {
         if (singleton == null) singleton = new DataManager();
 
@@ -24,10 +21,10 @@ public partial class DataManager : IDatabaseComponent {
         /*
          * init shit
          */
-        all_players = DDatabaseCore.GetSingleton().all_players;
-        all_seasons = DDatabaseCore.GetSingleton().all_seasons;
-        all_score_reports = DDatabaseCore.GetSingleton().all_score_reports;
-        all_queues = DDatabaseCore.GetSingleton().all_queues;
+        //all_players = DDatabaseCore.GetSingleton().all_players;
+        //all_seasons = DDatabaseCore.GetSingleton().all_seasons;
+        //all_score_reports = DDatabaseCore.GetSingleton().all_score_reports;
+        //all_queues = DDatabaseCore.GetSingleton().all_queues;
         SortAllTables();
     }
     public void SortAllTables() {
@@ -47,8 +44,8 @@ public partial class DataManager : IDatabaseComponent {
                     all_players.Insert(~search_res, component as DPlayer);
                     break;
                 case EPrimaryKeyType.SCORE_REPORT:
-                    if(all_score_reports.Count == 0) { all_score_reports.Add(component as FScoreReport); break; }
-                    all_score_reports.Insert(~search_res, component as FScoreReport);
+                    if(all_score_reports.Count == 0) { all_score_reports.Add(component as ScoreReport); break; }
+                    all_score_reports.Insert(~search_res, component as ScoreReport);
                     break;
                 case EPrimaryKeyType.QUEUE:
                     if(all_queues.Count == 0) { all_queues.Add(component as DQueue); break; }

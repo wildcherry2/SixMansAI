@@ -9,10 +9,10 @@ using Database.Structs;
 namespace Database.Database.DatabaseCore;
 
 public class DDatabaseCore : IDatabaseComponent {
-    public         List<DPlayer>?      all_players               { get; set; }
-    public         List<DSeason>?      all_seasons               { get; set; }
-    public         List<FScoreReport>? all_score_reports         { get; set; }
-    public         List<DQueue>?       all_queues                { get; set; }
+    //public         List<DPlayer>?      all_players               { get; set; }
+    //public         List<DSeason>?      all_seasons               { get; set; }
+    //public         List<ScoreReport>? all_score_reports         { get; set; }
+    //public         List<DQueue>?       all_queues                { get; set; }
     public         FMessageList        all_discord_chat_messages { get; set; }
     public         FMessageList        all_score_report_messages { get; set; }
     private static DDatabaseCore?      singleton                 { get; set; }
@@ -25,9 +25,8 @@ public class DDatabaseCore : IDatabaseComponent {
     public static string sr_dir    { get; set; } = @"C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\score-report";
 
     private DDatabaseCore() {
-        all_players = new List<DPlayer>();
-        all_seasons = new List<DSeason>();
-        
+        //all_players = new List<DPlayer>();
+        //all_seasons = new List<DSeason>();
     }
 
     public static DDatabaseCore GetSingleton() {
@@ -70,24 +69,24 @@ public class DDatabaseCore : IDatabaseComponent {
 
     // TODO: move to cquerier
     public DPlayer? GetPlayerIfExists(in ulong discord_id) {
-        if (discord_id == 0 || all_players == null) return null;
-        foreach (var player in all_players) {
-            if (player.discord_id == discord_id) 
-                return player;
-        }
-        return null;
+        if (discord_id == 0 || DataManager.GetSingleton().all_players == null) return null;
+        //foreach (var player in DataManager.GetSingleton().all_players) {
+        //    if (player.discord_id == discord_id) 
+        //        return player;
+        //}
+        return QueryFactory.GetSingleton().QueryPlayers(new PrimaryKey(discord_id, EPrimaryKeyType.PLAYER));
     }
 
         // TODO: move to cquerier
     public DPlayer? GetPlayerIfExists(in string name) {
-        if (name.Length == 0 || all_players == null) return null;
-        foreach (var player in all_players) {
-            foreach (var this_name in player.recorded_names) {
-                if(this_name == name) 
-                    return player;
-            }
-        }
-        return null;
+        if (name.Length == 0 || DataManager.GetSingleton().all_players == null) return null;
+        //foreach (var player in DataManager.GetSingleton().all_players) {
+        //    foreach (var this_name in player.recorded_names) {
+        //        if(this_name == name) 
+        //            return player;
+        //    }
+        //}
+        return QueryFactory.GetSingleton().QueryPlayers(name);
     }
 
     #region Inherited Overrides

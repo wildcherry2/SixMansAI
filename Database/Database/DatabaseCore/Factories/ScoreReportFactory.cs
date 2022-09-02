@@ -3,7 +3,8 @@ using Database.Database.DatabaseCore.MainComponents;
 using Database.Database.Interfaces;
 using Database.Structs;
 
-namespace Database.Database.DatabaseCore.Factories {
+namespace Database.Database.DatabaseCore.Factories
+{
     public class ScoreReportFactory : FactoryBase {
         private ScoreReportFactory() {}
         private static ScoreReportFactory? singleton   { get; set; }
@@ -21,11 +22,11 @@ namespace Database.Database.DatabaseCore.Factories {
             logger.Log("Deserializing {0} messages into FScoreReports...", messages.messages.Count.ToString());
             if (!ScoreReportCleaner.GetSingleton().bIsComplete) { return; }
 
-            var ret = new List<FScoreReport>();
+            var ret = new List<ScoreReport>();
             var err_count = 0;
             for (var i = 0; i < messages.messages.Count; i++) {
                 var message = messages.messages[i];
-                var report = new FScoreReport();
+                var report = new ScoreReport();
                 report.iMatchId = message.GetMatchId();
                 report.bReportedWin = GetReportedWin(ref message);
                 report.reporter = GetReporter(ref message);
@@ -36,7 +37,7 @@ namespace Database.Database.DatabaseCore.Factories {
 
                 if (report.iMatchId == -1 || ReferenceEquals(report.reporter, null) || (subs && (ReferenceEquals(report.subbed_in, null) || ReferenceEquals(report.subbed_out, null)))) {
                     report.bError = true;
-                    logger.Log("Error building an FScoreReport! Missing data, fields = \nMatch ID = {0}, \nReporter = {1}, \nHasSubs = {2}, \nSubbed in = {3}, \nSubbed out = {4}",
+                    logger.Log("Error building an ScoreReport! Missing data, fields = \nMatch ID = {0}, \nReporter = {1}, \nHasSubs = {2}, \nSubbed in = {3}, \nSubbed out = {4}",
                         report.iMatchId.ToString(), !ReferenceEquals(report.reporter, null) ? report.reporter.recorded_names[0] : "Null Reporter!",
                         subs.ToString(), subs ? !ReferenceEquals(report.subbed_in, null) ? report.subbed_in.recorded_names[0] : "Null subbed in player!" : "",
                         subs ? !ReferenceEquals(report.subbed_out, null) ? report.subbed_out.recorded_names[0] : "Null subbed out player!" : "");
@@ -50,8 +51,8 @@ namespace Database.Database.DatabaseCore.Factories {
             if (ret.Count == 0) { logger.Log("Error creating score report list! No reports were added to the list!"); }
             else {
                 logger.Log("{0} score reports generated with {1} errors! Valid score reports = {2}", ret.Count.ToString(), err_count.ToString(), (ret.Count - err_count).ToString());
-                bIsComplete = true;
-                DDatabaseCore.GetSingleton().all_score_reports = ret;
+                bIsComplete                                  = true;
+                DataManager.GetSingleton().all_score_reports = ret;
             }
         }
 
@@ -71,7 +72,7 @@ namespace Database.Database.DatabaseCore.Factories {
             return DDatabaseCore.GetSingleton().GetPlayerIfExists(ulong.Parse(id));
         }
 
-        private void SetSubstitutes(ref FScoreReport report, ref DDiscordMessage message) {
+        private void SetSubstitutes(ref ScoreReport report, ref DDiscordMessage message) {
             if (message.mentions == null || message.mentions.Count != 2 || message.mentions[0].id == null || message.mentions[1].id == null) { return; }
 
             report.subbed_in = DDatabaseCore.GetSingleton().GetPlayerIfExists(message.mentions[0].id);

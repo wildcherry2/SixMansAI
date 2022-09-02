@@ -62,7 +62,7 @@ public class QueryFactory : FactoryBase {
             case EPrimaryKeyType.SCORE_REPORT:
                 if (dm.all_score_reports == null) return error;
                 //if (dm.all_score_reports.Count == 0) return 0;
-                return dm.all_score_reports.BinarySearch(component as FScoreReport);
+                return dm.all_score_reports.BinarySearch(component as ScoreReport);
             default:
                 return error;
         }
@@ -77,7 +77,7 @@ public class QueryFactory : FactoryBase {
                 var dummyq = new DQueue(key);
                 return Search(dummyq);
             case EPrimaryKeyType.SCORE_REPORT:
-                var dummyr = new FScoreReport(key);
+                var dummyr = new ScoreReport(key);
                 return Search(dummyr);
             default:
                 return int.MinValue;
@@ -122,7 +122,7 @@ public class QueryFactory : FactoryBase {
 
         return null;
     }
-    public FScoreReport? QueryScoreReports(in PrimaryKey primary_key) {
+    public ScoreReport? QueryScoreReports(in PrimaryKey primary_key) {
         var reports = DataManager.GetSingleton().all_score_reports;
 
         if (ReferenceEquals(reports, null)) return null;

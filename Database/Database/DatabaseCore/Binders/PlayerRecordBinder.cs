@@ -17,11 +17,11 @@ namespace Database.Database.DatabaseCore.Binders {
 
         // Preconditions: all_players is not null, all_queues is not null, and score reports have been linked to their appropriate DQueue object
         public void BindRecordsToPlayers() {
-            if (!QueueReportBinder.GetSingleton().bIsComplete || DDatabaseCore.GetSingleton().all_players == null || DDatabaseCore.GetSingleton().all_queues == null) { return; }
+            if (!QueueReportBinder.GetSingleton().bIsComplete || DataManager.GetSingleton().all_players == null || DataManager.GetSingleton().all_queues == null) { return; }
 
-            foreach (var queue in DDatabaseCore.GetSingleton().all_queues) {
+            foreach (var queue in DataManager.GetSingleton().all_queues) {
                 var num_assigned = 0;
-                foreach (var player in DDatabaseCore.GetSingleton().all_players) {
+                foreach (var player in DataManager.GetSingleton().all_players) {
                     if (queue.IsPlayerInTeam(ETeamLabel.TEAM_ONE, player.discord_id)) {
                         SetRecord(queue, ETeamLabel.TEAM_ONE, player);
                         num_assigned++;
