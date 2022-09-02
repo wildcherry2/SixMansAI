@@ -19,8 +19,8 @@ namespace Database.Database.DatabaseCore.Binders {
         public void BindRecordsToPlayers() {
             if (!QueueReportBinder.GetSingleton().bIsComplete || DDatabaseCore.GetSingleton().all_players == null || DDatabaseCore.GetSingleton().all_queues == null) { return; }
 
-            int success = 0;
-            int err     = 0;
+            var success = 0;
+            var err     = 0;
             foreach (var queue in DDatabaseCore.GetSingleton().all_queues) {
                 //var num_assigned = 0;
                 //foreach (var player in DDatabaseCore.GetSingleton().all_players) {
@@ -44,13 +44,11 @@ namespace Database.Database.DatabaseCore.Binders {
                     SetRecord(queue, ETeamLabel.TEAM_ONE, queue.team_two.player_three!);
                     success++;
                 }
-                else
-                    err++;
-
-                
+                else { err++; }
 
                 //if (num_assigned != 6) { Log("Not all players linked to queue {0}! Number of assigned players = {1}", queue.match_id.ToString(), num_assigned.ToString()); }
             }
+
             Log($"{success} records bound to players, {err} errors!");
             bComplete = true;
         }
