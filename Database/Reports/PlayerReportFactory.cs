@@ -56,7 +56,7 @@ public class PlayerReportFactory : IReport {
                 continue;
             }
 
-            line += $"{(int)record.team} {record.bPlayerWon} {record.queue.TryGetOrCreatePrimaryKey().key},";
+            line += $"{(int)record.team} {(record.bPlayerWon ? 1 : 0)} {record.queue.TryGetOrCreatePrimaryKey().key},";
         }
 
         line = line.Trim(',');

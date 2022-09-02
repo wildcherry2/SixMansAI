@@ -45,6 +45,7 @@ public class DDatabaseCore : IDatabaseComponent {
         ScoreReportFactory.GetSingleton().ProcessChat(all_score_report_messages);
         QueueReportBinder.GetSingleton().BindReportsToQueues();
         PlayerRecordBinder.GetSingleton().BindRecordsToPlayers();
+        DataManager.GetSingleton().InitializeData();
         PlayerReportFactory.GetSingleton().GenerateReport(@"C:\Users\tyler\Documents\Programming\AI\SixMans\Reports");
         //foreach(var player in all_players) {
         //    Console.WriteLine(player.ToJson());

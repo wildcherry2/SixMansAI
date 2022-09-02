@@ -11,8 +11,8 @@ public partial class DataManager : IDatabaseComponent {
     public        List<DSeason>?      all_seasons               { get; private set; }
     public        List<FScoreReport>? all_score_reports         { get; private set; }
     public        List<DQueue>?       all_queues                { get; private set; }
-    public        FMessageList        all_discord_chat_messages { get; private set; }
-    public        FMessageList        all_score_report_messages { get; private set; }
+    //public        FMessageList        all_discord_chat_messages { get; private set; }
+    //public        FMessageList        all_score_report_messages { get; private set; }
     private static DataManager?        singleton                 { get; set; }
     public static DataManager GetSingleton() {
         if (singleton == null) singleton = new DataManager();
@@ -24,7 +24,10 @@ public partial class DataManager : IDatabaseComponent {
         /*
          * init shit
          */
-
+        all_players = DDatabaseCore.GetSingleton().all_players;
+        all_seasons = DDatabaseCore.GetSingleton().all_seasons;
+        all_score_reports = DDatabaseCore.GetSingleton().all_score_reports;
+        all_queues = DDatabaseCore.GetSingleton().all_queues;
         SortAllTables();
     }
     public void SortAllTables() {
@@ -81,7 +84,7 @@ public partial class DataManager : IDatabaseComponent {
         if (rhs == null) { return 1; }
 
         if (lhs == rhs) return 0;
-        if (rhs < lhs) return -1;
+        if (lhs < rhs) return -1;
 
         return 1;
     }
