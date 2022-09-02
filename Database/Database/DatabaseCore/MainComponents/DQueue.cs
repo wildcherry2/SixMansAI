@@ -33,7 +33,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
             matched = new List<DPlayer>();
             if (teams_picked_message.type == EMessageType.TEAMS_PICKED) {
                 match_id = teams_picked_message.GetMatchId();
-
+                this.teams_picked_message = teams_picked_message;
                 var names = teams_picked_message.GetPlayerNamesFromTeamPickedMessage();
 
                 if (names != null && names.Length == 6) {
@@ -42,7 +42,7 @@ namespace Database.Database.DatabaseCore.MainComponents {
                     TryAssignToTeam(ref names);
 
                     //score_report = new FScoreReport(); // maybe parse names and score reports before chat so that we can go ahead and set it and winner now?}
-                    this.teams_picked_message = teams_picked_message;
+                    
                     if (bError) { TryInferMissingPlayer(); }
                 }
                 else {
