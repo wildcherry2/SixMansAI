@@ -1,7 +1,7 @@
 ﻿using Database.Database.DatabaseCore.MainComponents;
+using Database.Database.Enums;
 using Database.Database.Interfaces;
-using Database.Enums;
-using Database.Structs;
+using Database.Database.Structs;
 
 namespace Database.Database.DatabaseCore.Cleaners;
 

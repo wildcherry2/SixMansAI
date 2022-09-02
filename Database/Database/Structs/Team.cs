@@ -1,6 +1,6 @@
 ﻿using Database.Database.DatabaseCore.MainComponents;
 
-namespace Database.Structs;
+namespace Database.Database.Structs;
 
 public class FTeam {
     public DPlayer? player_one   { get; set; }

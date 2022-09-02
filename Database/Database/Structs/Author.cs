@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Database.Structs;
+namespace Database.Database.Structs;
 public class FAuthor {
     [JsonPropertyName("id")]
     public string? id { get; init; }

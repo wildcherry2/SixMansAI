@@ -1,4 +1,4 @@
-﻿namespace Database.Enums;
+﻿namespace Database.Database.Enums;
 public enum EQueryResultType {
     PLAYER,
     SEASON,

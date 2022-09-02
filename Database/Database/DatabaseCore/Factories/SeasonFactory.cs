@@ -1,6 +1,5 @@
 ﻿using Database.Database.DatabaseCore.MainComponents;
-using Database.Enums;
-using Database.Structs;
+using Database.Database.Structs;
 
 namespace Database.Database.DatabaseCore.Factories;
 

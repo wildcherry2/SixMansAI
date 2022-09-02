@@ -1,7 +1,7 @@
 ﻿using Database.Database.DatabaseCore.MainComponents;
-using Database.Enums;
+using Database.Database.Enums;
 
-namespace Database.Structs;
+namespace Database.Database.Structs;
 
 public class FGameRecord {
     public DQueue     queue { get; set; } = new DQueue();

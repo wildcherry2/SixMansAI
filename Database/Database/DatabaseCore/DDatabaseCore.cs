@@ -5,7 +5,7 @@ using Database.Database.DatabaseCore.Cleaners;
 using Database.Database.DatabaseCore.Factories;
 using Database.Database.DatabaseCore.MainComponents;
 using Database.Database.Interfaces;
-using Database.Structs;
+using Database.Database.Structs;
 
 namespace Database.Database.DatabaseCore;
 
@@ -16,6 +16,7 @@ public class DDatabaseCore : IDatabaseComponent {
     public         List<DQueue>?       all_queues                { get; set; }
     public         FMessageList        all_discord_chat_messages { get; set; }
     public         FMessageList        all_score_report_messages { get; set; }
+    public         bool                built                     { get; set; } = false;
     private static DDatabaseCore?      singleton                 { get; set; }
 
     // Will move to CLoader
@@ -39,15 +40,16 @@ public class DDatabaseCore : IDatabaseComponent {
     // Look into situations in QueueReportBinder where reporter is true but 
     public void BuildDatabase(in bool bUsingDirectory = false) {
         ChatCleaner.GetSingleton(bUsingDirectory).ProcessChat();
-        //ScoreReportCleaner.GetSingleton(true).ProcessChat();
+        ScoreReportCleaner.GetSingleton(true).ProcessChat();
         PlayerFactory.GetSingleton().ProcessChat(all_discord_chat_messages);
         QueueFactory.GetSingleton(all_discord_chat_messages).ProcessChat();
-        //ScoreReportFactory.GetSingleton().ProcessChat(all_score_report_messages);
-        //QueueReportBinder.GetSingleton().BindReportsToQueues();
-
-        foreach(var player in all_players) {
-            Console.WriteLine(player.ToJson());
-        }
+        ScoreReportFactory.GetSingleton().ProcessChat(all_score_report_messages);
+        QueueReportBinder.GetSingleton().BindReportsToQueues();
+        PlayerRecordBinder.GetSingleton().BindRecordsToPlayers();
+        built = true;
+        //foreach(var player in all_players) {
+        //    Console.WriteLine(player.ToJson());
+        //}
     }
 
     // Will later use CLoader

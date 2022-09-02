@@ -1,5 +1,5 @@
 ﻿
-namespace Database.Enums; 
+namespace Database.Database.Enums; 
 
 public enum ETeamLabel {
     TEAM_ONE,

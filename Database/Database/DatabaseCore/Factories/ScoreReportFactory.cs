@@ -1,7 +1,7 @@
 ﻿using Database.Database.DatabaseCore.Cleaners;
 using Database.Database.DatabaseCore.MainComponents;
 using Database.Database.Interfaces;
-using Database.Structs;
+using Database.Database.Structs;
 
 namespace Database.Database.DatabaseCore.Factories;
 

@@ -1,4 +1,4 @@
-﻿namespace Database.Structs;
+﻿namespace Database.Database.Structs;
 
 public class FSeasonLabel {
     public string month { get; set; } = "-1";

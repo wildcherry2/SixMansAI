@@ -2,7 +2,6 @@
 using Database.Database.DatabaseCore;
 using Database.Database.DatabaseCore.Cleaners;
 using Database.Database.DatabaseCore.Factories;
-using Database.Structs;
 
 namespace UnitTest;
 

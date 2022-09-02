@@ -1,7 +1,7 @@
 ﻿using Database.Database.DatabaseCore.MainComponents;
 using Database.Database.Interfaces;
 
-namespace Database.Structs;
+namespace Database.Database.Structs;
 
 public class FScoreReport : ILogger {
     public DPlayer?        reporter     { get; set; }

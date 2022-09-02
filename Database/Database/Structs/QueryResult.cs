@@ -1,8 +1,6 @@
-﻿using Database.Database.DatabaseCore;
-using Database.Database.Interfaces;
-using Database.Enums;
+﻿using Database.Database.Interfaces;
 
-namespace Database.Structs;
+namespace Database.Database.Structs;
 
 //make common base class for structs so T can be a struct as well?
 public struct FQueryResult<T> where T : IDatabaseComponent {

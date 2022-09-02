@@ -1,7 +1,7 @@
 ﻿
 using Database.Database.DatabaseCore;
 using Database.Database.DatabaseCore.Cleaners;
-using Database.Enums;
+using Database.Database.Enums;
 
 namespace UnitTest;
 

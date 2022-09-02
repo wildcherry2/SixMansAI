@@ -1,8 +1,8 @@
 ﻿using Database.Database.DatabaseCore.Factories;
+using Database.Database.Enums;
 using Database.Database.Interfaces;
-using Database.Enums;
+using Database.Database.Structs;
 using Newtonsoft.Json;
-using Database.Structs;
 
 namespace Database.Database.DatabaseCore.MainComponents {
     public class DQueue : IDatabaseComponent {

@@ -2,8 +2,8 @@
 using Database.Database.DatabaseCore.Cleaners;
 using Database.Database.DatabaseCore.Factories;
 using Database.Database.DatabaseCore.MainComponents;
-using Database.Enums;
-using Database.Structs;
+using Database.Database.Enums;
+using Database.Database.Structs;
 
 namespace UnitTest;
 
