@@ -11,14 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EditorConfigFiles Remove="C:\Users\tyler\Documents\Programming\AI\SixMans\Database\Database\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="C:\Users\tyler\Documents\Programming\AI\SixMans\Database\Database\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 </Project>

@@ -1,9 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Database.Database.Structs {
-    public class FField {
-        [JsonPropertyName("name")] public string name { get; init; }
+namespace Database.Database.Structs; 
 
-        [JsonPropertyName("value")] public string value { get; init; }
-    }
+public class FField {
+    [JsonPropertyName("name")] public string name { get; init; }
+
+    [JsonPropertyName("value")] public string value { get; init; }
 }

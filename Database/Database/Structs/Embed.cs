@@ -1,11 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Database.Database.Structs {
-    public class FEmbed {
-        [JsonPropertyName("title")] public string title { get; init; }
+namespace Database.Database.Structs; 
 
-        [JsonPropertyName("description")] public string description { get; init; }
+public class FEmbed {
+    [JsonPropertyName("title")] public string title { get; init; }
 
-        [JsonPropertyName("fields")] public List<FField> fields { get; init; }
-    }
+    [JsonPropertyName("description")] public string description { get; init; }
+
+    [JsonPropertyName("fields")] public List<FField> fields { get; init; }
 }
