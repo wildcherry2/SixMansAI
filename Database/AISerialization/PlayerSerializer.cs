@@ -8,7 +8,9 @@ namespace Database.AISerialization {
             { ESeason.JUNE22, new SeasonTimes(DateTime.Parse(@"2022-06-30T15:29:00-04:00"), DateTime.Parse(@"2022-05-31T15:30:00-04:00")) },
             { ESeason.MAY22, new SeasonTimes(DateTime.Parse(@"2022-05-31T15:30:00-04:00"), DateTime.Parse(@"2022-04-30T15:30:00-04:00")) },
             { ESeason.APRIL22, new SeasonTimes(DateTime.Parse(@"2022-04-30T15:30:00-04:00"), DateTime.Parse(@"2022-03-31T15:30:00-04:00")) },
-            { ESeason.MARCH22, new SeasonTimes(DateTime.Parse(@"2022-03-31T15:30:00-04:00"), DateTime.Parse(@"2022-02-28T15:30:00-05:00")) }
+            { ESeason.MARCH22, new SeasonTimes(DateTime.Parse(@"2022-03-31T15:30:00-04:00"), DateTime.Parse(@"2022-02-28T15:30:00-05:00")) },
+            { ESeason.FEBRUARY22, new SeasonTimes(DateTime.Parse(@"2022-02-28T15:30:00-05:00"), DateTime.Parse(@"2022-01-31T15:30:00-05:00")) },
+            { ESeason.JANUARY22, new SeasonTimes(DateTime.Parse(@"2022-01-31T15:30:00-05:00"), DateTime.Parse(@"2022-01-02T15:30:00-05:00")) }
         };
 
         public static string SerializePlayer(in DPlayer player, in DateTime queue_time) {
@@ -18,7 +20,7 @@ namespace Database.AISerialization {
                 if (IsGameInSeasonSoFar(record, GetSeasonFromTime(queue_time), queue_time)) { SerializeRecord(record, ref season_wins, ref season_losses); }
             }
 
-            return $"{season_wins} {season_losses} {player.iTotalWins} {player.iTotalLosses}";
+            return $"{season_wins},{season_losses},{player.iTotalWins},{player.iTotalLosses}";
         }
 
         private static void SerializeRecord(in FGameRecord? record, ref int wins, ref int losses) {
@@ -48,6 +50,10 @@ namespace Database.AISerialization {
 
             if (time > seasons[ESeason.MARCH22].after && time < seasons[ESeason.MARCH22].before) { return ESeason.MARCH22; }
 
+            if (time > seasons[ESeason.FEBRUARY22].after && time < seasons[ESeason.FEBRUARY22].before) { return ESeason.FEBRUARY22; }
+
+            if (time > seasons[ESeason.JANUARY22].after && time < seasons[ESeason.JANUARY22].before) { return ESeason.JANUARY22; }
+
             return ESeason.UNKNOWN;
         }
     }
@@ -67,6 +73,8 @@ namespace Database.AISerialization {
         MAY22,
         APRIL22,
         MARCH22,
+        FEBRUARY22,
+        JANUARY22,
         UNKNOWN
     }
 }

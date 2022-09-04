@@ -23,7 +23,7 @@ namespace Database.AISerialization {
 
         // TODO: check for subs
         private static string SerializeTeams(in DQueue queue) {
-            var ret_val    = "{";
+            var ret_val    = "";
             var queue_time = queue.teams_picked_message.timestamp;
             ret_val += $"{PlayerSerializer.SerializePlayer(queue.team_one.player_one!, queue_time!.Value)},";
             ret_val += $"{PlayerSerializer.SerializePlayer(queue.team_one.player_two!, queue_time!.Value)},";
@@ -31,7 +31,7 @@ namespace Database.AISerialization {
             ret_val += $"{PlayerSerializer.SerializePlayer(queue.team_two.player_one!, queue_time!.Value)},";
             ret_val += $"{PlayerSerializer.SerializePlayer(queue.team_two.player_two!, queue_time!.Value)},";
             ret_val += $"{PlayerSerializer.SerializePlayer(queue.team_two.player_three!, queue_time!.Value)}";
-            ret_val += "}";
+            //ret_val += "";
 
             return ret_val;
         }

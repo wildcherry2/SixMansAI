@@ -7,6 +7,7 @@ namespace Database {
             var core = DDatabaseCore.GetSingleton();
             core.BuildDatabase(true);
             AISerializerCore.GetSingleton().Serialize(@"C:\Users\tyler\Documents\Programming\AI\SixMans\Reports");
+
         }
     }
 }

@@ -4,14 +4,15 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>e870d680-b88a-4570-a123-20fb4ec98d6a</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>AIModel.py</StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>AIModel</Name>
     <RootNamespace>AIModel</RootNamespace>
-    <InterpreterId>CondaEnv|CondaEnv|TensorFlow2</InterpreterId>
+    <InterpreterId>CondaEnv|CondaEnv|ai</InterpreterId>
+    <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,10 +23,13 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AIModel.py" />
+    <Compile Include="main.py" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="CondaEnv|CondaEnv|TensorFlow2" />
+    <InterpreterReference Include="CondaEnv|CondaEnv|ai" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="data_9_3_2022 11-34-57 AM.csv" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
