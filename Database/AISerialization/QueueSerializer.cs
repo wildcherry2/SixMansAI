@@ -1,5 +1,6 @@
 ﻿using Database.Database.DatabaseCore.MainComponents;
 using Database.Database.Enums;
+using MathNet.Numerics.Statistics;
 
 namespace Database.AISerialization; 
 
@@ -17,10 +18,14 @@ public static class QueueSerializer {
         if (!QueueValidator.IsQueueValid(queue)) { return ""; }
 
         var ret_val = "";
-        ret_val += SerializeTeams(queue) + ",";
-        ret_val += SerializeWinner(queue);
+        ret_val += SerializeTeams(queue);
+        if (ret_val.Length > 0) {
+            ret_val += "," + SerializeWinner(queue);
 
-        return ret_val;
+            return ret_val;
+        }
+
+        return "";
     }
 
     private static string SerializeWinner(in DQueue queue) { return queue.winner == ETeamLabel.TEAM_ONE ? "0" : "1"; }
@@ -38,7 +43,74 @@ public static class QueueSerializer {
         ret_val += $"{PlayerSerializer.SerializePlayer(queue.team_two.player_three!, queue_time!.Value, EPlayerNumber.SIX, ref mq)}";
         //ret_val += "";
         mqueues.Add(mq);
-        return ret_val;
+        return PostCalcs(mq);
+    }
+
+    public static string PostCalcs(in MiniQueue q) {
+        const int query = 1;
+        Console.ForegroundColor = ConsoleColor.White;
+
+            if (q.one_wins + q.one_losses < query ||
+                q.two_wins + q.two_losses < query ||
+                q.three_wins + q.three_losses < query ||
+                q.four_wins + q.four_losses < query ||
+                q.five_wins + q.five_losses < query ||
+                q.six_wins + q.six_losses < query)
+                return "";
+
+            var samples = new List<double>();
+            samples.Add(q.one_wins - q.one_losses);
+            samples.Add(q.two_wins - q.two_losses);
+            samples.Add(q.three_wins - q.three_losses);
+            samples.Add(q.four_wins - q.four_losses);
+            samples.Add(q.five_wins - q.five_losses);
+            samples.Add(q.six_wins - q.six_losses);
+            var sd       = samples.StandardDeviation();
+            var mean     = samples.Mean();
+            var z_scores = new List<double>();
+            z_scores.Add(CalculateZScore(samples[0], mean, sd));
+            z_scores.Add(CalculateZScore(samples[1], mean, sd));
+            z_scores.Add(CalculateZScore(samples[2], mean, sd));
+            z_scores.Add(CalculateZScore(samples[3], mean, sd));
+            z_scores.Add(CalculateZScore(samples[4], mean, sd));
+            z_scores.Add(CalculateZScore(samples[5], mean, sd));
+            double t1_bias = 0.0, t2_bias = 0.0;
+
+            GetBiases(ref t1_bias, ref t2_bias, ref z_scores);
+
+            return ($"{Math.Round(z_scores[0], 15, MidpointRounding.AwayFromZero)},{Math.Round(z_scores[1], 15, MidpointRounding.AwayFromZero)},{Math.Round(z_scores[2], 15, MidpointRounding.AwayFromZero)},{Math.Round(t1_bias, 15, MidpointRounding.AwayFromZero)}," +
+                    $"{Math.Round(z_scores[3], 15, MidpointRounding.AwayFromZero)},{Math.Round(z_scores[4], 15, MidpointRounding.AwayFromZero)},{Math.Round(z_scores[5], 15, MidpointRounding.AwayFromZero)},{Math.Round(t2_bias, 15, MidpointRounding.AwayFromZero)}");
+
+    }
+
+    private static double CalculateZScore(in double value, in double sample_mean, in double sd) {
+        return (value - sample_mean) / sd;
+    }
+    private static void GetBiases(ref double t1_out, ref double t2_out, ref List<double> z_scores) {
+        var t1_avg = new List<double>() {
+            z_scores[0],
+            z_scores[1],
+            z_scores[2]
+        }.Mean();
+        var t2_avg = new List<double>() {
+            z_scores[3],
+            z_scores[4],
+            z_scores[5]
+        }.Mean();
+
+        var skill_gap = t1_avg - t2_avg;
+        Console.WriteLine($"Queue with skill gap = {skill_gap}");
+        
+        // double - int floored version to separate fractals, keep fractals below 1 by using the same method after adding to it
+        if (skill_gap > 0) {
+            // Team one is higher rated than team two
+            t1_out = (skill_gap * skill_gap) / 8.0;
+        }
+
+        else if (skill_gap < 0) {
+            // Team two is higher rated than team one
+            t2_out = (skill_gap * skill_gap) / 8.0;
+        }
     }
 }
 

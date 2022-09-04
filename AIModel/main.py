@@ -41,13 +41,9 @@ def model_builder(hp):
 
   return model
 
-all_data = panda.read_csv("C:\\Users\\tyler\Documents\\Programming\\AI\\SixMans\\Database\\AIModel\\data_9_3_2022 11-34-57 AM.csv",
-                          names=["T1P1 Season Wins","T1P1 Season Losses","T1P1 Total Wins","T1P1 Total Losses",
-                                 "T1P2 Season Wins","T1P2 Season Losses","T1P2 Total Wins","T1P2 Total Losses",
-                                 "T1P3 Season Wins","T1P3 Season Losses","T1P3 Total Wins","T1P3 Total Losses",
-                                 "T2P1 Season Wins","T2P1 Season Losses","T2P1 Total Wins","T2P1 Total Losses",
-                                 "T2P2 Season Wins","T2P2 Season Losses","T2P2 Total Wins","T2P2 Total Losses",
-                                 "T2P3 Season Wins","T2P3 Season Losses","T2P3 Total Wins","T2P3 Total Losses",
+all_data = panda.read_csv("C:\Users\tyler\Documents\Programming\AI\SixMans\Database\AIModel\data_9_4_2022 1-19-40 PM.csv",
+                          names=["T1P1 Relative Rank","T1P2 Relative Rank","T1P3 Relative Rank","T1 Bias",
+                                 "T2P1 Relative Rank","T2P2 Relative Rank","T2P3 Relative Rank","T2 Bias",
                                  "Winner"])
 features = all_data.copy();
 labels = features.pop("Winner")
