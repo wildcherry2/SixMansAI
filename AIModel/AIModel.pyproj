@@ -4,14 +4,14 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>e870d680-b88a-4570-a123-20fb4ec98d6a</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>main.py</StartupFile>
+    <StartupFile>mainV2.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>AIModel</Name>
     <RootNamespace>AIModel</RootNamespace>
-    <InterpreterId>CondaEnv|CondaEnv|ai</InterpreterId>
+    <InterpreterId>Global|VisualStudio|ai</InterpreterId>
     <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -24,12 +24,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="main.py" />
+    <Compile Include="mainV2.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="CondaEnv|CondaEnv|ai" />
+    <InterpreterReference Include="Global|VisualStudio|ai" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="data_9_4_2022 1-19-40 PM.csv" />
+    <Content Include="data_9_4_2022 2-04-07 PM.csv" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
