@@ -19,15 +19,21 @@ public class AISerializerCore {
         var queues = DDatabaseCore.GetSingleton().all_queues;
         if (queues == null) { return; }
 
-        var name = MakeFileName();
+        var success = 0;
+        var name    = MakeFileName();
         File.Create(path + name).Close();
         var sw = new StreamWriter(path + name);
         foreach (var q in queues) {
             var ret = QueueSerializer.GetQueueString(q);
-            if (ret.Length > 0) { sw.WriteLine(ret); }
+            if (ret.Length > 0) { 
+                sw.WriteLine(ret);
+                success++;
+            }
         }
 
         sw.Close();
+
+        Console.WriteLine($"Wrote {success} queues out of {queues.Count}");
     }
 
     private string MakeFileName() {

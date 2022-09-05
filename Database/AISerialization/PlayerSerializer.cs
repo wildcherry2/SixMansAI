@@ -21,7 +21,7 @@ public static class PlayerSerializer {
             if (IsGameInSeasonSoFar(record, GetSeasonFromTime(queue_time), queue_time)) { SerializeRecord(record, ref season_wins, ref season_losses); }
         }
 
-        return $"{season_wins},{season_losses},{player.iTotalWins},{player.iTotalLosses}";
+        return $"{season_wins - season_losses},{player.iTotalWins - player.iTotalLosses}";
     }
 
     public static string SerializePlayer(in DPlayer player, in DateTime queue_time, in EPlayerNumber number, ref MiniQueue meta) {
@@ -58,7 +58,7 @@ public static class PlayerSerializer {
                 break;
         }
 
-        return $"{season_wins},{season_losses},{player.iTotalWins},{player.iTotalLosses}";
+        return $"{season_wins - season_losses},{season_wins + season_losses},{player.iTotalWins - player.iTotalLosses},{player.iTotalWins + player.iTotalLosses}";
     }
 
     private static void SerializeRecord(in FGameRecord? record, ref int wins, ref int losses) {
@@ -77,7 +77,7 @@ public static class PlayerSerializer {
         return date < limit && date > seasons[season].after;
     }
 
-    private static ESeason GetSeasonFromTime(in DateTime time) {
+    public static ESeason GetSeasonFromTime(in DateTime time) {
         if (time > seasons[ESeason.JULY22].after && time < seasons[ESeason.JULY22].before) { return ESeason.JULY22; }
 
         if (time > seasons[ESeason.JUNE22].after && time < seasons[ESeason.JUNE22].before) { return ESeason.JUNE22; }
