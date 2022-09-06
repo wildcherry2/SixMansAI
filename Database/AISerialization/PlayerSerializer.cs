@@ -5,6 +5,7 @@ namespace Database.AISerialization;
 
 public static class PlayerSerializer {
     public static Dictionary<ESeason, SeasonTimes> seasons = new() {
+        { ESeason.AUGUST22, new SeasonTimes(DateTime.Parse(@"2022-08-31T15:30:00-04:00"), DateTime.Parse(@"2022-07-31T18:30:00-04:00")) },
         { ESeason.JULY22, new SeasonTimes(DateTime.Parse(@"2022-07-31T18:30:00-04:00"), DateTime.Parse(@"2022-06-30T15:30:00-04:00")) },
         { ESeason.JUNE22, new SeasonTimes(DateTime.Parse(@"2022-06-30T15:29:00-04:00"), DateTime.Parse(@"2022-05-31T15:30:00-04:00")) },
         { ESeason.MAY22, new SeasonTimes(DateTime.Parse(@"2022-05-31T15:30:00-04:00"), DateTime.Parse(@"2022-04-30T15:30:00-04:00")) },
@@ -78,6 +79,8 @@ public static class PlayerSerializer {
     }
 
     public static ESeason GetSeasonFromTime(in DateTime time) {
+        if (time > seasons[ESeason.AUGUST22].after && time < seasons[ESeason.AUGUST22].before) { return ESeason.AUGUST22; }
+
         if (time > seasons[ESeason.JULY22].after && time < seasons[ESeason.JULY22].before) { return ESeason.JULY22; }
 
         if (time > seasons[ESeason.JUNE22].after && time < seasons[ESeason.JUNE22].before) { return ESeason.JUNE22; }
@@ -106,6 +109,7 @@ public class SeasonTimes {
 }
 
 public enum ESeason {
+    AUGUST22,
     JULY22,
     JUNE22,
     MAY22,

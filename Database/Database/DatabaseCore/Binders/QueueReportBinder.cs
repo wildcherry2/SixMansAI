@@ -1,4 +1,5 @@
-﻿using Database.Database.DatabaseCore.Factories;
+﻿using Database.AISerialization;
+using Database.Database.DatabaseCore.Factories;
 using Database.Database.DatabaseCore.MainComponents;
 using Database.Database.Enums;
 using Database.Database.Interfaces;
@@ -40,10 +41,14 @@ public class QueueReportBinder : ILogger {
         foreach (var queue in core.all_queues) {
             var found = false;
             foreach (var report in core.all_score_reports) {
-                if (queue.match_id == report.iMatchId) {
-                    queue.score_report = report;
-                    SetWinnerInQueue(queue);
-                    found = true;
+                if (queue.match_id == report.iMatchId && 
+                    !ReferenceEquals(queue.teams_picked_message, null) && !ReferenceEquals(report.report_msg, null) && 
+                    PlayerSerializer.GetSeasonFromTime(queue.teams_picked_message.timestamp!.Value) == PlayerSerializer.GetSeasonFromTime(report.report_msg.timestamp!.Value)) {
+                        queue.score_report = report;
+                        SetWinnerInQueue(queue);
+                        found = true;
+
+                        break;
                 }
             }
 
@@ -57,8 +62,8 @@ public class QueueReportBinder : ILogger {
         }
 
         Log("{0} rank b queues bound to reports, {1} rank b queues not accounted for!", (core.all_queues.Count - err_count).ToString(), err_count.ToString());
-        Log("Printing problem queues...");
-        foreach (var queue in problems) { Log(queue.ToString()); }
+        //Log("Printing problem queues...");
+        //foreach (var queue in problems) { Log(queue.ToString()); }
 
         bIsComplete = true;
     }

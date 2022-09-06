@@ -8,10 +8,14 @@ from sklearn.model_selection import train_test_split
 from matplotlib import pyplot
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
-all_data = panda.read_csv(r"C:\Users\tyler\Documents\Programming\AI\SixMans\Reports\data_9_5_2022 2-17-06 AM.csv",
-                          names=["T1P1 Relative Rank","T1P2 Relative Rank","T1P3 Relative Rank",
-                                 "T2P1 Relative Rank","T2P2 Relative Rank","T2P3 Relative Rank",
-                                 "Winner"])
+all_data = panda.read_csv(r"C:\Users\tyler\Documents\Programming\AI\SixMans\Reports\data_9_5_2022 11-14-53 PM.csv",
+                          names=["T1P1 Season Differential","T1P1 Season Total","T1P1 Overall Differential", "T1P1 Total Games",
+                                 "T1P2 Season Differential","T1P2 Season Total","T1P2 Overall Differential", "T1P2 Total Games",
+                                 "T1P3 Season Differential","T1P3 Season Total","T1P3 Overall Differential", "T1P3 Total Games",
+                                 "T2P1 Season Differential","T2P1 Season Total","T2P1 Overall Differential", "T2P1 Total Games",
+                                 "T2P2 Season Differential","T2P2 Season Total","T2P2 Overall Differential", "T2P2 Total Games",
+                                 "T2P3 Season Differential","T2P3 Season Total","T2P3 Overall Differential", "T2P3 Total Games",
+                                 "Day", "Winner"])
 
 features = all_data.copy();
 labels = features.pop("Winner")
@@ -23,7 +27,7 @@ pyplot.ylabel('Loss')
 
 
 def DoTrain(num_nodes, train_color, num_epochs = 128, num_layers = 8, initializer = "he_uniform"):
-    features_train, features_test, labels_train, labels_test = train_test_split(features, labels, test_size=0.33)
+    features_train, features_test, labels_train, labels_test = train_test_split(features, labels, test_size=0.3)
     model = Sequential()
     ret = ""
     for x in range(0, num_layers):
@@ -31,7 +35,7 @@ def DoTrain(num_nodes, train_color, num_epochs = 128, num_layers = 8, initialize
 
     model.add(Dense(1, activation='sigmoid'))
     model.compile(optimizer=tf.keras.optimizers.Adam(), loss=tf.keras.losses.Huber(), metrics=["accuracy"])
-    hist = model.fit(features_train, labels_train, epochs=num_epochs, batch_size=32, shuffle=True, validation_split=0.3)
+    hist = model.fit(features_train, labels_train, epochs=num_epochs, batch_size=32, validation_split=0.3)
     loss, acc = model.evaluate(features_test, labels_test)
     pyplot.plot(hist.history['loss'],train_color, label='N = ' + str(num_nodes) + ', L = ' + str(num_layers) + ' Training loss')
     pyplot.plot(hist.history['val_loss'],train_color, label='N = ' + str(num_nodes) + ', L = ' + str(num_layers) + ' Validation loss')
@@ -41,12 +45,12 @@ def DoTrain(num_nodes, train_color, num_epochs = 128, num_layers = 8, initialize
 
 results = ""
 
-results += DoTrain(6,'#02c775', 256, 6, "he_normal")
-results += DoTrain(6,'#0000FF', 256, 5, "he_normal")
-results += DoTrain(6,'#42f548', 256, 4, "he_normal")
-results += DoTrain(6,'#fff370', 256, 3, "he_normal")
-results += DoTrain(6,'#fc0303', 256, 2, "he_normal")
-results += DoTrain(8,'#8902c7', 256, 8, "he_normal")
+results += DoTrain(25,'#02c775', 256, 25) #this was pretty good 
+results += DoTrain(25,'#0000FF', 256, 30)
+results += DoTrain(25,'#42f548', 256, 35)
+results += DoTrain(25,'#fff370', 256, 40)
+#results += DoTrain(6,'#fc0303', 256, 2, "he_normal")
+#results += DoTrain(8,'#8902c7', 256, 8, "he_normal")
 
 print(results)
 pyplot.legend()
