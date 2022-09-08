@@ -1,0 +1,12 @@
+(25,30) Adam(amsgrad = true, learning_rate = 0.01) TL = 0.12452010810375214
+(25,30) Adam(amsgrad = true, learning_rate = 0.01) TA = 0.5321485996246338
+(25,30) Adam(amsgrad = true, learning_rate = 0.001) TL = 0.22778674960136414
+(25,30) Adam(amsgrad = true, learning_rate = 0.001) TA = 0.5444265007972717
+(25,30) Adam(amsgrad = true, learning_rate = 0.0001) TL = 0.16015949845314026
+(25,30) Adam(amsgrad = true, learning_rate = 0.0001) TA = 0.5111470222473145
+(25,30) Adam(learning_rate = 0.01) TL = 0.12438572198152542
+(25,30) Adam(learning_rate = 0.01) TA = 0.5350565314292908
+(25,30) Adam(learning_rate = 0.001) TL = 0.13807733356952667
+(25,30) Adam(learning_rate = 0.001) TA = 0.5670436024665833
+(25,30) Adam(learning_rate = 0.0001) TL = 0.1709403693675995
+(25,30) Adam(learning_rate = 0.0001) TA = 0.5198707580566406
