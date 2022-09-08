@@ -62,23 +62,23 @@ def OnPick(event):
     fig.canvas.draw()
 
 results = ""
-results += DoTrain(25,'#fff370', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, amsgrad=True), "Adam(amsgrad = true, epsilon = 1e-7)")
-results += DoTrain(25,'#fc0303', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01), "Adam(epsilon = 1e-7)") 
+#results += DoTrain(25,'#fff370', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, amsgrad=True), "Adam(amsgrad = true, epsilon = 1e-7)")
+#results += DoTrain(25,'#fc0303', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01), "Adam(epsilon = 1e-7)") 
 
-results += DoTrain(25,'#8902c7', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, amsgrad=True, epsilon=1e-6), "Adam(amsgrad = true, epsilon = 1e-6)")
-results += DoTrain(25,'#4287f5', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, epsilon=1e-6), "Adam(epsilon = 1e-6)")
+results += DoTrain(25,'#8902c7', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, amsgrad=True, epsilon=1e-1), "Adam(amsgrad = true, epsilon = 0.1)")
+results += DoTrain(25,'#4287f5', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, epsilon=1e-1), "Adam(epsilon = 0.1)")
 
-results += DoTrain(25,'#02c775', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, amsgrad=True, epsilon=1e-5), "Adam(amsgrad = true, epsilon = 1e-5)")
-results += DoTrain(25,'#0000FF', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, epsilon = 1e-5), "Adam(epsilon = 1e-5)")
+results += DoTrain(25,'#02c775', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, amsgrad=True, epsilon=0.5), "Adam(amsgrad = true, epsilon = 0.5)")
+results += DoTrain(25,'#0000FF', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, epsilon = 0.5), "Adam(epsilon = 0.5)")
 #results += "\n"
-results += DoTrain(25,'#90eef5', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, amsgrad=True, epsilon=1e-4), "Adam(amsgrad = true, epsilon = 1e-4)")
-results += DoTrain(25,'#eb4034', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, epsilon=1e-4), "Adam(epsilon = 1e-4)")
+results += DoTrain(25,'#90eef5', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, amsgrad=True, epsilon=1), "Adam(amsgrad = true, epsilon = 1)")
+results += DoTrain(25,'#eb4034', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, epsilon=1), "Adam(epsilon = 1)")
 
-results += DoTrain(25,'#32a852', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, amsgrad=True, epsilon=1e-3), "Adam(amsgrad = true, epsilon = 1e-3)")
-results += DoTrain(25,'#f740b1', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, epsilon=1e-3), "Adam(epsilon = 1e-3)")
+#results += DoTrain(25,'#32a852', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, amsgrad=True, epsilon=1e-3), "Adam(amsgrad = true, epsilon = 1e-3)")
+#results += DoTrain(25,'#f740b1', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, epsilon=1e-3), "Adam(epsilon = 1e-3)")
 
-results += DoTrain(25,'#116d58', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, amsgrad=True, epsilon=1e-2), "Adam(amsgrad = true, epsilon = 1e-2)")
-results += DoTrain(25,'#576764', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, epsilon=1e-2), "Adam(epsilon = 1e-2)")
+#results += DoTrain(25,'#116d58', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, amsgrad=True, epsilon=1e-2), "Adam(amsgrad = true, epsilon = 1e-2)")
+#results += DoTrain(25,'#576764', 100, 30, "he_uniform", tf.keras.optimizers.Adam(learning_rate=0.01, epsilon=1e-2), "Adam(epsilon = 1e-2)")
 
 print(results)
 legend = pyplot.legend()
@@ -98,34 +98,3 @@ res_str_save.write(results)
 res_str_save.close()
 pyplot.connect('pick_event', OnPick)
 pyplot.show()
-
-'''
-BINARY CROSSENTROPY
-
-10 x 8
-Test Accuracy: 0.507
-Test Loss: 0.918
-
-12 x 8
-Test Accuracy: 0.490
-Test Loss: 1.382
-
-12 x 7
-Test Accuracy: 0.515
-Test Loss: 1.140
-
-14 x 8
-Test Accuracy: 0.517
-Test Loss: 1.961
-'''
-
-'''
-HUBER
-8 x 8 (swish)
-Test Accuracy: 0.507
-Test Loss: 0.147
-
-8 x 8 (relu)
-Test Accuracy: 0.510
-Test Loss: 0.142
-'''

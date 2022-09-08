@@ -1,0 +1,12 @@
+(25,30) Adam(amsgrad = true, epsilon = 0.1) TL = 0.1261366605758667
+(25,30) Adam(amsgrad = true, epsilon = 0.1) TA = 0.5450726747512817
+(25,30) Adam(epsilon = 0.1) TL = 0.26865869760513306
+(25,30) Adam(epsilon = 0.1) TA = 0.46268174052238464
+(25,30) Adam(amsgrad = true, epsilon = 0.5) TL = 0.12635789811611176
+(25,30) Adam(amsgrad = true, epsilon = 0.5) TA = 0.5069466829299927
+(25,30) Adam(epsilon = 0.5 TL = 0.12501247227191925
+(25,30) Adam(epsilon = 0.5 TA = 0.5289176106452942
+(25,30) Adam(amsgrad = true, epsilon = 1) TL = 0.1253068745136261
+(25,30) Adam(amsgrad = true, epsilon = 1) TA = 0.5395799875259399
+(25,30) Adam(epsilon = 1) TL = 0.12639090418815613
+(25,30) Adam(epsilon = 1) TA = 0.5250403881072998
