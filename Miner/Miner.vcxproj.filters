@@ -13,25 +13,55 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{6e8d5f50-949e-4092-b6b9-9a9429cb7aad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Enums">
+      <UniqueIdentifier>{bb6c57d9-f9d1-4c4f-bd28-b82b13454fb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{8895729d-86bd-4a5d-bde2-a3d140031f47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Serializers">
+      <UniqueIdentifier>{3681e7f5-3ba6-4edd-a24c-15cc695233ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Serializers">
+      <UniqueIdentifier>{5022e36a-0d4b-41e6-9bbc-ca8498c75532}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AMessage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="APlayer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="AData.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="EMessageType.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="AMessage.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="APlayer.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="AQueue.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="ESeason.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Enums</Filter>
     </ClInclude>
-    <ClInclude Include="AData.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="ETeamTag.h">
+      <Filter>Header Files\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="EMessageType.h">
+      <Filter>Header Files\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="QueueSerializer.h">
+      <Filter>Header Files\Serializers</Filter>
+    </ClInclude>
+    <ClInclude Include="ISerializer.h">
+      <Filter>Header Files\Serializers</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreReportSerializer.h">
+      <Filter>Header Files\Serializers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -41,8 +71,20 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="APlayerMessage.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="AMessage.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="AQueue.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="APlayer.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="QueueSerializer.cpp">
+      <Filter>Source Files\Serializers</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreReportSerializer.cpp">
+      <Filter>Source Files\Serializers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

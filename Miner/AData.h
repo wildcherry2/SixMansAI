@@ -1,21 +1,24 @@
 #pragma once
 #include "pch.h"
-struct AData {
-    protected:
-        bool is_valid = true;
-        string log_prefix = "[<NotSet>]";
 
-    public:
-        void Log(const string& str) const noexcept {
-            cout << log_prefix << " " << str << "\n";
-        }
+namespace Components {
+    struct AData {
+        protected:
+            bool is_valid = true;
+            string log_prefix = "[<NotSet>]";
 
-        void Invalidate(bool new_is_valid = false) { is_valid = new_is_valid; }
+        public:
+            virtual ~AData() = default;
 
-        [[nodiscard]] bool IsValid() const noexcept { return is_valid; }
+            void    Log(const string& str) const noexcept {
+                cout << log_prefix << " " << str << "\n";
+            }
 
-        operator bool() const noexcept { return is_valid; }
+            [[nodiscard]] bool IsValid() const noexcept { return is_valid; }
+            operator bool() const noexcept { return is_valid; }
+            void Invalidate(bool new_is_valid = false) { is_valid = new_is_valid; }
 
-    protected:
-        explicit AData(const string& logPrefix) : log_prefix(logPrefix) {}
-};
+        protected:
+            explicit AData(const string& logPrefix) : log_prefix(logPrefix) {}
+    };
+}
