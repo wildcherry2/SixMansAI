@@ -142,6 +142,9 @@
     <ClInclude Include="ESeason.h" />
     <ClInclude Include="AData.h" />
     <ClInclude Include="ETeamTag.h" />
+    <ClInclude Include="FScoreReport.h" />
+    <ClInclude Include="FSeason.h" />
+    <ClInclude Include="FTeam.h" />
     <ClInclude Include="ISerializer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="AMessage.h" />

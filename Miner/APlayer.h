@@ -1,17 +1,19 @@
 #pragma once
 #include "AData.h"
+#include "AQueue.h"
+#include "FSeason.h"
 
 namespace Components {
     class APlayer : public AData {
         public:
             struct FPlayerRecordEntry {
-                int  match_id = 0;
-                bool bWon = false;
-                Season season;
+                int              match_id = 0;
+                bool             bWon     = false;
+                Structs::FSeason season;
                 /* pointer to queue struct */
             };
 
-            using Record = vector<FPlayerRecordEntry>;
+            APlayer() : AData("[APlayer]"){ is_valid = false; }
 
             APlayer(const string& name, const string& nickname = "", const uint64_t& discord_id = 0) : AData("[APlayer]") {
                 if(name.empty() or discord_id == 0) is_valid = false;
@@ -21,24 +23,20 @@ namespace Components {
                 }
             }
 
-            void AddName(std::convertible_to<std::string_view> auto&& ...name_list); /*{
-                for(auto str : std::initializer_list<std::string_view>{ name_list... }) {
-                    names.push_back(string(str));
-                }
-            }*/
+            void AddName(std::convertible_to<std::string_view> auto&& ...name_list); 
             bool HasName(const std::string& name) const;
             void IncrementTotalLosses() noexcept { total_losses++; }
             void IncrementTotalWins() noexcept { total_wins++; }
 
-            [[nodiscard]] const FPlayerRecordEntry* GetRecordEntry(const int& match_id) const;
-            [[nodiscard]] const list<FPlayerRecordEntry> GetRecordsFromSeason(const Season& season) const;
-            [[nodiscard]] const int& GetTotalLosses() const { return total_losses; }
-            [[nodiscard]] const int& GetTotalWins() const { return total_wins; }
-            [[nodiscard]] const uint64_t& GetDiscordId() const { return discord_id; }
+            [[nodiscard]] const FPlayerRecordEntry*      GetRecordEntry(const int& match_id) const;
+            [[nodiscard]] const list<FPlayerRecordEntry> GetRecordsFromSeason(const Structs::FSeason& season) const;
+            [[nodiscard]] const int&                     GetTotalLosses() const { return total_losses; }
+            [[nodiscard]] const int&                     GetTotalWins() const { return total_wins; }
+            [[nodiscard]] const uint64_t&                GetDiscordId() const { return discord_id; }
 
         private:
             vector<string> names;
-            Record         record;
+            vector<FPlayerRecordEntry>         record;
             int            total_wins = 0;
             int            total_losses = 0;
             uint64_t discord_id = 0;

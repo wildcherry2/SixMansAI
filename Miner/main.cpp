@@ -2,8 +2,8 @@
 #include "AMessage.h"
 
 int main() {
-    auto msg = AMessage();
-    int tp = 1;
+    auto msg = Components::AMessage();
+    int  tp  = 1;
     msg.Log("test");
     return 0;
 }

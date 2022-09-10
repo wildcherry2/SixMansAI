@@ -28,6 +28,9 @@
     <Filter Include="Source Files\Serializers">
       <UniqueIdentifier>{5022e36a-0d4b-41e6-9bbc-ca8498c75532}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Structs">
+      <UniqueIdentifier>{2adbbc55-d7da-4963-a92f-325da07be110}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -62,6 +65,15 @@
     </ClInclude>
     <ClInclude Include="ScoreReportSerializer.h">
       <Filter>Header Files\Serializers</Filter>
+    </ClInclude>
+    <ClInclude Include="FSeason.h">
+      <Filter>Header Files\Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="FScoreReport.h">
+      <Filter>Header Files\Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="FTeam.h">
+      <Filter>Header Files\Structs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

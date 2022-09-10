@@ -1,5 +1,8 @@
 #include "pch.h"
+#pragma once
 #include "ScoreReportSerializer.h"
+
+
 
 shared_ptr<Components::AData> Serializers::ScoreReportSerializer::Serialize(const json& src) {
     return shared_ptr<AData>();

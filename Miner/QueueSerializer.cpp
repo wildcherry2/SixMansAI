@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "QueueSerializer.h"
 
+
+
 Serializers::QueueSerializer::QueueSerializer() : ISerializer("[QueueSerializer]") {
     
 }

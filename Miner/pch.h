@@ -36,10 +36,3 @@ using std::ofstream;
 using std::format;
 using std::list;
 using std::regex;
-
-class APlayer;
-enum class ETeamTag;
-using Season = tuple<EMonth, EYear>;
-using Team = tuple<APlayer, APlayer, APlayer>;
-using Lobby = tuple<Team, Team>;
-using ScoreReport = tuple<int, Lobby, ETeamTag>;
