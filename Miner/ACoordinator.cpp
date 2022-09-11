@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "ACoordinator.h"
-
+#include "AMessage.h"
 #include "MessageSerializer.h"
 
 Components::ACoordinator::ACoordinator() : AData("[ACoordinator]"){}
@@ -15,10 +15,13 @@ void Components::ACoordinator::SerializeMessagesInFile(const path& file) {
     ifstream js_file(file);
     json parent;
     js_file >> parent;
-
+    int count = 0;
     for(auto& msg : parent["messages"]) {
-        auto res = message_serializer->Serialize(msg);
+        auto res = dynamic_pointer_cast<AMessage>(message_serializer->Serialize(msg));
+        //if(res) cout << res->ToString() << "\n\n";
+        count++;
     }
+    cout << std::to_string(count);
 }
 
 shared_ptr<Components::ACoordinator> Components::ACoordinator::singleton;

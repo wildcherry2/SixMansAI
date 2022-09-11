@@ -1,5 +1,4 @@
 #include "pch.h"
-#pragma once
 #include "AMessage.h"
 
 void Components::AMessage::SetMessageType() {
@@ -8,7 +7,7 @@ void Components::AMessage::SetMessageType() {
     }
 
     else {
-        if(embedded_message->fields.empty()) is_valid = false;
+        if(!embedded_message) is_valid = false;
         else {
             const auto& desc = embedded_message->description;
             if(desc.find(") has joined.") != string::npos)
@@ -25,4 +24,25 @@ void Components::AMessage::SetMessageType() {
     }
 
     is_valid = type != EMessageType::OTHER && type != EMessageType::NOT_SET;
+}
+
+string Components::AMessage::GetMessageTypeLabel() const {
+    switch(type){
+        case EMessageType::PM_QUEUE:
+            return "PM_QUEUE";
+        case EMessageType::PM_LEAVE:
+            return "PM_LEAVE";
+        case EMessageType::BOT_QUEUE:
+            return "BOT_QUEUE";
+        case EMessageType::BOT_LEAVE:
+            return "BOT_LEAVE";
+        case EMessageType::BOT_VOTING_COMPLETE:
+            return "BOT_VOTING_COMPLETE";
+        case EMessageType::BOT_TEAMS_PICKED:
+            return "BOT_TEAMS_PICKED";
+        case EMessageType::OTHER:
+            return "OTHER";
+        default:
+            return "NOT_SET";
+    }
 }

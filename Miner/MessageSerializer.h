@@ -9,14 +9,18 @@ namespace Serializers {
 
             auto RemoveQuotes(std::convertible_to<string> auto&& ... in) {
                 ([&] {
-                    if((*in.begin()) == '\"') in.erase(in.begin());
-                    if((*(in.end() - 1)) == '\"') in.erase(in.end() - 1);
+                    if(!in.empty()){
+                        if((*in.begin()) == '\"') in.erase(in.begin());
+                        if((*(in.end() - 1)) == '\"') in.erase(in.end() - 1);
+                    }
                 }(),...);
             }
 
             auto RemoveQuotes(std::convertible_to<string> auto&& in) {
-                if((*in.begin()) == '\"') in.erase(in.begin());
-                if((*(in.end() - 1)) == '\"') in.erase(in.end() - 1);
+                if(!in.empty()){
+                    if((*in.begin()) == '\"') in.erase(in.begin());
+                    if((*(in.end() - 1)) == '\"') in.erase(in.end() - 1);
+                }
                 return in;
             }
 

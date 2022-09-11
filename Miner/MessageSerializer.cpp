@@ -53,6 +53,7 @@ bool Serializers::MessageSerializer::SetTrivialData(const json& src, const share
 bool Serializers::MessageSerializer::SetEmbeds(const json& src, const shared_ptr<Components::AMessage>& msg) {
     try {
         auto                                     the_embed = src["embeds"];
+        if(!the_embed.empty()) the_embed = the_embed[0];
         shared_ptr<Components::AMessage::FEmbed> embed;
         if (!the_embed.empty()) {
             string              title       = the_embed["title"];

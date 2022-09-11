@@ -14,8 +14,8 @@ namespace Components {
             };
 
         private:
-            string sender_name;
-            string sender_nickname;
+            string sender_name = "";
+            string sender_nickname = "";
             string content;
             uint64_t sender_discord_id = 0;
             uint64_t message_id = 0;
@@ -27,7 +27,7 @@ namespace Components {
             EMessageType type = EMessageType::NOT_SET;
 
             void SetMessageType();
-
+            string GetMessageTypeLabel() const;
         public:
             AMessage(const string& senderName, const string& senderNickname, const string& content, uint64_t senderDiscordId, uint64_t messageId, const sys_time<milliseconds>& timestamp, const shared_ptr<FEmbed> embeddedMessage, bool is_bot, const vector<string>& emoji_reactions, const vector<tuple<uint64_t, string, string>>& mentions) :
                 AData("[AMessage]"), sender_name(senderName), sender_nickname(senderNickname), content(content), sender_discord_id(senderDiscordId), message_id(messageId), is_bot(is_bot), timestamp(timestamp),
@@ -46,7 +46,9 @@ namespace Components {
             [[nodiscard]] const uint64_t& GetMessageId() const { return message_id; }
             [[nodiscard]] const uint64_t& GetSenderDiscordId() const { return sender_discord_id; }
 
-            //AMessage() : AData("[AMessage]") { is_valid = false; }
+            string ToString() const noexcept {
+                return "Message " + std::to_string(message_id) + "\nSender: " + sender_name + "\nType: " + GetMessageTypeLabel() + "\nValid: " + std::to_string(is_valid);
+            }
 
             friend Serializers::MessageSerializer;
     };
