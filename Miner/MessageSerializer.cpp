@@ -1,17 +1,18 @@
 #include "pch.h"
 #include "MessageSerializer.h"
 #include "AMessage.h"
-#define JGet(js) RemoveQuotes(js.dump())
+
+#define JGet(js) RemoveQuotes((js).dump())
 
 shared_ptr<Components::AData> Serializers::MessageSerializer::Serialize(const json& src) {
-    auto ret = make_shared<Components::AMessage>();
+    auto ret      = make_shared<Components::AMessage>();
     ret->is_valid = SetTrivialData(src, ret);
     ret->is_valid &= SetEmbeds(src, ret);
     ret->is_valid &= SetReactions(src, ret);
     ret->is_valid &= SetMentions(src, ret);
     ret->is_valid &= SetTimestamp(src, ret);
     ret->SetMessageType();
-    if(ret->is_valid) return ret;
+    if (ret->is_valid && ret->type != EMessageType::OTHER && ret->type != EMessageType::NOT_SET) return ret;
     return nullptr;
 }
 
@@ -22,11 +23,11 @@ shared_ptr<Serializers::MessageSerializer> Serializers::MessageSerializer::GetSi
     return singleton;
 }
 
-Serializers::MessageSerializer::MessageSerializer() : ISerializer("[MessageSerializer]") { }
+Serializers::MessageSerializer::MessageSerializer() : ISerializer("[MessageSerializer]") {}
 
 shared_ptr<Serializers::MessageSerializer> Serializers::MessageSerializer::singleton;
 
-bool Serializers::MessageSerializer::SetTrivialData(const json& src, shared_ptr<Components::AMessage> msg) {
+bool Serializers::MessageSerializer::SetTrivialData(const json& src, const shared_ptr<Components::AMessage>& msg) {
     try {
         auto sender_name       = src["author"]["name"].dump();
         auto sender_nickname   = src["author"]["nickname"].dump();
@@ -49,7 +50,7 @@ bool Serializers::MessageSerializer::SetTrivialData(const json& src, shared_ptr<
     return true;
 }
 
-bool Serializers::MessageSerializer::SetEmbeds(const json& src, shared_ptr<Components::AMessage> msg) {
+bool Serializers::MessageSerializer::SetEmbeds(const json& src, const shared_ptr<Components::AMessage>& msg) {
     try {
         auto                                     the_embed = src["embeds"];
         shared_ptr<Components::AMessage::FEmbed> embed;
@@ -71,46 +72,42 @@ bool Serializers::MessageSerializer::SetEmbeds(const json& src, shared_ptr<Compo
     return true;
 }
 
-bool Serializers::MessageSerializer::SetReactions(const json& src, shared_ptr<Components::AMessage> msg) {
+bool Serializers::MessageSerializer::SetReactions(const json& src, const shared_ptr<Components::AMessage>& msg) {
     try {
         vector<string> reaction_vector;
         auto           reactions = src["reactions"];
-        for(auto& it : reactions) { reaction_vector.push_back(JGet(it["emoji"]["name"])); }
+        for (auto& it : reactions) { reaction_vector.push_back(JGet(it["emoji"]["name"])); }
 
         msg->emoji_reactions = reaction_vector;
     }
-    catch(const std::exception& ex) {
-        return false;
-    }
+    catch (const std::exception& ex) { return false; }
 
     return true;
 }
 
-bool Serializers::MessageSerializer::SetMentions(const json& src, shared_ptr<Components::AMessage> msg) {
+bool Serializers::MessageSerializer::SetMentions(const json& src, const shared_ptr<Components::AMessage>& msg) {
     try {
         vector<tuple<uint64_t, string, string>> mentions_vector;
         auto                                    mentions = src["mentions"];
-        for(auto& it : mentions) { mentions_vector.push_back(std::make_tuple(stoull(JGet(it["id"])), JGet(it["name"]), JGet(it["nickname"]))); }
+        for (auto& it : mentions) { mentions_vector.push_back(std::make_tuple(stoull(JGet(it["id"])), JGet(it["name"]), JGet(it["nickname"]))); }
 
         msg->mentions = mentions_vector;
     }
-    catch(const std::exception& ex) {
-        return false;
-    }
+    catch (const std::exception& ex) { return false; }
 
     return true;
 }
 
-bool Serializers::MessageSerializer::SetTimestamp(const json& src, shared_ptr<Components::AMessage> msg) {
+bool Serializers::MessageSerializer::SetTimestamp(const json& src, const shared_ptr<Components::AMessage>& msg) {
     try {
-        istringstream          ts_str{ JGet(src["timestamp"]) };
+        istringstream          ts_str{JGet(src["timestamp"])};
         sys_time<milliseconds> ts;
         ts_str >> parse("%FT%T", ts);
         msg->timestamp = ts;
-        if(ts.time_since_epoch().count() != 0) return true;
+        if (ts.time_since_epoch().count() != 0) return true;
         return false;
     }
-    catch(const std::exception& ex) {
-        return false;
-    }
+    catch (const std::exception& ex) { return false; }
 }
+
+#undef JGet

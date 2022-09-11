@@ -1,6 +1,4 @@
 #pragma once
-#include <cstdarg>
-
 #include "ISerializer.h"
 
 namespace Serializers {
@@ -22,11 +20,11 @@ namespace Serializers {
                 return in;
             }
 
-            bool SetTrivialData(const json& src, shared_ptr<Components::AMessage> msg);
-            bool SetEmbeds(const json& src, shared_ptr<Components::AMessage> msg);
-            bool SetReactions(const json& src, shared_ptr<Components::AMessage> msg);
-            bool SetMentions(const json& src, shared_ptr<Components::AMessage> msg);
-            bool SetTimestamp(const json& src, shared_ptr<Components::AMessage> msg);
+            bool SetTrivialData(const json& src, const shared_ptr<Components::AMessage>& msg);
+            bool SetEmbeds(const json& src, const shared_ptr<Components::AMessage>& msg);
+            bool SetReactions(const json& src, const shared_ptr<Components::AMessage>& msg);
+            bool SetMentions(const json& src, const shared_ptr<Components::AMessage>& msg);
+            bool SetTimestamp(const json& src, const shared_ptr<Components::AMessage>& msg);
 
         public:
             shared_ptr<AData>                  Serialize(const json& src) override;
