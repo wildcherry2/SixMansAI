@@ -1,5 +1,6 @@
 #pragma once
 #include "AData.h"
+#include "MessageSerializer.h"
 
 namespace Components {
     class AMessage : public AData {
@@ -8,9 +9,11 @@ namespace Components {
                 string title;
                 string description;
                 map<string, string> fields;
+
+                FEmbed(const string& title, const string& description, const map<string,string>& fields) : title(title), description(description), fields(fields) {}
             };
 
-        protected:
+        private:
             string sender_name;
             string sender_nickname;
             string content;
@@ -18,19 +21,24 @@ namespace Components {
             uint64_t message_id = 0;
             bool is_bot = false;
             sys_time<milliseconds> timestamp;
-            FEmbed embedded_message;
+            shared_ptr<FEmbed> embedded_message;
+            vector<string> emoji_reactions;
+            vector<tuple<uint64_t, string, string>> mentions;
             EMessageType type = EMessageType::NOT_SET;
 
-            AMessage(const string& senderName, const string& senderNickname, const string& content, uint64_t senderDiscordId, uint64_t messageId, const sys_time<milliseconds>& timestamp, const FEmbed& embeddedMessage, bool is_bot) :
-                AData("[AMessage]"), sender_name(senderName), sender_nickname(senderNickname), content(content), sender_discord_id(senderDiscordId), message_id(messageId), timestamp(timestamp), embedded_message(embeddedMessage), is_bot(is_bot) {
+            void SetMessageType();
+
+        public:
+            AMessage(const string& senderName, const string& senderNickname, const string& content, uint64_t senderDiscordId, uint64_t messageId, const sys_time<milliseconds>& timestamp, const shared_ptr<FEmbed> embeddedMessage, bool is_bot, const vector<string>& emoji_reactions, const vector<tuple<uint64_t, string, string>>& mentions) :
+                AData("[AMessage]"), sender_name(senderName), sender_nickname(senderNickname), content(content), sender_discord_id(senderDiscordId), message_id(messageId), is_bot(is_bot), timestamp(timestamp),
+                embedded_message(embeddedMessage), emoji_reactions(emoji_reactions), mentions(mentions) {
                 SetMessageType();
             }
 
-        private:
-            void SetMessageType();
-        public:
+            AMessage() : AData("[AMessage]"){ is_valid = false; }
+
             [[nodiscard]] const EMessageType& GetType() const { return type; }
-            [[nodiscard]] const FEmbed& GetEmbeddedMessage() const { return embedded_message; }
+            [[nodiscard]] const shared_ptr<FEmbed> GetEmbeddedMessage() const { return embedded_message; }
             [[nodiscard]] const string& GetContent() const { return content; }
             [[nodiscard]] const string& GetSenderName() const { return sender_name; }
             [[nodiscard]] const string& GetSenderNickname() const { return sender_nickname; }
@@ -38,6 +46,8 @@ namespace Components {
             [[nodiscard]] const uint64_t& GetMessageId() const { return message_id; }
             [[nodiscard]] const uint64_t& GetSenderDiscordId() const { return sender_discord_id; }
 
-            AMessage() : AData("[AMessage]") { is_valid = false; }
+            //AMessage() : AData("[AMessage]") { is_valid = false; }
+
+            friend Serializers::MessageSerializer;
     };
 }

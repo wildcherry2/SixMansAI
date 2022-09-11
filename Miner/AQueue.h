@@ -16,11 +16,10 @@ namespace Components {
             shared_ptr<Structs::FLobby>       lobby;
             shared_ptr<Structs::FScoreReport> result;
 
-        protected:
+        public:
             AQueue() : AData("[AQueue]") { is_valid = false; }
             AQueue(const int& match_id, shared_ptr<AMessage> teams_picked_message, shared_ptr<AMessage> score_report_message);
 
-        public:
             [[nodiscard]] const shared_ptr<Structs::FLobby>&       GetLobby() const { return lobby; }
             [[nodiscard]] const shared_ptr<Structs::FScoreReport>& GetResult() const { return result; }
             [[nodiscard]] int                                      GetMatchId() const { return match_id; }

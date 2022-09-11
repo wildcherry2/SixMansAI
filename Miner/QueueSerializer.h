@@ -14,6 +14,4 @@ namespace Serializers {
             static shared_ptr<QueueSerializer> GetSingleton();
             QueueSerializer();
     };
-
-    shared_ptr<QueueSerializer> QueueSerializer::singleton;
 }

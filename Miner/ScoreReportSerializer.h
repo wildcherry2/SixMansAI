@@ -11,5 +11,4 @@ namespace Serializers {
             static shared_ptr<ScoreReportSerializer> GetSingleton();
             ScoreReportSerializer();
     };
-    shared_ptr<ScoreReportSerializer> ScoreReportSerializer::singleton;
 }

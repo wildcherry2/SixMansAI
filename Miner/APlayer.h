@@ -4,12 +4,14 @@
 #include "FSeason.h"
 
 namespace Components {
+    class AQueue;
     class APlayer : public AData {
         public:
             struct FPlayerRecordEntry {
                 int              match_id = 0;
                 bool             bWon     = false;
-                Structs::FSeason season;
+                shared_ptr<Structs::FSeason> season;
+                shared_ptr<AQueue> queue;
                 /* pointer to queue struct */
             };
 

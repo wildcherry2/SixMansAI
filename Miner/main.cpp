@@ -1,9 +1,8 @@
 #include "pch.h"
-#include "AMessage.h"
+#include "ACoordinator.h"
 
 int main() {
-    auto msg = Components::AMessage();
-    int  tp  = 1;
-    msg.Log("test");
+    auto coord = Components::ACoordinator::GetSingleton();
+    coord->SerializeMessagesInFile(R"(C:\Users\tyler\Documents\Programming\AI\SixMans\RawData\rank-b\August2022.json)");
     return 0;
 }

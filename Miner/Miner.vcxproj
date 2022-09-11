@@ -138,6 +138,7 @@
   <ItemGroup>
     <ClInclude Include="APlayer.h" />
     <ClInclude Include="AQueue.h" />
+    <ClInclude Include="ACoordinator.h" />
     <ClInclude Include="EMessageType.h" />
     <ClInclude Include="ESeason.h" />
     <ClInclude Include="AData.h" />
@@ -146,16 +147,19 @@
     <ClInclude Include="FSeason.h" />
     <ClInclude Include="FTeam.h" />
     <ClInclude Include="ISerializer.h" />
+    <ClInclude Include="MessageSerializer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="AMessage.h" />
     <ClInclude Include="QueueSerializer.h" />
     <ClInclude Include="ScoreReportSerializer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ACoordinator.cpp" />
     <ClCompile Include="AMessage.cpp" />
     <ClCompile Include="APlayer.cpp" />
     <ClCompile Include="AQueue.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MessageSerializer.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

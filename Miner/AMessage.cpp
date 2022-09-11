@@ -8,9 +8,9 @@ void Components::AMessage::SetMessageType() {
     }
 
     else {
-        if(embedded_message.fields.empty()) is_valid = false;
+        if(embedded_message->fields.empty()) is_valid = false;
         else {
-            const auto& desc = embedded_message.description;
+            const auto& desc = embedded_message->description;
             if(desc.find(") has joined.") != string::npos)
                 type = EMessageType::BOT_QUEUE;
             else if(desc.find(") has left (using command).") != string::npos)

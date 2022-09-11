@@ -75,6 +75,12 @@
     <ClInclude Include="FTeam.h">
       <Filter>Header Files\Structs</Filter>
     </ClInclude>
+    <ClInclude Include="MessageSerializer.h">
+      <Filter>Header Files\Serializers</Filter>
+    </ClInclude>
+    <ClInclude Include="ACoordinator.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -97,6 +103,12 @@
     </ClCompile>
     <ClCompile Include="ScoreReportSerializer.cpp">
       <Filter>Source Files\Serializers</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageSerializer.cpp">
+      <Filter>Source Files\Serializers</Filter>
+    </ClCompile>
+    <ClCompile Include="ACoordinator.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,6 +1,4 @@
 #include "pch.h"
-
-#pragma once
 #include "APlayer.h"
 
 void Components::APlayer::AddName(std::convertible_to<std::string_view> auto && ...name_list) {
@@ -26,7 +24,7 @@ const Components::APlayer::FPlayerRecordEntry* Components::APlayer::GetRecordEnt
 const list<Components::APlayer::FPlayerRecordEntry> Components::APlayer::GetRecordsFromSeason(const Structs::FSeason& season) const {
     list<FPlayerRecordEntry> matches;
     for(auto& rec :record) {
-        if(rec.season.month == season.month and rec.season.year == season.year)
+        if(rec.season->month == season.month and rec.season->year == season.year)
             matches.push_back(rec);
     }
 

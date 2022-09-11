@@ -21,3 +21,4 @@ Serializers::ScoreReportSerializer::ScoreReportSerializer() : ISerializer("[Scor
     
 }
 
+shared_ptr<Serializers::ScoreReportSerializer> Serializers::ScoreReportSerializer::singleton;
