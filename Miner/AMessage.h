@@ -37,14 +37,17 @@ namespace Components {
 
             AMessage() : AData("[AMessage]"){ is_valid = false; }
 
-            [[nodiscard]] const EMessageType& GetType() const { return type; }
-            [[nodiscard]] const shared_ptr<FEmbed> GetEmbeddedMessage() const { return embedded_message; }
-            [[nodiscard]] const string& GetContent() const { return content; }
-            [[nodiscard]] const string& GetSenderName() const { return sender_name; }
-            [[nodiscard]] const string& GetSenderNickname() const { return sender_nickname; }
-            [[nodiscard]] const sys_time<milliseconds>& GetTimestamp() const { return timestamp; }
-            [[nodiscard]] const uint64_t& GetMessageId() const { return message_id; }
-            [[nodiscard]] const uint64_t& GetSenderDiscordId() const { return sender_discord_id; }
+            [[nodiscard]] const EMessageType&                            GetType() const { return type; }
+            [[nodiscard]] const shared_ptr<FEmbed>                       GetEmbeddedMessage() const { return embedded_message; }
+            [[nodiscard]] const string&                                  GetContent() const { return content; }
+            [[nodiscard]] const string&                                  GetSenderName() const { return sender_name; }
+            [[nodiscard]] const string&                                  GetSenderNickname() const { return sender_nickname; }
+            [[nodiscard]] const sys_time<milliseconds>&                  GetTimestamp() const { return timestamp; }
+            [[nodiscard]] const uint64_t&                                GetMessageId() const { return message_id; }
+            [[nodiscard]] const uint64_t&                                GetSenderDiscordId() const { return sender_discord_id; }
+            [[nodiscard]] const vector<string>&                          GetEmojiReactions() const { return emoji_reactions; }
+            [[nodiscard]] bool                                           IsBot() const { return is_bot; }
+            [[nodiscard]] const vector<tuple<uint64_t, string, string>>& GetMentions() const { return mentions; }
 
             string ToString() const noexcept {
                 return "Message " + std::to_string(message_id) + "\nSender: " + sender_name + "\nType: " + GetMessageTypeLabel() + "\nValid: " + std::to_string(is_valid);

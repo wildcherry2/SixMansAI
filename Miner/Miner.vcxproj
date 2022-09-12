@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ACore.h" />
     <ClInclude Include="APlayer.h" />
     <ClInclude Include="AQueue.h" />
     <ClInclude Include="ACoordinator.h" />
@@ -156,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ACoordinator.cpp" />
+    <ClCompile Include="ACore.cpp" />
     <ClCompile Include="AMessage.cpp" />
     <ClCompile Include="APlayer.cpp" />
     <ClCompile Include="AQueue.cpp" />

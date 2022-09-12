@@ -10,8 +10,14 @@ namespace Components {
         public:
             virtual ~AData() = default;
 
-            void    Log(const string& str) const noexcept {
-                cout << log_prefix << " " << str << "\n";
+            template<typename ... T>
+            void Log(const string& fmt_str, T&& ... in) const {
+                try {
+                    cout << log_prefix << " " << vformat(string_view(fmt_str), make_format_args(in...)) << "\n";
+                }
+                catch(const exception& ex) {
+                    cout << log_prefix << "[FORMATTING ERROR] " << fmt_str << " " << "(Exception: " << ex.what() << ")";
+                }
             }
 
             [[nodiscard]] bool IsValid() const noexcept { return is_valid; }

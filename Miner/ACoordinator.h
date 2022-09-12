@@ -1,5 +1,6 @@
 #pragma once
 #include "AData.h"
+#include "AMessage.h"
 
 namespace Components {
 
@@ -10,7 +11,8 @@ namespace Components {
 
 	    public:
 		    static shared_ptr<ACoordinator> GetSingleton();
-		    void SerializeMessagesInFile(const path& file);
+		    void                            SerializeMessagesInFile(const path& file) const;
+		    void                            DispatchMessageToSerializer(const shared_ptr<AMessage>& message);
 	};
 
 }
