@@ -4,7 +4,7 @@
 
 
 Serializers::QueueSerializer::QueueSerializer() : ISerializer("[QueueSerializer]") {
-    is_valid = false;
+    
 }
 
 shared_ptr<Components::AData> Serializers::QueueSerializer::Serialize(const json& src) {
@@ -17,7 +17,7 @@ string Serializers::QueueSerializer::Deserialize(const shared_ptr<AData>& compon
 
 
 shared_ptr<Serializers::QueueSerializer> Serializers::QueueSerializer::GetSingleton() {
-    if(singleton == nullptr) singleton = make_shared<QueueSerializer>();
+    if(singleton == nullptr) singleton = shared_ptr<QueueSerializer>(new QueueSerializer());
     return singleton;
 }
 

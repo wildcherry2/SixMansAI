@@ -18,7 +18,6 @@ void Components::ACoordinator::SerializeMessagesInFile(const path& file) const {
     const auto& file_name = file.filename().string();
 
     Log("Serializing from {}...", file_name);
-
     try {
         ifstream js_file(file);
         json     parent;
@@ -38,11 +37,9 @@ void Components::ACoordinator::SerializeMessagesInFile(const path& file) const {
             }
         }
 
-        Log("Error queues in {}: {} / {}", file_name, err, core->raw_messages.size());
+        Log("Error !q messages in {}: {} / {}", file_name, err, core->raw_messages.size());
     }
     catch (const exception& ex) { Log("FATAL EXCEPTION: {}", ex.what()); }
 }
-
-void Components::ACoordinator::DispatchMessageToSerializer(const shared_ptr<AMessage>& message) { }
 
 shared_ptr<Components::ACoordinator> Components::ACoordinator::singleton;
