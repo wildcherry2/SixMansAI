@@ -31,6 +31,21 @@ pyplot.title('Learning Curves')
 pyplot.xlabel('Epoch')
 pyplot.ylabel('Loss')
 graph = {}
+#clamp values, lstm instead of cnn, latin hypercubes or bayesian optimizaton software for hypertuning
+#softmax act
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def DoTrain(num_nodes, train_color, num_epochs = 128, num_layers = 8, initializer = "he_uniform", opt = tf.keras.optimizers.Adam(), exp_label = "Adam (default)"):
     features_train, features_test, labels_train, labels_test = train_test_split(features, labels, test_size=0.3)
