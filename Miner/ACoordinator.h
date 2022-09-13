@@ -4,14 +4,15 @@
 
 namespace Components {
 
-	class ACoordinator : public AData {
-	    private:
-	        static shared_ptr<ACoordinator> singleton;
-		    ACoordinator();
+    class ACoordinator : public AData {
+        private:
+            static shared_ptr<ACoordinator> singleton;
+            ACoordinator();
 
-	    public:
-		    static shared_ptr<ACoordinator> GetSingleton();
-		    void                            SerializeMessagesInFile(const path& file) const;
-	};
+        public:
+            static shared_ptr<ACoordinator> GetSingleton();
+            void                            SerializeMessagesInFile(const path& file) const;
+            void                            SerializePlayerNamesFromMessages() const;
+    };
 
 }

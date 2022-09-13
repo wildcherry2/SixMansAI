@@ -21,6 +21,7 @@ namespace Components {
             }
 
             [[nodiscard]] bool IsValid() const noexcept { return is_valid; }
+            void               SetIsValid(const bool isValid) { is_valid = isValid; }
             operator bool() const noexcept { return is_valid; }
             void Invalidate(bool new_is_valid = false) { is_valid = new_is_valid; }
 

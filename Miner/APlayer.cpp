@@ -1,11 +1,9 @@
 #include "pch.h"
 #include "APlayer.h"
 
-void Components::APlayer::AddName(std::convertible_to<std::string_view> auto && ...name_list) {
-    for(auto str : std::initializer_list<std::string_view>{ name_list... }) {
-        names.push_back(string(str));
-    }
-}
+//void Components::APlayer::AddName(std::convertible_to<std::string_view> auto && ...name_list) {
+//    
+//}
 
 bool Components::APlayer::HasName(const std::string& name) const {
     for(auto& it : names)

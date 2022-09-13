@@ -42,4 +42,10 @@ void Components::ACoordinator::SerializeMessagesInFile(const path& file) const {
     catch (const exception& ex) { Log("FATAL EXCEPTION: {}", ex.what()); }
 }
 
+void Components::ACoordinator::SerializePlayerNamesFromMessages() const {
+    auto core = ACore::GetSingleton();
+
+}
+
+
 shared_ptr<Components::ACoordinator> Components::ACoordinator::singleton;

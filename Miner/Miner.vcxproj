@@ -152,6 +152,7 @@
     <ClInclude Include="MessageSerializer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="AMessage.h" />
+    <ClInclude Include="PlayerSerializer.h" />
     <ClInclude Include="QueueSerializer.h" />
     <ClInclude Include="ScoreReportSerializer.h" />
   </ItemGroup>
@@ -167,6 +168,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PlayerSerializer.cpp" />
     <ClCompile Include="QueueSerializer.cpp" />
     <ClCompile Include="ScoreReportSerializer.cpp" />
   </ItemGroup>

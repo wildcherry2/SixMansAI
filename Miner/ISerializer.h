@@ -12,7 +12,8 @@ namespace Serializers {
     class ISerializer : public Components::AData {
         public:
             explicit                  ISerializer(const string& prefix = "[ISerializer]") : AData(prefix) {}
-            virtual shared_ptr<AData> Serialize(const json& src) = 0;
-            virtual string            Deserialize(const shared_ptr<AData>& component) = 0;
+            virtual shared_ptr<AData> Serialize(const json& src){ return nullptr; }
+            virtual shared_ptr<AData> Serialize(){ return nullptr; }
+            virtual string            Deserialize(const shared_ptr<AData>& component){ return""; }
     };
 }

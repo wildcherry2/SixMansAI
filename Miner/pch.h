@@ -10,6 +10,7 @@
 #include <list>
 #include <map>
 #include <nlohmann/json.hpp>
+#include <ranges>
 #include <regex>
 #include <sstream>
 #include <string>
@@ -39,8 +40,11 @@ using std::make_shared;
 using std::map;
 using std::ofstream;
 using std::ostringstream;
+using std::ranges::none_of;
 using std::regex;
+using std::regex_search;
 using std::shared_ptr;
+using std::smatch;
 using std::stoull;
 using std::string;
 using std::stringstream;
